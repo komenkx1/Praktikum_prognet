@@ -5,6 +5,9 @@ use App\Models\Couriers;
 use App\Models\Provinces;
 use App\Models\Cities;
 use App\Models\Carts;
+use App\Models\Transactions;
+use App\Models\TransactionDetails;
+
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 use Illuminate\Http\Request;
@@ -23,16 +26,19 @@ class CheckoutController extends Controller
         $kurirs = Couriers::all();
         $carts = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->select(
             \DB::raw('SUM(carts.qty) as quantity,SUM(products.weight) as berattotal,SUM(products.price) as hargatotal'),
             'products.product_name as name',
-            'products.id as product_id')
-         ->groupBy('products.product_name', 'products.id')
+            'products.id as product_id',
+            'carts.status as status',)
+         ->groupBy('products.product_name', 'products.id','carts.status')
          ->get();
 
          $total = Carts::join('products','carts.product_id','=','products.id')
          ->select(\DB::raw('SUM(products.price) as total, SUM(products.weight) as berattotal'))
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->get()->first();
         // dd($carts);
         return view('checkout',compact('provinsis','kurirs','carts','total'));
@@ -54,8 +60,8 @@ class CheckoutController extends Controller
     'destination'   => $request->kota,      // ID kota/kabupaten tujuan
     'weight'        => $request->berat,    // berat barang dalam gram
     'courier'       => $request->kurir    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
-])->get();
-return response()->json($cost);
+    ])->get();
+    return response()->json($cost);
     }
   
     /**
@@ -75,8 +81,42 @@ return response()->json($cost);
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $carts = Carts::join('products','carts.product_id','=','products.id')
+         ->where('user_id',"=",'1')->get();
+
+        $total = Carts::join('products','carts.product_id','=','products.id')
+         ->select(\DB::raw('SUM(products.price) as total, SUM(products.weight) as berattotal'))
+         ->where('user_id',"=",'1')
+         ->get()->first();
+
+        $transaksi = New Transactions;
+        $datetime = strtotime("+1 day");
+        $tomorrowDate = date("Y-m-d H:i:s", $datetime);
+        $transaksaction = $request->all();
+        $transaksaction['timeout'] = $tomorrowDate;
+        $transaksaction['total'] = $total->total;
+        $transaksaction['sub_total'] = $request->shipping_cost + $total->total;
+        $transaksaction['user_id'] = '1';
+        $transaksaction['status'] = 'unverified'; 
+        $transaksaction['telp'] = '081222111'; 
+        $idtransaksi = $transaksi->create($transaksaction);
+
+    
+
+        foreach ($carts as $key => $value) {
+            TransactionDetails::create([
+                'transaction_id' => $idtransaksi->id,
+                'product_id' => $value->product_id,
+                'qty' => $value->qty,
+                'selling_price' => $value->price,
+            ]);
+
+            Carts::where('user_id',"=",'1')->update([
+                'status' => 'checkedout',
+            ]);
+        }
+        // dd($transaksiDetails);
     }
 
     /**

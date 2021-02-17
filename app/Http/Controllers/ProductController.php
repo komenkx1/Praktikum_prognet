@@ -48,9 +48,36 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+     public function stock()
+    {
+        $data = Products::select('stock')->get();
+        $sen = $data->toArray();
+        return response()->json([
+        'status' => true,
+        'stocks' => $sen
+    ], 200);
+       
+    }
     public function store(Request $request)
     {
-        //
+     
+        $carts = new Carts;
+        if ($request->stock < 1) {
+           echo 'stock habis';
+        }else{
+        $stock = $request->stock-1;
+        Products::where('id',"=",$request->id)->update([
+                'stock' => $stock,
+            ]);
+       
+    
+    $carts->product_id = $request->id;
+    $carts->user_id  = 1;
+    $carts->qty = 1;
+    $carts->status = 'notyet';
+    $carts->save();
+    return redirect('checkout');
+        }
     }
 
     /**

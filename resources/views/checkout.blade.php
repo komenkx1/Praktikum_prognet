@@ -5,40 +5,43 @@
 </head>
 
 <body>
+    <form action="{{Route('checkout-all')}}" method="post">
+        @csrf
+        <label for="Provinsi">Provinsi</label>
+        <select id="provinsi" name="province" id="">
+            <option value="" selected disabled>Pilih Provinsi</option>
+            @foreach ($provinsis as $provinsi)
+            <option data-id="{{$provinsi->id}}" value="{{$provinsi->title}}">{{$provinsi->title}}</option>
+            @endforeach
+        </select>
 
-    <label for="Provinsi">Provinsi</label>
-    <select id="provinsi" name="" id="">
-        <option value="" selected disabled>Pilih Provinsi</option>
-        @foreach ($provinsis as $provinsi)
-        <option value="{{$provinsi->id}}">{{$provinsi->title}}</option>
-        @endforeach
-    </select>
+        <label for="Kota">Kota</label>
+        <select id="kota" name="regency" disabled>
+            <option value="" selected disabled>Pilih Kota</option>
+        </select>
+        <label for="Alamat">Alamat</label>
+        <textarea name="address" id="" cols="30" rows="10"></textarea>
 
-    <label for="Kota">Kota</label>
-    <select id="kota" name="kota" disabled>
-        <option value="" selected disabled>Pilih Kota</option>
-    </select>
-    <label for="Alamat">Alamat</label>
-    <textarea name="" id="" cols="30" rows="10"></textarea>
+        <label for="Kurir">Kurir</label>
+        <select name="courier_id" id="kurir">
+            <option value="" selected disabled>Pilih Kurir</option>
+            @foreach ($kurirs as $kurir)
+            <option data-kurir="{{$kurir->code}}" value="{{$kurir->id}}">{{$kurir->courier}}</option>
+            @endforeach
+        </select>
 
-    <label for="Kurir">Kurir</label>
-    <select name="kurir" id="kurir">
-        <option value="" selected disabled>Pilih Kurir</option>
-        @foreach ($kurirs as $kurir)
-        <option value="{{$kurir->code}}">{{$kurir->courier}}</option>
-        @endforeach
-    </select>
+        <label for="Layanan">Layanan</label>
+        <select name="shipping_cost" id="layanan">
+            <option value="" selected disabled>Pilih Layanan</option>
+        </select>
 
-    <label for="Layanan">Layanan</label>
-    <select name="layanan" id="layanan">
-        <option value="" selected disabled>Pilih Layanan</option>
-    </select>
+        <button type="submit">Checkout</button>
+    </form>
 
     <hr>
     <h1>Data Barang</h1>
     <p id="berat" data-berat="{{$total->berattotal}}"> Total Berat : {{$total->berattotal}} kg</p>
     <p> Total Harga : Rp.{{$total->total}}</p>
-    <p> ongkos kirim : Rp. <span  id="ongkir">0</span></p>
     <hr>
     @foreach ($carts as $cart)
 
@@ -46,6 +49,7 @@
     <p>qty: {{$cart->quantity}}</p>
     <p>berat: {{$cart->berattotal}} kg</p>
     <p>harga:Rp.{{$cart->hargatotal}}</p>
+    <p>harga:Rp.{{$cart->status}}</p>
     <hr>
     @endforeach
 
@@ -59,7 +63,7 @@
   }
 });
     $('#provinsi').on('change', function() {
-        var id = $(this).val();
+        var id = $(this).find('option:selected').data("id");
         var html_option ='';
         $('#kota').prop("disabled", false);
         $.ajax({
@@ -69,18 +73,27 @@
             dataType: 'json',
 			success: function(data){
                 $.each(data.kota, function(i, kotas) {
-            html_option += '<option value='+kotas.city_id+'>'+kotas.title+'</option>'
+            html_option += '<option data-kota='+kotas.city_id+' value='+kotas.title+'>'+kotas.title+'</option>'
         });
         $('#kota').html(html_option);
+        loadongkir();
 			}
 		});
 });
-$('#kurir').change(loadongkir).change();
-$('#kota').change(loadongkir).change();
+// $('#kota').change(loadongkir).change();
+// $('#kurir').change().change();
+$('#kota').on('change', function() {
+    loadongkir();
+});
+$('#kurir').on('change', function() {
+    loadongkir();
+});
+
+
 
 function loadongkir(){
-        var kurir = $('#kurir').val();
-        var kota = $('#kota').val();
+        var kurir =$('#kurir').find('option:selected').data("kurir");
+        var kota = $('#kota').find('option:selected').data("kota");
         var berat = $('#berat').data('berat');
     $.ajax({
 			url: '{{Route("cekongkir")}}',
@@ -91,16 +104,15 @@ function loadongkir(){
                 berat: berat
                 },
                 success:function(data){
-$('select[name="layanan"]').empty();
-// ini untuk looping data result nya
+$('select[name="shipping_cost"]').empty();
+// looping data result nya
 $.each(data, function(key, value){
-// ini looping data layanan misal jne reg, jne oke, jne yes
+// looping data layanan misal jne reg, jne oke, jne yes
 $.each(value.costs, function(key1, value1){
-// ini untuk looping cost nya masing masing
-// silahkan pelajari cara menampilkan data json agar lebi paham
+// untuk looping cost nya masing masing
 $.each(value1.cost, function(key2, value2){
-$('select[name="layanan"]').append('<option value="'+ key +'">' + value1.service + '-' + value1.description +'</option>');
-$('#ongkir').html(value2.value);
+$('select[name="shipping_cost"]').append('<option value="'+ value2.value +'">' + value1.service + '-' + value1.description + '- Rp.' +value2.value+ '</option>');
+
 });
 });
 });

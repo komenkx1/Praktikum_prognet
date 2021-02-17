@@ -9,7 +9,14 @@
 
 
     <p>nama : {{$product->product_name}}</p>
-    <button class="btn-add" data-id="{{$product->id}}">tambah</button>
+    <p class="stock" > stock : {{$product->stock}}</p>
+    <button class="btn-add" data-id="{{$product->id}}"  data-stock="{{$product->stock}}">tambah</button>
+    <form action="{{Route('beli-product')}}" method="post">
+        @csrf
+        <button class="btn-add" value="{{$product->id}}" name="id">Beli Sekarang</button>
+        <input  type="hidden" value="{{$product->stock}}"  name="stock">
+        <input  type="hidden" value="{{$product->id}}"  name="id">
+</form>
     @endforeach
 
     data cart = <p id="countcarts"></p>
@@ -62,6 +69,21 @@ function loadtotal(){
 			}
 		});
 }
+// function loadstock(){
+//     var html_options = '';
+// 	$.ajax({
+// 			url: '{{Route("load-stock")}}',
+// 			type: 'get',
+//             dataType:'json',
+// 			success: function(data){
+//                 $.each(data.stocks, function(i, stockss) {
+//                     html_options += stockss.stock
+//         });
+//         $('.stock').html(html_options);
+//         console.log(html_options);  
+// 			}
+// 		});
+// }
 function loadcarts(){
     var html_option = '';
 	$.ajax({
@@ -74,24 +96,29 @@ function loadcarts(){
             html_option += '<tr><td>'+caritem.name+'</td><td>'+caritem.quantity+'</td>'
         });
         $('#table2 tbody').html(html_option);
+
 			}
 		});
 }
             $('.btn-add').click(function(){
 		var id = $(this).data('id');
+		var stock = $(this).data('stock');
 		$.ajax({
 			url: '{{Route("add-cart")}}',
 			type: 'post',
-			data: {id: id},
+			data: {id: id,stock : stock},
 			success: function(data){
 				// $('.modal-body-visimisi').html(data);
 				// $('#modalVisiMisi').modal('show'); 
+                // loadstock();
                 loadcount();
                 loadcarts();
                 loadtotal();
 			}
 		});
 	});
+
+
     </script>
 </body>
 

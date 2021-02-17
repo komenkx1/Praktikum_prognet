@@ -56,6 +56,7 @@ class CartController extends Controller
          return json_encode($data);
        
     }
+ 
 
     /**
      * Show the form for creating a new resource.
@@ -76,12 +77,19 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $carts = new Carts;
-
+        if ($request->stock < 1) {
+             echo 'stok habis';
+        }else{
+            $stock = $request->stock-1;
+        Products::where('id',"=",$request->id)->update([
+                'stock' => $stock,
+            ]);
         $carts->product_id = $request->id;
         $carts->user_id  = 1;
         $carts->qty = 1;
         $carts->status = 'notyet';
         $carts->save();
+    }
         // dd($carts);
 
     }
