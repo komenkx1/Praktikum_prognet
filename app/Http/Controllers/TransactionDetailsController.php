@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TransactionDetails;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
 
 class TransactionDetailsController extends Controller
@@ -12,9 +13,20 @@ class TransactionDetailsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($transactions)
     {
-        //
+        $id = decrypt($transactions);
+        $transaksi = Transactions::with('TransactionDetails')->where('id','=',$id)->get()->first();
+        $transaksidetails = TransactionDetails::with('Transaction')
+        ->join('transactions','transaction_details.transaction_id','=','transactions.id')
+        ->where('transactions.id','=',$id)
+        ->select(
+            \DB::raw('SUM(transaction_details.qty) as quantity,SUM(transaction_details.selling_price) as price'),
+            'transaction_details.product_id',)
+         ->groupBy('transaction_details.product_id')
+        ->get();
+// dd($transaksidetails);
+        return view('detail-transaksi',compact('transaksi','transaksidetails'));
     }
 
     /**

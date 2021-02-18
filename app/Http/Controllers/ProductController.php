@@ -18,17 +18,21 @@ class ProductController extends Controller
         $products = Products::all();
         $carts = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->select(
             \DB::raw('SUM(carts.qty) as quantity'),
             'products.product_name as name',
-            'products.id as product_id')
+            'products.id as product_id',
+            )
          ->groupBy('products.product_name', 'products.id')
-         ->get();
+         ->get()->all();
 
          $total = Carts::join('products','carts.product_id','=','products.id')
          ->select(\DB::raw('SUM(products.price) as total'))
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->get()->first();
+        //  dd($carts);
         return view('index',compact('products','carts','total'));
     }
 

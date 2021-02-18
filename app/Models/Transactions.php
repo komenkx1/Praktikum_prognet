@@ -9,4 +9,8 @@ class Transactions extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function TransactionDetails(){
+        return $this->hasMany(TransactionDetails::class,'transaction_id');
+    }
 }

@@ -27,13 +27,15 @@
                 <tr>
                     <th>Nama Product</th>
                     <th>jumlah</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($carts as $cart)
                 <tr>
                     <td>{{$cart->name}}</td>
-                    <td>{{$cart->quantity}}</td>
+                    <td >{{$cart->quantity}}</td>
+                    <td><button class="delete" data-qty="{{$cart->quantity}}" data-id="{{$cart->product_id}}">Hapus</button></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -69,21 +71,7 @@ function loadtotal(){
 			}
 		});
 }
-// function loadstock(){
-//     var html_options = '';
-// 	$.ajax({
-// 			url: '{{Route("load-stock")}}',
-// 			type: 'get',
-//             dataType:'json',
-// 			success: function(data){
-//                 $.each(data.stocks, function(i, stockss) {
-//                     html_options += stockss.stock
-//         });
-//         $('.stock').html(html_options);
-//         console.log(html_options);  
-// 			}
-// 		});
-// }
+
 function loadcarts(){
     var html_option = '';
 	$.ajax({
@@ -93,7 +81,7 @@ function loadcarts(){
 			success: function(data){
                 // console.log(result);
                 $.each(data.result, function(i, caritem) {
-            html_option += '<tr><td>'+caritem.name+'</td><td>'+caritem.quantity+'</td>'
+            html_option += '<tr><td>'+caritem.name+'</td><td>'+caritem.quantity+'</td><td><button class="delete" data-qty="'+caritem.quantity+'">Hapus</button></td></tr>'
         });
         $('#table2 tbody').html(html_option);
 
@@ -118,6 +106,24 @@ function loadcarts(){
 		});
 	});
 
+    $('.delete').click(function(){
+		var id = $(this).data('id');
+		var qty = $(this).data('qty');
+        console.log(qty);
+		$.ajax({
+			url: '{{Route("delete-cart")}}',
+			type: 'delete',
+			data: {id: id},
+			success: function(data){
+				// $('.modal-body-visimisi').html(data);
+				// $('#modalVisiMisi').modal('show'); 
+                // loadstock();
+                loadcount();
+                loadcarts();
+                loadtotal();
+			}
+		});
+	});
 
     </script>
 </body>

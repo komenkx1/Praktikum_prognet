@@ -14,7 +14,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $transaksis = Transactions::where('user_id','=','1')->get();
+        return view('transaksi',compact('transaksis'));
     }
 
     /**
@@ -35,7 +36,7 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -69,8 +70,33 @@ class TransactionController extends Controller
      */
     public function update(Request $request, Transactions $transactions)
     {
-        //
+        if ($request->proof_of_payment) {
+
+    $gambar = $request->file('proof_of_payment');
+    $urlgambar = $gambar->storeAs("img/bukti", md5('Bukti' . $transactions->id . microtime()) . '.' . $gambar->extension());
+    $transactions->proof_of_payment = $urlgambar;
+    $transactions->update();
+}
+return redirect()->back();
     }
+
+    public function cancel(Transactions $transactions)
+    {
+  
+    $transactions->status = 'canceled';
+    $transactions->update();
+    return redirect()->back();
+
+    }
+    public function verifbarang(Transactions $transactions)
+    {
+  
+    $transactions->status = 'success';
+    $transactions->update();
+    return redirect()->back();
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

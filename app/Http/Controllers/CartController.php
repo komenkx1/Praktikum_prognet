@@ -17,6 +17,7 @@ class CartController extends Controller
     {
          $data = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->select(
             \DB::raw('SUM(carts.qty) as quantity'),
             'products.product_name as name',
@@ -37,6 +38,7 @@ class CartController extends Controller
     {
         $data = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->select(
             \DB::raw('SUM(carts.qty) as quantity'),
             'products.product_name as name',
@@ -52,6 +54,7 @@ class CartController extends Controller
         $data = Carts::join('products','carts.product_id','=','products.id')
         ->select(\DB::raw('SUM(products.price) as total'))
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->get();
          return json_encode($data);
        

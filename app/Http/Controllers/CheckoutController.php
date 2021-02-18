@@ -83,11 +83,14 @@ class CheckoutController extends Controller
     public function store(Request $request)
     {   
         $carts = Carts::join('products','carts.product_id','=','products.id')
-         ->where('user_id',"=",'1')->get();
+         ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
+         ->get();
 
         $total = Carts::join('products','carts.product_id','=','products.id')
          ->select(\DB::raw('SUM(products.price) as total, SUM(products.weight) as berattotal'))
          ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
          ->get()->first();
 
         $transaksi = New Transactions;
@@ -95,8 +98,8 @@ class CheckoutController extends Controller
         $tomorrowDate = date("Y-m-d H:i:s", $datetime);
         $transaksaction = $request->all();
         $transaksaction['timeout'] = $tomorrowDate;
-        $transaksaction['total'] = $total->total;
-        $transaksaction['sub_total'] = $request->shipping_cost + $total->total;
+        $transaksaction['total'] =  $request->shipping_cost + $total->total;
+        $transaksaction['sub_total'] = $total->total;
         $transaksaction['user_id'] = '1';
         $transaksaction['status'] = 'unverified'; 
         $transaksaction['telp'] = '081222111'; 
