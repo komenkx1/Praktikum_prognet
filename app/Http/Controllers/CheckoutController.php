@@ -118,8 +118,9 @@ class CheckoutController extends Controller
                 'status' => 'checkedout',
             ]);
         }
+       
         // dd($transaksiDetails);
-        return redirect(Route('detail-transaksi',['transactions' => $idtransaksidetail->id]));
+        return redirect(Route('detail-transaksi',['transactions' => encrypt($idtransaksi->id)]));
     }
 
     /**

@@ -4289,6 +4289,10 @@ td {
     margin-right: auto;
 }
 
+div.header-logo-menu {
+    width: 15%;
+}
+
 .header.style-01 .header-logo-nav {
     text-align: center;
 }
