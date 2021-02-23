@@ -28,15 +28,14 @@ class CheckoutController extends Controller
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->select(
-            \DB::raw('SUM(carts.qty) as quantity,SUM(products.weight) as berattotal,SUM(products.price) as hargatotal'),
+            \DB::raw('products.price * carts.qty as subprice,products.weight * carts.qty as berattotal'),
             'products.product_name as name',
-            'products.id as product_id',
-            'carts.status as status',)
-         ->groupBy('products.product_name', 'products.id','carts.status')
+            'carts.qty as quantity',
+            'products.id as product_id',)
          ->get();
 
          $total = Carts::join('products','carts.product_id','=','products.id')
-         ->select(\DB::raw('SUM(products.price) as total, SUM(products.weight) as berattotal'))
+         ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight*carts.qty) as berattotal'))
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->get()->first();
@@ -88,7 +87,7 @@ class CheckoutController extends Controller
          ->get();
 
         $total = Carts::join('products','carts.product_id','=','products.id')
-         ->select(\DB::raw('SUM(products.price) as total, SUM(products.weight) as berattotal'))
+         ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight * carts.qty) as berattotal'))
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->get()->first();
@@ -108,7 +107,7 @@ class CheckoutController extends Controller
     
 
         foreach ($carts as $key => $value) {
-            TransactionDetails::create([
+            $idtransaksidetail = TransactionDetails::create([
                 'transaction_id' => $idtransaksi->id,
                 'product_id' => $value->product_id,
                 'qty' => $value->qty,
@@ -120,6 +119,7 @@ class CheckoutController extends Controller
             ]);
         }
         // dd($transaksiDetails);
+        return redirect(Route('detail-transaksi',['transactions' => $idtransaksidetail->id]));
     }
 
     /**

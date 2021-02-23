@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use App\Models\Carts;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -14,8 +15,24 @@ class TransactionController extends Controller
      */
     public function index()
     {
+        $carts = Carts::join('products','carts.product_id','=','products.id')
+        ->where('user_id',"=",'1')
+        ->where('status','=','notyet')
+        ->select(
+           \DB::raw('products.price * carts.qty as subprice'),
+           'products.product_name as name',
+           'carts.qty as quantity',
+           'carts.id',
+           'products.id as product_id',
+           'products.price',)
+        ->get();
+        $total = Carts::join('products','carts.product_id','=','products.id')
+        ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
+         ->where('user_id',"=",'1')
+         ->where('status','=','notyet')
+         ->get()->first();
         $transaksis = Transactions::where('user_id','=','1')->get();
-        return view('transaksi',compact('transaksis'));
+        return view('transaksi',compact('transaksis','carts','total'));
     }
 
     /**

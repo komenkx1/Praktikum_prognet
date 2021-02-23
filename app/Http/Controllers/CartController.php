@@ -19,18 +19,26 @@ class CartController extends Controller
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->select(
-            \DB::raw('SUM(carts.qty) as quantity'),
+            \DB::raw('products.price * carts.qty as subprice'),
             'products.product_name as name',
+            'carts.qty as quantity',
+            'carts.id',
             'products.id as product_id',
-            
-          )
-         ->groupBy('products.product_name', 'products.id')
+            'products.price',)
          ->get();
-         $sen = $data->toArray();
-        return response()->json([
-        'status' => true,
-        'result' => $sen
-    ], 200);
+         foreach ($data as $cart) {
+            $output = '<li class="kobolg-mini-cart-item mini_cart_item">
+            <a href="javascript:void(0)" data-id="'.$cart->id.'" class="delete remove remove_from_cart_button">×</a>
+            <a href="#">
+                <img src="assets/images/apro134-1-600x778.jpg"
+                     class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
+                     alt="img" width="600" height="778">'.$cart->name.'</a>
+            <span class="quantity">'.$cart->quantity.' × <span
+                    class="kobolg-Price-amount amount"><span
+                    class="kobolg-Price-currencySymbol">'."Rp " . number_format($cart->price,2,',','.').'</span>
+        </li>';
+            echo ($output);
+        }
     }
     
 
@@ -39,12 +47,6 @@ class CartController extends Controller
         $data = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
-         ->select(
-            \DB::raw('SUM(carts.qty) as quantity'),
-            'products.product_name as name',
-            'products.id as product_id',
-          )
-         ->groupBy('products.product_name', 'products.id')
          ->get()->count();
         return json_encode($data);
     }
@@ -52,11 +54,16 @@ class CartController extends Controller
     public function totalprice()
     {
         $data = Carts::join('products','carts.product_id','=','products.id')
-        ->select(\DB::raw('SUM(products.price) as total'))
+        ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->get();
-         return json_encode($data);
+
+         foreach ($data as $total ) {
+            $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total->total,2,',','.').'</span>';
+            echo ($output);
+         }
+       
        
     }
  
@@ -80,6 +87,11 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $carts = new Carts;
+        $checkCarts = $carts->where('user_id','=','1')
+        ->where('product_id','=', $request->id)
+        ->where('status','=', 'notyet')
+        ->get()->first();
+      
         if ($request->stock < 1) {
              echo 'stok habis';
         }else{
@@ -87,14 +99,28 @@ class CartController extends Controller
         Products::where('id',"=",$request->id)->update([
                 'stock' => $stock,
             ]);
-        $carts->product_id = $request->id;
-        $carts->user_id  = 1;
-        $carts->qty = 1;
-        $carts->status = 'notyet';
-        $carts->save();
-    }
-        // dd($carts);
 
+            if ($checkCarts) {
+
+            if ($checkCarts->product_id == $request->id ) {
+                $qty = $checkCarts->qty+1;
+                Carts::where('user_id','=','1')
+                ->where('product_id','=', $request->id)
+                ->where('status','=', 'notyet')
+                ->update([
+                        'qty' => $qty,
+                    ]);
+            }
+                        }else{
+                            $carts->product_id = $request->id;
+                            $carts->user_id  = 1;
+                            $carts->qty = 1;
+                            $carts->status = 'notyet';
+                            $carts->save();
+                        }
+                        echo 'Product DItambahkan Ke Keranjang';
+      
+    }
     }
 
     /**
@@ -137,8 +163,10 @@ class CartController extends Controller
      * @param  \App\Models\Carts  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Carts $cart)
+    public function destroy(Carts $cart,Request $request )
     {
-        //
+        $cart = Carts::find($request->id);
+        $cart->delete();
+        echo 'Produk Dihapus Dari Keranjang';
     }
 }
