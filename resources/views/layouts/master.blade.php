@@ -196,6 +196,13 @@ function loadcount(){
 			type: 'get',
 			success: function(data){
                 $('.countcarts').html(data);
+                if (data < 1) {
+                    $('a.button.kobolg-forward').addClass('w-100')
+                    $('a.button.checkout.kobolg-forward').addClass('d-none')
+                }else{
+                    $('a.button.kobolg-forward').removeClass('w-100')
+                    $('a.button.checkout.kobolg-forward').removeClass('d-none')
+                }
 			}
 		});
 }

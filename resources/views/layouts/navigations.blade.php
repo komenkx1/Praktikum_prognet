@@ -104,8 +104,8 @@
                                                     class="kobolg-Price-currencySymbol">$</span>418.00</span>
                                         </p>
                                         <p class="kobolg-mini-cart__buttons buttons">
-                                            <a href="cart.html" class="button kobolg-forward">Viewcart</a>
-                                            <a href="{{Route('checkout')}}" class="button checkout kobolg-forward">Checkout</a>
+                                            <a href="cart.html" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                            <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                         </p>
                                     </div>
                                 </div>
@@ -224,9 +224,9 @@
                                                             </p>
                                                             <p class="kobolg-mini-cart__buttons buttons">
                                                                 <a href="cart.html"
-                                                                    class="button kobolg-forward">Viewcart</a>
+                                                                    class="@if($carts->count() < 1) w-100 @endif  button kobolg-forward">Viewcart</a>
                                                                 <a href="{{Route('checkout')}}"
-                                                                    class="button checkout kobolg-forward">Checkout</a>
+                                                                    class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -329,8 +329,8 @@
                                     </span>
                                 </p>
                                 <p class="kobolg-mini-cart__buttons buttons">
-                                    <a href="cart.html" class="button kobolg-forward">Viewcart</a>
-                                    <a href="{{Route('checkout')}}" class="button checkout kobolg-forward">Checkout</a>
+                                    <a href="cart.html" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                    <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                 </p>
                             </div>
                         </div>
