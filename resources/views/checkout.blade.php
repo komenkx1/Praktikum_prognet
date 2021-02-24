@@ -35,7 +35,7 @@
                                                     for="billing_province" class="">Province&nbsp;<abbr class="required"
                                                         title="required">*</abbr></label>
                                                 <span class="kobolg-input-wrapper">
-                                                    <select id="provinsi" name="province"
+                                                    <select id="provinsi" name="province" required
                                                         class="province_to_state province_select" autocomplete="province"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option value="" selected disabled>Pilih Provinsi</option>
@@ -51,7 +51,7 @@
                                                     for="billing_regency" class="">Kota&nbsp;<abbr class="required"
                                                         title="required">*</abbr></label>
                                                 <span class="kobolg-input-wrapper">
-                                                    <select id="kota" name="regency" disabled
+                                                    <select id="kota" name="regency" disabled  required
                                                         class="regency_to_state regency_select" autocomplete="regency"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option value="" selected disabled>Pilih Kota</option>
@@ -62,7 +62,7 @@
                                                 id="billing_alamat_1_field" data-priority="50"><label
                                                     for="billing_alamat_1" class="">Alamat&nbsp;<abbr
                                                         class="required" title="required">*</abbr></label><span
-                                                    class="kobolg-input-wrapper"><input type="text" class="input-text "
+                                                    class="kobolg-input-wrapper"><input  required type="text" class="input-text "
                                                     name="address" id="billing_alamat_1"
                                                         placeholder="Alamat Lengkap" value=""
                                                         autocomplete="alamat-line1"
@@ -73,7 +73,7 @@
                                                 for="billing_courier" class="">Kurir&nbsp;<abbr class="required"
                                                     title="required">*</abbr></label>
                                             <span class="kobolg-input-wrapper">
-                                                <select name="courier_id" id="kurir">
+                                                <select name="courier_id" id="kurir"  required>
                                                     <option value="" selected disabled>Pilih Kurir</option>
                                                     @foreach ($kurirs as $kurir)
                                                     <option data-kurir="{{$kurir->code}}" value="{{$kurir->id}}">{{$kurir->courier}}</option>
@@ -86,7 +86,7 @@
                                             for="billing_courier" class="">Layanan&nbsp;<abbr class="required"
                                                 title="required">*</abbr></label>
                                         <span class="kobolg-input-wrapper">
-                                            <select name="shipping_cost" id="layanan">
+                                            <select name="shipping_cost" id="layanan"  required>
                                                 <option value="" selected disabled>Pilih Layanan</option>
                                             </select>
                                         </span>
