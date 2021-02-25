@@ -167,6 +167,7 @@
     <script src="/assets/js/threesixty.min.js"></script>
     <script src="/assets/js/jquery-ui.min.js"></script>
     <script src="/assets/js/mobilemenu.js"></script>
+    <script src="/assets/js/autoNumeric.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="/assets/js/star-rating.js"></script>
     @yield('scripts')

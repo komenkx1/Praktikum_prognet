@@ -13,9 +13,9 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-         $data = Carts::join('products','carts.product_id','=','products.id')
+         $carts = Carts::join('products','carts.product_id','=','products.id')
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->select(
@@ -24,9 +24,19 @@ class CartController extends Controller
             'carts.qty as quantity',
             'carts.id',
             'products.id as product_id',
-            'products.price',)
+            'products.price',
+            'products.stock',)
          ->get();
-         foreach ($data as $cart) {
+
+
+         $total = Carts::join('products','carts.product_id','=','products.id')
+         ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
+          ->where('user_id',"=",'1')
+          ->where('status','=','notyet')
+          ->get()->first();
+
+         if ($request->ajax()) {
+         foreach ($carts as $cart) {
             $output = '<li class="kobolg-mini-cart-item mini_cart_item">
             <a href="javascript:void(0)" data-id="'.$cart->id.'" class="delete remove remove_from_cart_button">×</a>
             <a href="#">
@@ -39,6 +49,9 @@ class CartController extends Controller
         </li>';
             echo ($output);
         }
+    }else{
+    return view('carts',compact('carts','total'));
+}
     }
     
 
