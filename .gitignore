@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /vendor/
 node_modules/
 npm-debug.log
@@ -21,3 +22,18 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+=======
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+>>>>>>> aeacb5ae71e2f9aad6ac594f64ef36d78c2fad9a
