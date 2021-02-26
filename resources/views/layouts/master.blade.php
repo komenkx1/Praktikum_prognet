@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="/assets/css/star-rating.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" />
-    <title>Kobolg - HTML Template </title>
+    <title>Home</title>
 </head>
 
 <body>

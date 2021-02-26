@@ -136,6 +136,8 @@ class CartController extends Controller
     }
     }
 
+    
+
     /**
      * Display the specified resource.
      *
@@ -167,7 +169,40 @@ class CartController extends Controller
      */
     public function update(Request $request, Carts $cart)
     {
-        //
+        $checkCarts = $cart->where('user_id','=','1')
+        ->where('product_id','=', $request->id)
+        ->where('status','=', 'notyet')
+        ->get()->first();
+      
+        if ($request->stock < 1) {
+             echo 'stok habis';
+        }else{
+            $stock = $request->stock-1;
+        Products::where('id',"=",$request->id)->update([
+                'stock' => $stock,
+            ]);
+
+            if ($checkCarts) {
+
+            if ($checkCarts->product_id == $request->id ) {
+                $qty = $checkCarts->qty+1;
+                Carts::where('user_id','=','1')
+                ->where('product_id','=', $request->id)
+                ->where('status','=', 'notyet')
+                ->update([
+                        'qty' => $qty,
+                    ]);
+            }
+                        }else{
+                            $cart->product_id = $request->id;
+                            $cart->user_id  = 1;
+                            $cart->qty = 1;
+                            $cart->status = 'notyet';
+                            $cart->save();
+                        }
+                        echo 'Product DItambahkan Ke Keranjang';
+      
+    }
     }
 
     /**
