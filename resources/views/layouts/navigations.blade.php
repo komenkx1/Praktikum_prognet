@@ -74,7 +74,7 @@
                             </div>
                             <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
                                 <div class="shopcart-dropdown block-cart-link" data-kobolg="kobolg-dropdown">
-                                    <a class="block-link link-dropdown" href="cart.html">
+                                    <a class="block-link link-dropdown" href="{{Route('cart')}}">
                                         <span class="flaticon-online-shopping-cart"></span>
                                         <span class="count">3</span>
                                     </a>
@@ -104,7 +104,7 @@
                                                     class="kobolg-Price-currencySymbol">$</span>418.00</span>
                                         </p>
                                         <p class="kobolg-mini-cart__buttons buttons">
-                                            <a href="cart.html" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                            <a href="{{Route('cart')}}" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
                                             <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                         </p>
                                     </div>
@@ -185,7 +185,7 @@
                                                     class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
                                                     <div class="shopcart-dropdown block-cart-link"
                                                         data-kobolg="kobolg-dropdown">
-                                                        <a class="block-link link-dropdown" href="cart.html">
+                                                        <a class="block-link link-dropdown" href="{{Route('cart')}}">
                                                             <span class="flaticon-online-shopping-cart"></span>
                                                             <span class="count countcarts">{{$carts->count()}}</span>
                                                         </a>
@@ -223,7 +223,7 @@
                                                                 </span>
                                                             </p>
                                                             <p class="kobolg-mini-cart__buttons buttons">
-                                                                <a href="cart.html"
+                                                                <a href="{{Route('cart')}}"
                                                                     class="@if($carts->count() < 1) w-100 @endif  button kobolg-forward">Viewcart</a>
                                                                 <a href="{{Route('checkout')}}"
                                                                     class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
@@ -294,7 +294,7 @@
                     </div>
                     <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
                         <div class="shopcart-dropdown block-cart-link" data-kobolg="kobolg-dropdown">
-                            <a class="block-link link-dropdown" href="cart.html">
+                            <a class="block-link link-dropdown" href="{{Route('cart')}}">
                                 <span class="flaticon-online-shopping-cart"></span>
                                 <span class="count countcarts">{{$carts->count()}}</span>
                             </a>
@@ -329,7 +329,7 @@
                                     </span>
                                 </p>
                                 <p class="kobolg-mini-cart__buttons buttons">
-                                    <a href="cart.html" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                    <a href="{{Route('cart')}}" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
                                     <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                 </p>
                             </div>

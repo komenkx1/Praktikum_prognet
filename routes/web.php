@@ -36,6 +36,7 @@ Route::get('getkota', [checkoutController::class, 'getkota'])->name('getkota');
 //cart
 Route::get('cart', [CartController::class, 'index'])->name('cart');
 Route::post('add-cart', [CartController::class, 'store'])->name('add-cart');
+Route::post('update-cart', [CartController::class, 'update'])->name('update-cart');
 Route::get('count-cart', [CartController::class, 'count'])->name('count-cart');
 Route::get('total-cart', [CartController::class, 'totalprice'])->name('total-cart');
 Route::delete('delete-cart', [CartController::class, 'destroy'])->name('delete-cart');

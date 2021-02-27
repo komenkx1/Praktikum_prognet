@@ -28,10 +28,13 @@ class CheckoutController extends Controller
          ->where('user_id',"=",'1')
          ->where('status','=','notyet')
          ->select(
-            \DB::raw('products.price * carts.qty as subprice,products.weight * carts.qty as berattotal'),
+            \DB::raw('products.price * carts.qty as subprice'),
             'products.product_name as name',
             'carts.qty as quantity',
-            'products.id as product_id',)
+            'carts.id',
+            'products.id as product_id',
+            'products.price',
+            'products.stock',)
          ->get();
 
          $total = Carts::join('products','carts.product_id','=','products.id')

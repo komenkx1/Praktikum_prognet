@@ -54,27 +54,31 @@
                                             <div class="quantity">
                                                 <span class="qty-label">Quantiy:</span>
                                                 <div class="control">
-                                                    <a href="#" class="up btn-number qtyplus quantity-plus" value="Up"
-                                                        data-max="{{$cart->stock}}">+</a>
-                                                    <input type="text" name="incdec" data-price="{{$cart->price}}"
-                                                        class="incdec input-qty input-text"
-                                                        value="{{$cart->quantity}}" />
-                                                    <a href="#" class="down btn-number qtyplus quantity-minus"
-                                                        value="Down" data-min="0">-</a>
+                                                    <div>
+                                                        <input type="hidden" name="id[]" value="{{$cart->id}}">
+                                                        <div data-min="1"
+                                                            class="dec button btn-number qtyplus quantity-minus">-
+                                                        </div>
+                                                        <input type="text" class="incdec input-qty input-text"
+                                                            name="qty[]" id="value{{$cart->id}}"
+                                                            value="{{$cart->quantity}}" data-price="{{$cart->price}}" />
+                                                        <div class="inc button btn-number qtyplus quantity-plus"
+                                                            data-max="{{$cart->stock}}">+</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="product-price" data-title="Price">
                                             <span class="kobolg-Price-amount amount subtotal">Rp
-                                                {{number_format($cart->price,0,',','.')}}</span></td>
+                                                {{number_format($cart->subprice,0,',','.')}}</span></td>
                                     </tr>
                                     @endforeach
                                     <tr>
                                         <td colspan="6" class="actions">
-                                            <button type="button"  id="submit" class="button" name="update_cart" value="Update cart"
-                                                >Update cart
+                                            <button type="button" id="submit" class="button" name="update_cart"
+                                                value="Update cart">Update cart
                                             </button>
-                                            
+
                                         </td>
                                     </tr>
                                 </tbody>
@@ -85,27 +89,24 @@
                                 <h2>Cart totals</h2>
                                 <table class="shop_table shop_table_responsive" cellspacing="0">
                                     <tbody>
-                                        <tr class="cart-subtotal">
-                                            <th>Subtotal</th>
-                                            <td data-title="Subtotal"><span class="kobolg-Price-amount amount"><span
-                                                        class="kobolg-Price-currencySymbol">$</span>418.00</span></td>
-                                        </tr>
                                         <tr class="order-total">
                                             <th>Total</th>
-                                            <td data-title="Total"><strong><span
-                                                        class="kobolg-Price-amount amount"><span
-                                                            class="kobolg-Price-currencySymbol">$</span>418.00</span></strong>
+                                            <td data-title="Total">
+                                                <strong><span class="kobolg-Price-amount amount sub-total">
+                                                    <span
+                                                        class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total->total,2,',','.')}}</span>
+                                                </span></strong>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div class="kobolg-proceed-to-checkout">
-                                    <a href="#" class="checkout-button button alt kobolg-forward">
+                                    <a href="{{Route('checkout')}}" class="checkout-button button alt kobolg-forward">
                                         Proceed to checkout</a>
                                 </div>
                             </div>
                         </div>
-                
+
                     </div>
                 </div>
             </div>
@@ -139,48 +140,75 @@ var total;
       return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
     };
 
-price = $('.incdec').data('price'); 
 
-
-$(".up").on('click',function(){
+incrementVar = 0;
+$('.inc.button').click(function(){
     var max = $(this).data("max");
-      if ($(".incdec").val() < $(this).data("max")) {
-        $(".incdec").val(parseInt($(".incdec").val())+1);
-        qty = $('.incdec').val();
-      }
-      total = price * qty;
-      console.log();
-         $('.kobolg-Price-amount.amount.subtotal').html('Rp '+format(total));
+    if ($(this).prev('input').val() < $(this).data("max")) {
+        var $this = $(this),
+        $input = $this.prev('input'),
+        $parent = $input.closest('div'),
+        newValue = parseInt($input.val())+1;
+    $parent.find('.inc').addClass('a'+newValue);
+    $input.val(newValue);
+    price = $(this).prev('input').data('price'); 
+    incrementVar += newValue;
+    total = price * newValue;
+   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
+    }else{
+        toastr.info('Stock Product Habis');
+    }
+   
 });
+$('.dec.button').click(function(){
+    var min = $(this).data("min");
+    if ($(this).next('input').val() > $(this).data("min")) {
+    var $this = $(this),
+        $input = $this.next('input'),
+        $parent = $input.closest('div'),
+        newValue = parseInt($input.val())-1;
+    console.log($parent);
+    $parent.find('.inc').addClass('a'+newValue);
+    $input.val(newValue);
+    price = $(this).next('input').data('price'); 
+    incrementVar += newValue;
+    total = price * newValue;
+   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
 
-$(".down").on('click',function(){
-      if ($(".incdec").val() > $(this).data("min")) {
-        $(".incdec").val(parseInt($(".incdec").val())-1);
-        qty = $('.incdec').val();
-      }
-      total = price * qty;
-      console.log(total);
-         $('.kobolg-Price-amount.amount.subtotal').html('Rp '+format(total));
+}else{
+        toastr.error('Pembelian Minimal 1 Product');
+    }
 });
 
 $(document).on('click','#submit',function(){
-		var qty = $('.incdec').val();
-		// $.ajax({
-		// 	url: '{{Route("add-cart")}}',
-		// 	type: 'post',
-		// 	data: {id: id,stock : stock},
-		// 	success: function(data){
-        //         loadcount();
-        //         loadcarts();
-        //         loadtotal();
-        //         if (data == 'stok habis') {
-        //             toastr.error(data);
-        //         }else{
-        //             toastr.success(data);
-        //         }
+    var qty = $('input[name="qty[]"]').map(function(){ 
+                    return this.value; 
+                }).get();
+
+    var id = $('input[name="id[]"]').map(function(){ 
+                    return this.value; 
+                }).get();
+
+		$.ajax({
+			url: '{{Route("update-cart")}}',
+			type: 'post',
+            data: {
+                        'qty[]': qty,
+                        'id[]': id,
+                        // other data
+                    },
+			success: function(data){
+                loadcount();
+                loadcarts();
+                loadtotal();
+                if (data == 'stok habis') {
+                    toastr.error(data);
+                }else{
+                    toastr.info(data);
+                }
                
-		// 	}
-		// });
+			}
+		});
 	});
 </script>
 @endsection

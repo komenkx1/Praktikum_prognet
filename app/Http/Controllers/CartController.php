@@ -108,11 +108,6 @@ class CartController extends Controller
         if ($request->stock < 1) {
              echo 'stok habis';
         }else{
-            $stock = $request->stock-1;
-        Products::where('id',"=",$request->id)->update([
-                'stock' => $stock,
-            ]);
-
             if ($checkCarts) {
 
             if ($checkCarts->product_id == $request->id ) {
@@ -131,7 +126,7 @@ class CartController extends Controller
                             $carts->status = 'notyet';
                             $carts->save();
                         }
-                        echo 'Product DItambahkan Ke Keranjang';
+                        echo 'Product Ditambahkan Ke Keranjang';
       
     }
     }
@@ -169,40 +164,13 @@ class CartController extends Controller
      */
     public function update(Request $request, Carts $cart)
     {
-        $checkCarts = $cart->where('user_id','=','1')
-        ->where('product_id','=', $request->id)
-        ->where('status','=', 'notyet')
-        ->get()->first();
-      
-        if ($request->stock < 1) {
-             echo 'stok habis';
-        }else{
-            $stock = $request->stock-1;
-        Products::where('id',"=",$request->id)->update([
-                'stock' => $stock,
+        foreach ($request->id as $key => $value) {
+
+            Carts::where('id',"=",$request->id[$key])->update([
+                'qty' => $request->qty[$key],
             ]);
-
-            if ($checkCarts) {
-
-            if ($checkCarts->product_id == $request->id ) {
-                $qty = $checkCarts->qty+1;
-                Carts::where('user_id','=','1')
-                ->where('product_id','=', $request->id)
-                ->where('status','=', 'notyet')
-                ->update([
-                        'qty' => $qty,
-                    ]);
-            }
-                        }else{
-                            $cart->product_id = $request->id;
-                            $cart->user_id  = 1;
-                            $cart->qty = 1;
-                            $cart->status = 'notyet';
-                            $cart->save();
-                        }
-                        echo 'Product DItambahkan Ke Keranjang';
-      
-    }
+        }
+        echo 'cart berhasil Diupdate';
     }
 
     /**
