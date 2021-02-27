@@ -30,9 +30,9 @@ Route::put('cancel/{transactions:id}', [TransactionController::class, 'cancel'])
 Route::put('verifikasi-barang/{transactions:id}', [TransactionController::class, 'verifbarang'])->name('verif-barang-diterima');
 
 Route::post('cekongkir',[CheckoutController::class, 'cekongkir'])->name('cekongkir');
-Route::get('checkout', [checkoutController::class, 'index'])->name('checkout');
-Route::post('checkout-all', [checkoutController::class, 'store'])->name('checkout-all');
-Route::get('getkota', [checkoutController::class, 'getkota'])->name('getkota');
+Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('checkout-all', [CheckoutController::class, 'store'])->name('checkout-all');
+Route::get('getkota', [CheckoutController::class, 'getkota'])->name('getkota');
 //cart
 Route::get('cart', [CartController::class, 'index'])->name('cart');
 Route::post('add-cart', [CartController::class, 'store'])->name('add-cart');

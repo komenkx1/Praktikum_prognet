@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductCategories;
+use App\Models\ProductCategoryDetails;
 use Illuminate\Http\Request;
 
-class ProductCategoriesController extends Controller
+class ProductCategoryDetailsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ProductCategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductCategories  $productCategories
+     * @param  \App\Models\ProductCategoryDetails  $productCategoryDetails
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductCategories $productCategories)
+    public function show(ProductCategoryDetails $productCategoryDetails)
     {
         //
     }
@@ -52,10 +52,10 @@ class ProductCategoriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProductCategories  $productCategories
+     * @param  \App\Models\ProductCategoryDetails  $productCategoryDetails
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductCategories $productCategories)
+    public function edit(ProductCategoryDetails $productCategoryDetails)
     {
         //
     }
@@ -64,10 +64,10 @@ class ProductCategoriesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductCategories  $productCategories
+     * @param  \App\Models\ProductCategoryDetails  $productCategoryDetails
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductCategories $productCategories)
+    public function update(Request $request, ProductCategoryDetails $productCategoryDetails)
     {
         //
     }
@@ -75,10 +75,10 @@ class ProductCategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductCategories  $productCategories
+     * @param  \App\Models\ProductCategoryDetails  $productCategoryDetails
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategories $productCategories)
+    public function destroy(ProductCategoryDetails $productCategoryDetails)
     {
         //
     }

@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/jquery.scrollbar.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/lightbox.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/magnific-popup.css" />
