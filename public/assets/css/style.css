@@ -7629,10 +7629,13 @@ body.admin-bar #yith-quick-view-modal {
 .product-item .product-info {
     padding: 20px 15px;
 }
-
+.bungkus-stock{
+    padding-top: 20px;
+}
 .product-item .product-inner {
     border-radius: 8px;
     border: 2px solid #f3f3f3;
+    height: 400px;
 }
 
 .product-item .product-inner:hover {

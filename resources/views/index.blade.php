@@ -93,8 +93,8 @@
                             class="form-search d-flex block-search-form kobolg-live-search-form">
                             <div class="form-content search-box results-search mr-3">
                                 <div class="inner">
-                                    <input autocomplete="off" id="form-search" class="searchfield txt-livesearch input" name="s" value=""
-                                        placeholder="Search here..." type="text">
+                                    <input autocomplete="off" id="form-search" class="searchfield txt-livesearch input"
+                                        name="s" value="" placeholder="Search here..." type="text">
                                 </div>
                             </div>
                             <button type="button" id="btn-search" class="btn-submit">
@@ -104,7 +104,7 @@
                     </div>
                 </div>
             </div>
-            <div class="kobolg-products style-02">
+            <div class="kobolg-products style-02 CONTAINER">
 
                 <div id="results" class="row" style="position: relative;">
 
@@ -128,12 +128,18 @@
 });
 
 var SITEURL = "{{ url('/') }}";
+var nearToBottom = 100;
    var page = 1; //track user scroll as page number, right now page number is 1
    load_more(page); //initial content load
    $(window).scroll(function() { //detect page scroll
-      if($(window).scrollTop() + $(window).height() >= $(document).height()) { //if user scrolled from top to bottom of the page
+    console.log( $(window).scrollTop());
+
+      if($(window).scrollTop() + $(window).height() >= 
+    $('.CONTAINER').offset().top + $('.CONTAINER').height() ) { //if user scrolled from top to bottom of the page
       page++; //page number increment
       load_more(page); //load content   
+
+  
       }
     });     
     function load_more(page){

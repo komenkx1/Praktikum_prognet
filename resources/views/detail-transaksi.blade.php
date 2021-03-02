@@ -4,7 +4,10 @@
 <main class="site-main main-container no-sidebar">
     <div class="container">
         <div class="bayar">
-            <h1 class="text-center text-danger font-weight-bolder">{{"Rp " . number_format($transaksi->total,2,',','.')}} <hr></h1>
+            <h1 class="text-center text-danger font-weight-bolder">
+                {{"Rp " . number_format($transaksi->total,2,',','.')}}
+                <hr>
+            </h1>
         </div>
         <div class="time text-center">
             @if ($transaksi->status == 'canceled')
@@ -38,7 +41,7 @@
             @endif
 
         </div>
- 
+
         <div class="row pt-5">
             @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null)
 

@@ -20,7 +20,7 @@
                 <div class="page-main-content">
                     <div class="kobolg">
                         <div class="kobolg-notices-wrapper"></div>
-                        
+
                         <form action="{{Route('checkout-all')}}" method="post" class="checkout kobolg-checkout"
                             enctype="multipart/form-data" novalidate="novalidate">
                             @csrf
@@ -29,74 +29,104 @@
                                     <div class="kobolg-billing-fields">
                                         <h3>Billing details</h3>
                                         <div class="kobolg-billing-fields__field-wrapper">
-                                        
+
                                             <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
                                                 id="billing_province_field" data-priority="40"><label
                                                     for="billing_province" class="">Province&nbsp;<abbr class="required"
                                                         title="required">*</abbr></label>
                                                 <span class="kobolg-input-wrapper">
                                                     <select id="provinsi" name="province" required
-                                                        class="province_to_state province_select" autocomplete="province"
-                                                        tabindex="-1" aria-hidden="true">
+                                                        class="province_to_state province_select"
+                                                        autocomplete="province" tabindex="-1" aria-hidden="true">
                                                         <option value="" selected disabled>Pilih Provinsi</option>
                                                         @foreach ($provinsis as $provinsi)
-                                                        <option data-id="{{$provinsi->id}}" value="{{$provinsi->title}}">{{$provinsi->title}}</option>
+                                                        <option data-id="{{$provinsi->id}}"
+                                                            value="{{$provinsi->title}}">{{$provinsi->title}}</option>
                                                         @endforeach
-                                                       
+
                                                     </select>
                                                 </span>
+                                                @if ($errors->has('province'))
+                                                <span class="text-danger">{{ $errors->first('province') }}</span>
+                                                @endif
                                             </p>
+
                                             <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
                                                 id="billing_regency_field" data-priority="40"><label
                                                     for="billing_regency" class="">Kota&nbsp;<abbr class="required"
                                                         title="required">*</abbr></label>
                                                 <span class="kobolg-input-wrapper">
-                                                    <select id="kota" name="regency" disabled  required
+                                                    <select id="kota" name="regency" disabled required
                                                         class="regency_to_state regency_select" autocomplete="regency"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option value="" selected disabled>Pilih Kota</option>
                                                     </select>
                                                 </span>
+                                                @if ($errors->has('regency'))
+                                                <span class="text-danger">{{ $errors->first('regency') }}</span>
+                                                @endif
                                             </p>
                                             <p class="form-row form-row-wide alamat-field validate-required"
                                                 id="billing_alamat_1_field" data-priority="50"><label
-                                                    for="billing_alamat_1" class="">Alamat&nbsp;<abbr
-                                                        class="required" title="required">*</abbr></label><span
-                                                    class="kobolg-input-wrapper"><input  required type="text" class="input-text "
-                                                    name="address" id="billing_alamat_1"
+                                                    for="billing_alamat_1" class="">Alamat&nbsp;<abbr class="required"
+                                                        title="required">*</abbr></label><span
+                                                    class="kobolg-input-wrapper"><input required type="text"
+                                                        class="input-text " name="address" id="billing_alamat_1"
                                                         placeholder="Alamat Lengkap" value=""
                                                         autocomplete="alamat-line1"
                                                         data-placeholder="Alamat Lengkap"></span>
+                                                @if ($errors->has('address'))
+                                                <span class="text-danger">{{ $errors->first('address') }}</span>
+                                                @endif
+                                            </p>
+                                            <p class="form-row form-row-wide alamat-field validate-required"
+                                                id="billing_telp_field" data-priority="50"><label for="billing_tepl"
+                                                    class="">Nomor Telepon&nbsp;<abbr class="required"
+                                                        title="required">*</abbr></label><span
+                                                    class="kobolg-input-wrapper"><input required type="text"
+                                                        class="input-text " name="telp" id="billing_tepl"
+                                                        placeholder="Nomor Telepon" value="" autocomplete="alamat-line1"
+                                                        data-placeholder="Nomor Telepon"></span>
+                                                @if ($errors->has('telp'))
+                                                <span class="text-danger">{{ $errors->first('telp') }}</span>
+                                                @endif
                                             </p>
                                             <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
-                                            id="billing_courier_field" data-priority="40"><label
-                                                for="billing_courier" class="">Kurir&nbsp;<abbr class="required"
-                                                    title="required">*</abbr></label>
-                                            <span class="kobolg-input-wrapper">
-                                                <select name="courier_id" id="kurir"  required>
-                                                    <option value="" selected disabled>Pilih Kurir</option>
-                                                    @foreach ($kurirs as $kurir)
-                                                    <option data-kurir="{{$kurir->code}}" value="{{$kurir->id}}">{{$kurir->courier}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </span>
-                                        </p>
-                                        <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
-                                        id="billing_courier_field" data-priority="40"><label
-                                            for="billing_courier" class="">Layanan&nbsp;<abbr class="required"
-                                                title="required">*</abbr></label>
-                                        <span class="kobolg-input-wrapper">
-                                            <select name="shipping_cost" id="layanan"  required>
-                                                <option value="" selected disabled>Pilih Layanan</option>
-                                            </select>
-                                        </span>
-                                    </p>
-                                            
+                                                id="billing_courier_field" data-priority="40"><label
+                                                    for="billing_courier" class="">Kurir&nbsp;<abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <span class="kobolg-input-wrapper">
+                                                    <select name="courier_id" id="kurir" required>
+                                                        <option value="" selected disabled>Pilih Kurir</option>
+                                                        @foreach ($kurirs as $kurir)
+                                                        <option data-kurir="{{$kurir->code}}" value="{{$kurir->id}}">
+                                                            {{$kurir->courier}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </span>
+                                                @if ($errors->has('courier_id'))
+                                                <span class="text-danger">{{ $errors->first('courier_id') }}</span>
+                                                @endif
+                                            </p>
+                                            <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
+                                                id="billing_courier_field" data-priority="40"><label
+                                                    for="billing_courier" class="">Layanan&nbsp;<abbr class="required"
+                                                        title="required">*</abbr></label>
+                                                <span class="kobolg-input-wrapper">
+                                                    <select name="shipping_cost" id="layanan" required>
+                                                        <option value="" selected disabled>Pilih Layanan</option>
+                                                    </select>
+                                                </span>
+                                                @if ($errors->has('shipping_cost'))
+                                                <span class="text-danger">{{ $errors->first('shipping_cost') }}</span>
+                                                @endif
+                                            </p>
+
                                         </div>
                                     </div>
-                                   
+
                                 </div>
-                        
+
                             </div>
                             <h3 id="order_review_heading">Your order</h3>
                             <div id="order_review" class="kobolg-checkout-review-order">
@@ -111,21 +141,36 @@
                                         @foreach ($carts as $cart)
                                         <tr class="cart_item">
                                             <td class="product-name">
-                                               {{$cart->name}}&nbsp;&nbsp; <strong class="product-quantity">×
+                                                {{$cart->name}}&nbsp;&nbsp; <strong class="product-quantity">×
                                                     {{$cart->quantity}}</strong></td>
                                             <td class="product-total">
-                                                <span class="kobolg-Price-amount amount">{{"Rp " . number_format($cart->subprice,2,',','.')}}</span></td>
+                                                <span
+                                                    class="kobolg-Price-amount amount">{{"Rp " . number_format($cart->subprice,0,',','.')}}</span>
+                                            </td>
                                         </tr>
-                                       @endforeach
+                                        @endforeach
                                     </tbody>
                                     <tfoot>
                                         <tr class="cart-subtotal">
+                                            <th>Sub Total</th>
+                                            <td><span
+                                                    class="kobolg-Price-amount amount">{{"Rp " . number_format($total->total,0,',','.')}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
+                                            <th>Ongkir</th>
+                                            <td><span class="kobolg-Price-amount amount" id="ongkir">0</span></td>
+                                        </tr>
+                                        <tr class="cart-subtotal">
                                             <th>Berat Total</th>
-                                            <td><span class="kobolg-Price-amount amount" id="berat" data-berat="{{$total->berattotal}}">{{$total->berattotal}} Kg</span></td>
+                                            <td><span class="kobolg-Price-amount amount" id="berat"
+                                                    data-berat="{{$total->berattotal}}">{{$total->berattotal}} Kg</span>
+                                            </td>
                                         </tr>
                                         <tr class="order-total">
                                             <th>Total</th>
-                                            <td><strong><span class="kobolg-Price-amount amount">{{"Rp " . number_format($total->total,2,',','.')}}</span></strong>
+                                            <td><strong><span data-total="{{$total->total}}" id="total"
+                                                        class="kobolg-Price-amount amount">{{"Rp " . number_format($total->total,0,',','.')}}</span></strong>
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -134,8 +179,7 @@
                                     <ul class="wc_payment_methods payment_methods methods">
                                         <li class="wc_payment_method payment_method_bacs">
                                             <input id="payment_method_bacs" type="radio" class="input-radio"
-                                                 value="bacs" checked="checked"
-                                                data-order_button_text="">
+                                                value="bacs" checked="checked" data-order_button_text="">
                                             <label for="payment_method_bacs">
                                                 Direct bank transfer </label>
                                             <div class="payment_box payment_method_bacs">
@@ -144,7 +188,7 @@
                                                     until the funds have cleared in our account.</p>
                                             </div>
                                         </li>
-                                        
+
                                     </ul>
                                     <div class="form-row place-order">
                                         <noscript>
@@ -166,13 +210,13 @@
                                                         policy</a>.</p>
                                             </div>
                                         </div>
-                                        <button type="submit" class="button alt" 
-                                            id="place_order" value="Place order" data-value="Place order">Place
+                                        <button type="submit" class="button alt" id="place_order" value="Place order"
+                                            data-value="Place order">Place
                                             order
                                         </button>
                                         <input type="hidden" id="kobolg-process-checkout-nonce"
                                             value="634590c981"><input type="hidden"
-                                           value="/kobolg/?kobolg-ajax=update_order_review">
+                                            value="/kobolg/?kobolg-ajax=update_order_review">
                                     </div>
                                 </div>
                             </div>
@@ -185,12 +229,13 @@
 </main>
 @endsection
 @section('scripts')
-    <script>
-              $.ajaxSetup({
+<script>
+    $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
   }
 });
+
          $('#provinsi').on('change', function() {
         var id = $(this).find('option:selected').data("id");
         var html_option ='';
@@ -205,27 +250,49 @@
             html_option += '<option data-kota='+kotas.city_id+' value='+kotas.title+'>'+kotas.title+'</option>'
         });
         $('#kota').html(html_option);
-        loadongkir();
-			}
-		});
+        var kurir = $('#kurir :selected').val();
+    if (kurir) {
+     loadongkir();
+    }
+}
+    });
 });
 
 $('#kota').on('change', function() {
-    loadongkir();
+    var kurir = $('#kurir :selected').val();
+    if (kurir) {
+     loadongkir();
+    }
+   
 });
+
 $('#kurir').on('change', function() {
     loadongkir();
 });
 
+$('select[name="shipping_cost"]').on('change', function() {
+    loadSubOngkir();
+    loadtotals();
+});
 
+function loadtotals() {
+    var ongkir = $('select[name="shipping_cost"] :selected').val();
+    var total = $('#total').attr('data-total');
+    var totals = Number(ongkir) + Number(total);
+    $('span#total').html('Rp '+format(totals));
+}
+
+function loadSubOngkir() {
+    var html_option = '';
+    html_option += $('select[name="shipping_cost"] :selected').val();
+    $('#ongkir').html('Rp '+format(html_option));
+}
 
 function loadongkir(){
         var kurir =$('#kurir').find('option:selected').data("kurir");
         var kota = $('#kota').find('option:selected').data("kota");
         var berat = $('#berat').data('berat');
-        console.log(kurir);
-        console.log(kota);
-        console.log(berat);
+        var html_option = '';
     $.ajax({
 			url: '{{Route("cekongkir")}}',
 			type: 'post',
@@ -235,22 +302,27 @@ function loadongkir(){
                 berat: berat
                 },
                 success:function(data){
-$('select[name="shipping_cost"]').empty();
+                    
+    $('select[name="shipping_cost"]').html('<option value="" selected>Tidak ada layanan</option>');
+                
 // looping data result nya
 $.each(data, function(key, value){
 // looping data layanan misal jne reg, jne oke, jne yes
 $.each(value.costs, function(key1, value1){
 // untuk looping cost nya masing masing
 $.each(value1.cost, function(key2, value2){
-$('select[name="shipping_cost"]').append('<option value="'+ value2.value +'">' + value1.service + '-' + value1.description + '- Rp.' +value2.value+ '</option>');
 
+    html_option +='<option value="'+ value2.value +'">' + value1.service + '-' + value1.description + '- Rp.' +value2.value+ '</option>';
+    $('select[name="shipping_cost"]').html( html_option);
 });
+loadSubOngkir();
+loadtotals();
 });
 });
 }
-		});
-    };
+});
+};
 
 
-    </script>
+</script>
 @endsection

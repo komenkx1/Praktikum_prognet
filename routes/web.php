@@ -40,8 +40,8 @@ Route::post('update-cart', [CartController::class, 'update'])->name('update-cart
 Route::get('count-cart', [CartController::class, 'count'])->name('count-cart');
 Route::get('total-cart', [CartController::class, 'totalprice'])->name('total-cart');
 Route::delete('delete-cart', [CartController::class, 'destroy'])->name('delete-cart');
+Route::delete('delete/{cart:id}', [CartController::class, 'destroy'])->name('delete');
 //product
-Route::get('load-stock', [ProductController::class, 'stock'])->name('load-stock');
 Route::get('/', [ProductController::class, 'index'])->name('product');
 Route::get('detail-product/{products:id}', [ProductController::class, 'show'])->name('detail-product');
 Route::post('beli', [ProductController::class, 'store'])->name('beli-product');

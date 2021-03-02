@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transactions;
+use App\Models\Products;
+use App\Models\TransactionDetails;
 use App\Models\Carts;
 use Illuminate\Http\Request;
 
@@ -15,24 +17,25 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $carts = Carts::join('products','carts.product_id','=','products.id')
-        ->where('user_id',"=",'1')
-        ->where('status','=','notyet')
-        ->select(
-           \DB::raw('products.price * carts.qty as subprice'),
-           'products.product_name as name',
-           'carts.qty as quantity',
-           'carts.id',
-           'products.id as product_id',
-           'products.price',)
-        ->get();
-        $total = Carts::join('products','carts.product_id','=','products.id')
-        ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->get()->first();
-        $transaksis = Transactions::where('user_id','=','1')->get();
-        return view('transaksi',compact('transaksis','carts','total'));
+        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->select(
+                \DB::raw('products.price * carts.qty as subprice'),
+                'products.product_name as name',
+                'carts.qty as quantity',
+                'carts.id',
+                'products.id as product_id',
+                'products.price',
+            )
+            ->get();
+        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->get()->first();
+        $transaksis = Transactions::where('user_id', '=', '1')->get();
+        return view('transaksi', compact('transaksis', 'carts', 'total'));
     }
 
     /**
@@ -53,7 +56,6 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        
     }
 
     /**
@@ -89,29 +91,39 @@ class TransactionController extends Controller
     {
         if ($request->proof_of_payment) {
 
-    $gambar = $request->file('proof_of_payment');
-    $urlgambar = $gambar->storeAs("img/bukti", md5('Bukti' . $transactions->id . microtime()) . '.' . $gambar->extension());
-    $transactions->proof_of_payment = $urlgambar;
-    $transactions->update();
-}
-return redirect()->back();
+            $gambar = $request->file('proof_of_payment');
+            $urlgambar = $gambar->storeAs("img/bukti", md5('Bukti' . $transactions->id . microtime()) . '.' . $gambar->extension());
+            $transactions->proof_of_payment = $urlgambar;
+            $transactions->update();
+        }
+        return redirect()->back();
     }
 
     public function cancel(Transactions $transactions)
     {
-  
-    $transactions->status = 'canceled';
-    $transactions->update();
-    return redirect()->back();
 
+        $transactions->status = 'canceled';
+        $transactions->update();
+        return redirect()->back();
     }
     public function verifbarang(Transactions $transactions)
     {
-  
-    $transactions->status = 'success';
-    $transactions->update();
-    return redirect()->back();
 
+
+        $detailTrans = TransactionDetails::where('transaction_id', $transactions->id)->get();
+
+        // dd($detailTrans);
+        foreach ($detailTrans as  $detail) {
+            $products = Products::where('id', $detail->product_id)->get();
+            foreach ($products as $key => $value) {
+                Products::where('id', "=", $detail->product_id)->update([
+                    'stock' => $value->stock - $detail->qty,
+                ]);
+            }
+        }
+        $transactions->status = 'success';
+        $transactions->update();
+        return redirect()->back();
     }
 
 

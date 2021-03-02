@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Couriers;
 use App\Models\Provinces;
 use App\Models\Cities;
@@ -21,51 +22,52 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        
+
         $provinsis = Provinces::all();
         $kurirs = Couriers::all();
-        $carts = Carts::join('products','carts.product_id','=','products.id')
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->select(
-            \DB::raw('products.price * carts.qty as subprice'),
-            'products.product_name as name',
-            'carts.qty as quantity',
-            'carts.id',
-            'products.id as product_id',
-            'products.price',
-            'products.stock',)
-         ->get();
+        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->select(
+                \DB::raw('products.price * carts.qty as subprice'),
+                'products.product_name as name',
+                'carts.qty as quantity',
+                'carts.id',
+                'products.id as product_id',
+                'products.price',
+                'products.stock',
+            )
+            ->get();
 
-         $total = Carts::join('products','carts.product_id','=','products.id')
-         ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight*carts.qty) as berattotal'))
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->get()->first();
+        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight*carts.qty) as berattotal'))
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->get()->first();
         // dd($carts);
-        return view('checkout',compact('provinsis','kurirs','carts','total'));
+        return view('checkout', compact('provinsis', 'kurirs', 'carts', 'total'));
     }
     public function getkota(Request $request)
     {
-        $kota = Cities::where('province_id','=',$request->id)->get();
+        $kota = Cities::where('province_id', '=', $request->id)->get();
         $sen = $kota->toArray();
         return response()->json([
-        'status' => true,
-        'kota' => $sen
-    ], 200);
+            'status' => true,
+            'kota' => $sen
+        ], 200);
     }
     public function cekongkir(Request $request)
     {
-        $asal = Cities::where('city_id','128')->get()->first();
+        $asal = Cities::where('city_id', '128')->get()->first();
         $cost = RajaOngkir::ongkosKirim([
-    'origin'        => $asal->id,     // ID kota/kabupaten asal
-    'destination'   => $request->kota,      // ID kota/kabupaten tujuan
-    'weight'        => $request->berat,    // berat barang dalam gram
-    'courier'       => $request->kurir    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
-    ])->get();
-    return response()->json($cost);
+            'origin'        => $asal->id,     // ID kota/kabupaten asal
+            'destination'   => $request->kota,      // ID kota/kabupaten tujuan
+            'weight'        => $request->berat,    // berat barang dalam gram
+            'courier'       => $request->kurir    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
+        ])->get();
+        return response()->json($cost);
     }
-  
+
     /**
      * Show the form for creating a new resource.
      *
@@ -83,19 +85,29 @@ class CheckoutController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        $carts = Carts::join('products','carts.product_id','=','products.id')
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->get();
+    {
+        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->get();
 
-        $total = Carts::join('products','carts.product_id','=','products.id')
-         ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight * carts.qty) as berattotal'))
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->get()->first();
+        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
+            ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight * carts.qty) as berattotal'))
+            ->where('user_id', "=", '1')
+            ->where('status', '=', 'notyet')
+            ->get()->first();
 
-        $transaksi = New Transactions;
+        $request->validate([
+            'province'      => 'required',
+            'regency'  => 'required',
+            'address'  => 'required',
+            'courier_id'  => 'required',
+            'shipping_cost'  => 'required',
+            'telp'  => 'required',
+        ]);
+
+        $transaksi = new Transactions;
+
         $datetime = strtotime("+1 day");
         $tomorrowDate = date("Y-m-d H:i:s", $datetime);
         $transaksaction = $request->all();
@@ -103,11 +115,11 @@ class CheckoutController extends Controller
         $transaksaction['total'] =  $request->shipping_cost + $total->total;
         $transaksaction['sub_total'] = $total->total;
         $transaksaction['user_id'] = '1';
-        $transaksaction['status'] = 'unverified'; 
-        $transaksaction['telp'] = '081222111'; 
+        $transaksaction['status'] = 'unverified';
+        $transaksaction['telp'] = $request->telp;
         $idtransaksi = $transaksi->create($transaksaction);
 
-    
+
 
         foreach ($carts as $key => $value) {
             $idtransaksidetail = TransactionDetails::create([
@@ -117,13 +129,13 @@ class CheckoutController extends Controller
                 'selling_price' => $value->price,
             ]);
 
-            Carts::where('user_id',"=",'1')->update([
+            Carts::where('user_id', "=", '1')->update([
                 'status' => 'checkedout',
             ]);
         }
-       
+
         // dd($transaksiDetails);
-        return redirect(Route('detail-transaksi',['transactions' => encrypt($idtransaksi->id)]));
+        return redirect(Route('detail-transaksi', ['transactions' => encrypt($idtransaksi->id)]));
     }
 
     /**

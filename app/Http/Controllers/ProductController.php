@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Products::where('stock', '>', '0')->paginate(8);
+        $products = Products::paginate(8);
         $categories = Category::all();
         $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
             ->where('user_id', "=", '1')
@@ -86,8 +86,11 @@ class ProductController extends Controller
                 $data .= '</div>
                         <h3 class="product-name product_title">
                             <a href="detail-product/' . $product->id . '" tabindex="0">' . $product->product_name . '</a>
-                        </h3>
-                        <span class="price"><span class="kobolg-Price-amount amount"><span
+                        </h3>';
+                        if ($product->stock < 1) {
+                            $data .= '<p class="p-0 m-0">Out Of Stock</p>';
+                        }
+                        $data .='<span class="price"><span class="kobolg-Price-amount amount"><span
                                     class="kobolg-Price-currencySymbol">' . "Rp " . number_format($product->price, 2, ',', '.') . '</span>
                     </div>
                     <div class="group-button clearfix">
@@ -113,10 +116,10 @@ class ProductController extends Controller
     {
 
         if ($request->id == null) {
-            $products = Products::where('stock', '>', '0')->get();
+            $products = Products::get();
         } else {
             $products = ProductCategoryDetails::join('products', 'product_category_details.product_id', '=', 'products.id')
-                ->where('category_id', '=', $request->id)->where('stock', '>', '0')->get();
+                ->where('category_id', '=', $request->id)->get();
         }
         $data = '';
         if ($request->ajax()) {
@@ -191,10 +194,10 @@ class ProductController extends Controller
     public function searchFilter(Request $request)
     {
         if ($request->value == null) {
-            $products = Products::where('stock', '>', '0')->get();
+            $products = Products::get();
         } else {
             $products = ProductCategoryDetails::join('products', 'product_category_details.product_id', '=', 'products.id')
-                ->where('products.product_name', 'LIKE', '%' . $request->value . '%')->where('stock', '>', '0')->get();
+                ->where('products.product_name', 'LIKE', '%' . $request->value . '%')->get();
         }
         $data = '';
         if ($request->ajax()) {
@@ -282,31 +285,17 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function stock()
-    {
-        $data = Products::select('stock')->get();
-        $sen = $data->toArray();
-        return response()->json([
-            'status' => true,
-            'stocks' => $sen
-        ], 200);
-    }
+    
     public function store(Request $request)
     {
 
         $carts = new Carts;
-        if ($request->stock < 1) {
-            echo 'stock habis';
+        if ($request->qty < 1) {
+            return redirect()->back()->with('error','pembelian minimal 1 product');
         } else {
-            $stock = $request->stock - 1;
-            Products::where('id', "=", $request->id)->update([
-                'stock' => $stock,
-            ]);
-
-
             $carts->product_id = $request->id;
             $carts->user_id  = 1;
-            $carts->qty = 1;
+            $carts->qty = $request->qty;
             $carts->status = 'notyet';
             $carts->save();
             return redirect('checkout');

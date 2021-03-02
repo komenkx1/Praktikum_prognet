@@ -173,6 +173,9 @@
     <script src="/assets/js/star-rating.js"></script>
     @yield('scripts')
     <script>
+        @if ($message = Session::get('error'))
+    toastr.error('{{ session('error') }}');
+@endif
         $.ajaxSetup({
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -255,6 +258,73 @@ function loadtotal(){
 		});
 	});
     </script>
+
+<script>
+    var price;
+var qty;
+var total;
+
+    var format = function(num){
+      var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+      if(str.indexOf(".") > 0) {
+        parts = str.split(".");
+        str = parts[0];
+      }
+      str = str.split("").reverse();
+      for(var j = 0, len = str.length; j < len; j++) {
+        if(str[j] != ".") {
+          output.push(str[j]);
+          if(i%3 == 0 && j < (len - 1)) {
+            output.push(".");
+          }
+          i++;
+        }
+      }
+      formatted = output.reverse().join("");
+      return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+    };
+
+
+incrementVar = 0;
+$('.inc.button').click(function(){
+    var max = $(this).data("max");
+    if ($(this).prev('input').val() < $(this).data("max")) {
+        var $this = $(this),
+        $input = $this.prev('input'),
+        $parent = $input.closest('div'),
+        newValue = parseInt($input.val())+1;
+    $parent.find('.inc').addClass('a'+newValue);
+    $input.val(newValue);
+    price = $(this).prev('input').data('price'); 
+    incrementVar += newValue;
+    total = price * newValue;
+   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
+    }else{
+        toastr.info('Stock Product Habis');
+    }
+   
+});
+$('.dec.button').click(function(){
+    var min = $(this).data("min");
+    if ($(this).next('input').val() > $(this).data("min")) {
+    var $this = $(this),
+        $input = $this.next('input'),
+        $parent = $input.closest('div'),
+        newValue = parseInt($input.val())-1;
+    console.log($parent);
+    $parent.find('.inc').addClass('a'+newValue);
+    $input.val(newValue);
+    price = $(this).next('input').data('price'); 
+    incrementVar += newValue;
+    total = price * newValue;
+   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
+
+}else{
+        toastr.error('Pembelian Minimal 1 Product');
+    }
+});
+
+</script>
     <script src="/assets/js/functions.js"></script>
 </body>
 

@@ -83,27 +83,38 @@
                                 </p>
 
 
-                                <form class="variations_form cart">
+
                                     <div class="single_variation_wrap">
                                         <div class="kobolg-variation single_variation"></div>
-                                        <div class="kobolg-variation-add-to-cart variations_button">
-                                            <div class="quantity">
-                                                <span class="qty-label">Quantiy:</span>
-                                                <div class="control">
-                                                    <a class="btn-number qtyminus quantity-minus" href="#">-</a>
-                                                    <input type="text" data-step="1" min="0" max="" name="quantity[25]"
-                                                        value="0" title="Qty" class="input-qty input-text qty text"
-                                                        size="4" pattern="[0-9]*" inputmode="numeric">
-                                                    <a class="btn-number qtyplus quantity-plus" href="#">+</a>
+                                        <div class="kobolg-variation-add-to-cart variations_button d-flex align-items-center">
+                                            <form action="{{Route('beli-product')}}" method="POST">
+                                                @csrf
+                                                <div class="d-flex align-items-center">
+                                                <div class="quantity m-0 mr-3 ">
+                                                    <span class="qty-label">Quantiy:</span>
+                                                    <div class="control">
+                                                        <div>
+                                                            <input type="hidden" name="id" value="{{$products->id}}">
+                                                            <div data-min="0"
+                                                                class="dec button btn-number qtyplus quantity-minus">-
+                                                            </div>
+                                                            <input type="text" class="incdec input-qty input-text"
+                                                                name="qty"
+                                                                value="0" />
+                                                            <div class="inc button btn-number qtyplus quantity-plus"
+                                                                data-max="{{$products->stock}}">+</div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             <button type="submit"
                                                 class="single_add_to_cart_button button alt kobolg-variation-selection-needed">
-                                                Add to cart
+                                               Beli Sekarang
                                             </button>
                                         </div>
+                                        </form>
+                                        </div>
                                     </div>
-                                </form>
+                          
 
                                 <div class="clear"></div>
 
@@ -502,46 +513,7 @@
                                 </a>
                                 <div class="flash">
                                     <span class="onnew"><span class="text">New</span></span></div>
-                                <form class="variations_form cart">
-                                    <table class="variations">
-                                        <tbody>
-                                            <tr>
-                                                <td class="value">
-                                                    <select title="box_style" data-attributetype="box_style"
-                                                        data-id="pa_color" class="attribute-select "
-                                                        name="attribute_pa_color"
-                                                        data-attribute_name="attribute_pa_color"
-                                                        data-show_option_none="yes" tabindex="-1">
-                                                        <option data-type="" data-pa_color="" value="">Choose an
-                                                            option
-                                                        </option>
-                                                        <option data-width="30" data-height="30" data-type="color"
-                                                            data-pa_color="#ff63cb" value="pink"
-                                                            class="attached enabled">Pink
-                                                        </option>
-                                                        <option data-width="30" data-height="30" data-type="color"
-                                                            data-pa_color="#a825ea" value="purple"
-                                                            class="attached enabled">Purple
-                                                        </option>
-                                                        <option data-width="30" data-height="30" data-type="color"
-                                                            data-pa_color="#db2b00" value="red"
-                                                            class="attached enabled">Red
-                                                        </option>
-                                                    </select>
-                                                    <div class="data-val attribute-pa_color"
-                                                        data-attributetype="box_style"><a class="change-value color"
-                                                            href="#" style="background: #ff63cb;"
-                                                            data-value="pink"></a><a class="change-value color" href="#"
-                                                            style="background: #a825ea;" data-value="purple"></a><a
-                                                            class="change-value color" href="#"
-                                                            style="background: #db2b00;" data-value="red"></a></div>
-                                                    <a class="reset_variations" href="#" tabindex="-1"
-                                                        style="visibility: hidden;">Clear</a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
+                              
                                 <div class="group-button">
                                     <div class="yith-wcwl-add-to-wishlist">
                                         <div class="yith-wcwl-add-button show">
@@ -576,177 +548,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-sm-12 kobolg_dreaming_upsell-product">
-                <div class="block-title">
-                    <h2 class="product-grid-title">
-                        <span>Upsell Products</span>
-                    </h2>
-                </div>
-                <div class="owl-slick owl-products equal-container better-height"
-                    data-slick="{&quot;arrows&quot;:false,&quot;slidesMargin&quot;:30,&quot;dots&quot;:true,&quot;infinite&quot;:false,&quot;slidesToShow&quot;:4}"
-                    data-responsive="[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesToShow&quot;:2,&quot;slidesMargin&quot;:&quot;10&quot;}},{&quot;breakpoint&quot;:768,&quot;settings&quot;:{&quot;slidesToShow&quot;:2,&quot;slidesMargin&quot;:&quot;10&quot;}},{&quot;breakpoint&quot;:992,&quot;settings&quot;:{&quot;slidesToShow&quot;:2,&quot;slidesMargin&quot;:&quot;20&quot;}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesToShow&quot;:3,&quot;slidesMargin&quot;:&quot;20&quot;}},{&quot;breakpoint&quot;:1500,&quot;settings&quot;:{&quot;slidesToShow&quot;:3,&quot;slidesMargin&quot;:&quot;30&quot;}}]">
-                    <div
-                        class="product-item style-01 post-27 product type-product status-publish has-post-thumbnail product_cat-table product_cat-new-arrivals product_cat-lamp product_tag-table product_tag-sock  instock shipping-taxable purchasable product-type-variable has-default-attributes ">
-                        <div class="product-inner tooltip-left">
-                            <div class="product-thumb">
-                                <a class="thumb-link" href="#" tabindex="0">
-                                    <img class="img-responsive" src="/assets/images/apro141-1-600x778.jpg"
-                                        alt="Smart Monitor" width="600" height="778">
-                                </a>
-                                <div class="flash">
-                                    <span class="onnew"><span class="text">New</span></span></div>
-                                <div class="group-button">
-                                    <div class="yith-wcwl-add-to-wishlist">
-                                        <div class="yith-wcwl-add-button show">
-                                            <a href="#" class="add_to_wishlist">Add to Wishlist</a>
-                                        </div>
-                                    </div>
-                                    <div class="kobolg product compare-button">
-                                        <a href="#" class="compare button">Compare</a>
-                                    </div>
-                                    <a href="#" class="button yith-wcqv-button">Quick View</a>
-                                    <div class="add-to-cart">
-                                        <a href="#" class="button product_type_external add_to_cart_button">Buy
-                                            it on Amazon</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-info equal-elem">
-                                <h3 class="product-name product_title">
-                                    <a href="#" tabindex="0">Dining Accessories</a>
-                                </h3>
-                                <div class="rating-wapper ">
-                                    <div class="star-rating"><span style="width:100%">Rated <strong
-                                                class="rating">5.00</strong> out of 5</span></div>
-                                    <span class="review">(1)</span>
-                                </div>
-                                <span class="price"><span class="kobolg-Price-amount amount"><span
-                                            class="kobolg-Price-currencySymbol">$</span>207.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="product-item style-01 post-26 product type-product status-publish has-post-thumbnail product_cat-light product_cat-chair product_cat-sofas product_tag-light product_tag-hat last instock featured shipping-taxable product-type-external  ">
-                        <div class="product-inner tooltip-left">
-                            <div class="product-thumb">
-                                <a class="thumb-link" href="#" tabindex="0">
-                                    <img class="img-responsive" src="/assets/images/apro31-1-600x778.jpg"
-                                        alt="Blue Smartphone" width="600" height="778">
-                                </a>
-                                <div class="flash">
-                                    <span class="onnew"><span class="text">New</span></span></div>
-                                <div class="group-button">
-                                    <div class="yith-wcwl-add-to-wishlist">
-                                        <div class="yith-wcwl-add-button show">
-                                            <a href="#" class="add_to_wishlist">Add to Wishlist</a>
-                                        </div>
-                                    </div>
-                                    <div class="kobolg product compare-button">
-                                        <a href="#" class="compare button">Compare</a>
-                                    </div>
-                                    <a href="#" class="button yith-wcqv-button">Quick View</a>
-                                    <div class="add-to-cart">
-                                        <a href="#" class="button product_type_simple add_to_cart_button">Add to
-                                            cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-info equal-elem">
-                                <h3 class="product-name product_title">
-                                    <a href="#" tabindex="0">Blue Smartphone</a>
-                                </h3>
-                                <div class="rating-wapper nostar">
-                                    <div class="star-rating"><span style="width:0%">Rated <strong
-                                                class="rating">0</strong> out of 5</span></div>
-                                    <span class="review">(0)</span>
-                                </div>
-                                <span class="price"><span class="kobolg-Price-amount amount"><span
-                                            class="kobolg-Price-currencySymbol">$</span>120.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="product-item style-01 post-37 product type-product status-publish has-post-thumbnail product_cat-chair product_cat-bed product_tag-light product_tag-hat product_tag-sock first instock shipping-taxable purchasable product-type-simple  ">
-                        <div class="product-inner tooltip-left">
-                            <div class="product-thumb">
-                                <a class="thumb-link kobolg-product-gallery__image" href="#" tabindex="0">
-                                    <img class="img-responsive wp-post-image" src="/assets/images/apro83-1-600x778.jpg"
-                                        alt="Glasses – Red" width="600" height="778">
-                                </a>
-                                <div class="flash">
-                                    <span class="onnew"><span class="text">New</span></span></div>
-                                <div class="group-button">
-                                    <div class="yith-wcwl-add-to-wishlist">
-                                        <div class="yith-wcwl-add-button show">
-                                            <a href="#" class="add_to_wishlist">Add to Wishlist</a>
-                                        </div>
-                                    </div>
-                                    <div class="kobolg product compare-button">
-                                        <a href="#" class="compare button">Compare</a>
-                                    </div>
-                                    <a href="#" class="button yith-wcqv-button">Quick View</a>
-                                    <div class="add-to-cart">
-                                        <a href="#" class="button product_type_simple add_to_cart_button">Add to
-                                            cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-info equal-elem">
-                                <h3 class="product-name product_title">
-                                    <a href="#" tabindex="0">Glasses – Red</a>
-                                </h3>
-                                <div class="rating-wapper nostar">
-                                    <div class="star-rating"><span style="width:0%">Rated <strong
-                                                class="rating">0</strong> out of 5</span></div>
-                                    <span class="review">(0)</span>
-                                </div>
-                                <span class="price"><span class="kobolg-Price-amount amount"><span
-                                            class="kobolg-Price-currencySymbol">$</span>56.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="product-item style-01 post-1194 product_variation type-product_variation status-publish has-post-thumbnail product  instock shipping-taxable purchasable product-type-variation ">
-                        <div class="product-inner tooltip-left">
-                            <div class="product-thumb">
-                                <a class="thumb-link" href="#" tabindex="-1">
-                                    <img class="img-responsive" src="/assets/images/apro302-600x778.jpg"
-                                        alt="Circle Watches" width="600" height="778">
-                                </a>
-                                <div class="flash">
-                                    <span class="onnew"><span class="text">New</span></span></div>
-                                <div class="group-button">
-                                    <div class="yith-wcwl-add-to-wishlist">
-                                        <div class="yith-wcwl-add-button show">
-                                            <a href="#" class="add_to_wishlist">Add to Wishlist</a>
-                                        </div>
-                                    </div>
-                                    <div class="kobolg product compare-button">
-                                        <a href="#" class="compare button">Compare</a>
-                                    </div>
-                                    <a href="#" class="button yith-wcqv-button">Quick View</a>
-                                    <div class="add-to-cart">
-                                        <a href="#" class="button product_type_simple add_to_cart_button">Add to
-                                            cart</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="product-info equal-elem">
-                                <h3 class="product-name product_title">
-                                    <a href="#" tabindex="-1">Circle Watches</a>
-                                </h3>
-                                <div class="rating-wapper nostar">
-                                    <div class="star-rating"><span style="width:0%">Rated <strong
-                                                class="rating">0</strong> out of 5</span></div>
-                                    <span class="review">(0)</span>
-                                </div>
-                                <span class="price"><span class="kobolg-Price-amount amount"><span
-                                            class="kobolg-Price-currencySymbol">$</span>79.00</span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
         </div>
     </div>
 </div>
