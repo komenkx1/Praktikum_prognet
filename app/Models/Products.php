@@ -26,4 +26,7 @@ class Products extends Model
     public function reviews(){
         return $this->hasMany(ReviewProducts::class,'product_id');
     }
+    public function discounts(){
+        return $this->hasMany(Discounts::class, 'id_product', 'id');
+    }
 }
