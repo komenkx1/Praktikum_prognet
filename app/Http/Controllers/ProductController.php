@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Models\Carts;
 use App\Models\Category;
-use App\Models\ProductCategoryDetails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -17,36 +18,35 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $diskon = 0;
-        $tanggal_mulai = "";
-        $tanggal_akhir = "";
+
+        $totalDsic = 0;
         $products = Products::paginate(8);
         $categories = Category::all();
-        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->select(
-                \DB::raw('products.price * carts.qty as subprice'),
-                'products.product_name as name',
-                'carts.qty as quantity',
-                'carts.id',
-                'products.id as product_id',
-                'products.price',
-            )
-            ->get();
 
-        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get()->first();
+
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
+                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+        }
+
         $data = '';
         if ($request->ajax()) {
             foreach ($products as $product) {
                 $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
                     ->select(
                         'product_reviews.product_id',
-                        \DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
+                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
                     )
                     ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
                 $data .= '<div
@@ -61,14 +61,15 @@ class ProductController extends Controller
                             <span class="onnew"><span class="text">New</span></span></div>';
 
                 foreach ($product->discounts as $discount) {
-                    $diskon = $product->price * ($discount->percentage / 100);
-                    $tanggal_mulai = $discount->start;
-                    $tanggal_akhir = $discount->end;
-                    $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $totalDsic += ($discount->percentage / 100) * $product->price;
+
+                        $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
+                    }
                 }
 
                 $data .= ' </div>
-                    <div class="product-info">
+                    <div class="product-info"> 
                     <div class="rating-wapper nostar">';
 
                 if (!$avgrate->isEmpty()) {
@@ -106,14 +107,22 @@ class ProductController extends Controller
                                     class="kobolg-Price-currencySymbol"> ';
 
                 // $data .="Rp " . number_format($product->price, 2, ',', '.');
+                $is_discount = false;
+                foreach ($product->discounts as $discount) {
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $diskon =  ($discount->percentage / 100) * $product->price;
+                        if ($diskon) {
 
-                if ($diskon && now() < $tanggal_akhir) {
+                            $is_discount = true;
+                            $data .= " Rp " . number_format($product->price - $diskon, 2, ',', '.');
+                        }
+                    }
+                }
+                if ($is_discount) {
                     $data .= "<small><strike> Rp " . number_format($product->price, 2, ',', '.') . '</strike></small>';
-                    $data .= " Rp " . number_format($diskon, 2, ',', '.');
                 } else {
                     $data .= " Rp " . number_format($product->price, 2, ',', '.');
                 }
-
                 $data .= '</span>
                     </div>
                     <div class="group-button clearfix">
@@ -137,14 +146,13 @@ class ProductController extends Controller
 
     public function categoryFilter(Request $request)
     {
-        $diskon = 0;
-        $tanggal_mulai = "";
-        $tanggal_akhir = "";
         if ($request->id == null) {
             $products = Products::get();
         } else {
-            $products = ProductCategoryDetails::join('products', 'product_category_details.product_id', '=', 'products.id')
-                ->where('category_id', '=', $request->id)->get();
+            $value = $request->id;
+            $products = Products::whereHas('product_category_detail', function ($query) use ($value) {
+                return $query->where('category_id', '=',  $value);
+            })->get();
         }
         $data = '';
         if ($request->ajax()) {
@@ -152,7 +160,7 @@ class ProductController extends Controller
                 $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
                     ->select(
                         'product_reviews.product_id',
-                        \DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
+                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
                     )
                     ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
                 $data .= '<div
@@ -165,21 +173,13 @@ class ProductController extends Controller
                         </a>
                         <div class="flash">
                             <span class="onnew"><span class="text">New</span></span></div>';
-                if ($request->id == null) {
-                    foreach ($product->discounts as $discount) {
-                        $diskon = $product->price * ($discount->percentage / 100);
-                        $tanggal_mulai = $discount->start;
-                        $tanggal_akhir = $discount->end;
-                        $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
-                    }
-                } else {
-                    foreach ($product->product->discounts as $discount) {
-                        $diskon = $product->price * ($discount->percentage / 100);
-                        $tanggal_mulai = $discount->start;
-                        $tanggal_akhir = $discount->end;
+
+                foreach ($product->discounts as $discount) {
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
                         $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
                     }
                 }
+
                 $data .= ' </div>
                     <div class="product-info">
                     <div class="rating-wapper nostar">';
@@ -220,9 +220,18 @@ class ProductController extends Controller
 
                 // $data .="Rp " . number_format($product->price, 2, ',', '.');
 
-                if ($diskon && now() < $tanggal_akhir) {
+                $is_discount = false;
+                foreach ($product->discounts as $discount) {
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $diskon =  ($discount->percentage / 100) * $product->price;
+                        if ($diskon) {
+                            $is_discount = true;
+                            $data .= " Rp " . number_format($product->price - $diskon, 2, ',', '.');
+                        }
+                    }
+                }
+                if ($is_discount) {
                     $data .= "<small><strike> Rp " . number_format($product->price, 2, ',', '.') . '</strike></small>';
-                    $data .= " Rp " . number_format($diskon, 2, ',', '.');
                 } else {
                     $data .= " Rp " . number_format($product->price, 2, ',', '.');
                 }
@@ -246,9 +255,7 @@ class ProductController extends Controller
     }
     public function searchFilter(Request $request)
     {
-        $diskon = 0;
-        $tanggal_mulai = "";
-        $tanggal_akhir = "";
+
         if ($request->value == null) {
             $products = Products::get();
         } else {
@@ -260,7 +267,7 @@ class ProductController extends Controller
                 $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
                     ->select(
                         'product_reviews.product_id',
-                        \DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
+                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
                     )
                     ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
                 $data .= '<div
@@ -275,12 +282,10 @@ class ProductController extends Controller
                             <span class="onnew"><span class="text">New</span></span></div>';
 
                 foreach ($product->discounts as $discount) {
-                    $diskon = $product->price * ($discount->percentage / 100);
-                    $tanggal_mulai = $discount->start;
-                    $tanggal_akhir = $discount->end;
-                    $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $data .= '<a href="detail-product/' . $product->id . '" class="button yith-wcqv-button">' . $discount->percentage . '%</a>';
+                    }
                 }
-
                 $data .= ' </div>
                     <div class="product-info">
                     <div class="rating-wapper nostar">';
@@ -321,12 +326,22 @@ class ProductController extends Controller
 
                 // $data .="Rp " . number_format($product->price, 2, ',', '.');
 
-                if ($diskon && now() < $tanggal_akhir) {
+                $is_discount = false;
+                foreach ($product->discounts as $discount) {
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $diskon =  ($discount->percentage / 100) * $product->price;
+                        if ($diskon) {
+                            $is_discount = true;
+                            $data .= " Rp " . number_format($product->price - $diskon, 2, ',', '.');
+                        }
+                    }
+                }
+                if ($is_discount) {
                     $data .= "<small><strike> Rp " . number_format($product->price, 2, ',', '.') . '</strike></small>';
-                    $data .= " Rp " . number_format($diskon, 2, ',', '.');
                 } else {
                     $data .= " Rp " . number_format($product->price, 2, ',', '.');
                 }
+
 
                 $data .= '</span>
                     </div>
@@ -390,29 +405,26 @@ class ProductController extends Controller
         $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
             ->select(
                 'product_reviews.product_id',
-                \DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
+                DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
             )
             ->groupBy('product_reviews.product_id')->where('product_id', $products->id)->get();
 
         $categories = Category::all();
-        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->select(
-                \DB::raw('products.price * carts.qty as subprice'),
-                'products.product_name as name',
-                'carts.qty as quantity',
-                'carts.id',
-                'products.id as product_id',
-                'products.price',
-            )
-            ->get();
-
-        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get()->first();
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
+                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+        }
 
 
         return view('detail-product', compact('products', 'carts', 'total', 'avgrate'));

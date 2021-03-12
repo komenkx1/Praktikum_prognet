@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products;
 use App\Models\Carts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CartController extends Controller
 {
@@ -15,26 +16,25 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->select(
-                \DB::raw('products.price * carts.qty as subprice'),
-                'products.product_name as name',
-                'carts.qty as quantity',
-                'carts.id',
-                'products.id as product_id',
-                'products.price',
-                'products.stock',
-            )
-            ->get();
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
 
+               if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
 
-        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get()->first();
+            // dd($cart->qty);
+        }
+
 
         if ($request->ajax()) {
             foreach ($carts as $cart) {
@@ -43,11 +43,27 @@ class CartController extends Controller
             <a href="#">
                 <img src="assets/images/apro134-1-600x778.jpg"
                      class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
-                     alt="img" width="600" height="778">' . $cart->name . '</a>
-            <span class="quantity">' . $cart->quantity . ' × <span
+                     alt="img" width="600" height="778">' . $cart->products->product_name . '</a>
+            <span class="quantity">' . $cart->qty . ' × <span
                     class="kobolg-Price-amount amount"><span
-                    class="kobolg-Price-currencySymbol">' . "Rp " . number_format($cart->price, 2, ',', '.') . '</span>
-        </li>';
+                    class="kobolg-Price-currencySymbol">';
+                $is_discount = false;
+                foreach ($cart->products->discounts as $discount) {
+                    if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {
+                        $diskon =  ($discount->percentage / 100) * $cart->products->price;
+                        if ($diskon) {
+                            $is_discount = true;
+                            $output .= " Rp " . number_format($cart->products->price - $diskon, 2, ',', '.');
+                        }
+                    }
+                }
+                if ($is_discount) {
+                    $output .= "<small><strike> Rp " . number_format($cart->products->price, 2, ',', '.') . '</strike></small>';
+                } else {
+                    $output .= "Rp " . number_format($cart->products->price, 2, ',', '.') . '</span>';
+                }
+
+                $output .= '</li>';
                 echo ($output);
             }
         } else {
@@ -67,19 +83,25 @@ class CartController extends Controller
 
     public function totalprice()
     {
-        $data = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get();
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
 
-        foreach ($data as $total) {
-            $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total->total, 2, ',', '.') . '</span>';
-            echo ($output);
+               if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
         }
+        $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total, 2, ',', '.') . '</span>';
+        echo ($output);
     }
-
-
     /**
      * Show the form for creating a new resource.
      *

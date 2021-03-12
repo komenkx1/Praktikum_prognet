@@ -1,4 +1,4 @@
-<header id="header" class="header style-04 header-dark">
+<header id="header" class="header style-04 header-dark sticky-top">
 
     <div class="header-middle d-lg-none">
         <div class="container">
@@ -93,9 +93,35 @@
                                                         alt="img" width="600" height="778">T-shirt with skirt –
                                                     Pink&nbsp;
                                                 </a>
-                                                <span class="quantity">1 × <span
+                                                <span class="quantity">{{$cart->qty}} × <span
                                                         class="kobolg-Price-amount amount"><span
-                                                            class="kobolg-Price-currencySymbol">$</span>150.00</span></span>
+                                                            class="kobolg-Price-currencySymbol">
+                                                            @php
+                                                            $is_discount = false;
+                                                            @endphp
+                                                            @foreach ($cart->products->discounts as
+                                                            $discount)
+                                                            @if (date('Y-m-d') >= $discount->start
+                                                            && date('Y-m-d') < $discount->end)
+                                                                @php
+                                                                $diskon = ($discount->percentage /
+                                                                100) * $cart->products->price;
+
+                                                                @endphp
+                                                                @if ($diskon)
+                                                                @php
+                                                                $is_discount = true;
+                                                                @endphp
+                                                                {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
+                                                                @endif
+                                                                @endif
+                                                                @endforeach
+                                                                @if ($is_discount)
+                                                                <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
+                                                                @else
+                                                                {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                                @endif
+                                                        </span>
                                             </li>
                                             @endforeach
                                         </ul>
@@ -104,8 +130,10 @@
                                                     class="kobolg-Price-currencySymbol">$</span>418.00</span>
                                         </p>
                                         <p class="kobolg-mini-cart__buttons buttons">
-                                            <a href="{{Route('cart')}}" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
-                                            <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
+                                            <a href="{{Route('cart')}}"
+                                                class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                            <a href="{{Route('checkout')}}"
+                                                class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                         </p>
                                     </div>
                                 </div>
@@ -140,11 +168,11 @@
                                 <li id="menu-item-230"
                                     class="menu-item menu-item-type-post_type menu-item-object-megamenu menu-item-230 parent parent-megamenu item-megamenu menu-item-has-children">
                                     <a class="kobolg-menu-item-title" title="Home" href="/">Home</a>
-                                   
+
                                 </li>
-                        
-                           
-                                
+
+
+
                                 <li id="menu-item-238"
                                     class="menu-item menu-item-type-custom menu-item-object-custom menu-item-238">
                                     <div class="header-control d-none d-lg-block">
@@ -206,11 +234,37 @@
                                                                         <img src="/assets/images/apro134-1-600x778.jpg"
                                                                             class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
                                                                             alt="img" width="600"
-                                                                            height="778">{{$cart->name}}&nbsp;
+                                                                            height="778">{{$cart->products->product_name}}&nbsp;
                                                                     </a>
-                                                                    <span class="quantity">{{$cart->quantity}} × <span
+                                                                    <span class="quantity">{{$cart->qty}} × <span
                                                                             class="kobolg-Price-amount amount"><span
-                                                                                class="kobolg-Price-currencySymbol">{{"Rp " . number_format($cart->price,2,',','.')}}</span>
+                                                                                class="kobolg-Price-currencySymbol">
+                                                                                @php
+                                                                                $is_discount = false;
+                                                                                @endphp
+                                                                                @foreach ($cart->products->discounts as
+                                                                                $discount)
+                                                                                @if (date('Y-m-d') >= $discount->start
+                                                                                && date('Y-m-d') < $discount->end)
+                                                                                    @php
+                                                                                    $diskon = ($discount->percentage /
+                                                                                    100) * $cart->products->price;
+
+                                                                                    @endphp
+                                                                                    @if ($diskon)
+                                                                                    @php
+                                                                                    $is_discount = true;
+                                                                                    @endphp
+                                                                                    {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
+                                                                                    @endif
+                                                                                    @endif
+                                                                                    @endforeach
+                                                                                    @if ($is_discount)
+                                                                                    <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
+                                                                                    @else
+                                                                                    {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                                                    @endif
+                                                                            </span>
                                                                 </li>
 
                                                                 @endforeach
@@ -219,7 +273,7 @@
                                                                 <strong>Subtotal:</strong>
                                                                 <span class="kobolg-Price-amount amount sub-total">
                                                                     <span
-                                                                        class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total->total,2,',','.')}}</span>
+                                                                        class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total,2,',','.')}}</span>
                                                                 </span>
                                                             </p>
                                                             <p class="kobolg-mini-cart__buttons buttons">
@@ -252,7 +306,7 @@
                 </a>
             </div>
 
-           
+
         </div>
         <div class="header-mobile-mid">
             <div class="header-logo">
@@ -313,11 +367,37 @@
                                         <a href="#">
                                             <img src="/assets/images/apro134-1-600x778.jpg"
                                                 class="attachment-kobolg_thumbnail size-kobolg_thumbnail" alt="img"
-                                                width="600" height="778">{{$cart->name}}&nbsp;
+                                                width="600" height="778">{{$cart->products->product_name}}&nbsp;
                                         </a>
-                                        <span class="quantity">{{$cart->quantity}} × <span
+                                        <span class="quantity">{{$cart->qty}} × <span
                                                 class="kobolg-Price-amount amount"><span
-                                                    class="kobolg-Price-currencySymbol">{{"Rp " . number_format($cart->price,2,',','.')}}</span>
+                                                    class="kobolg-Price-currencySymbol">
+                                                    @php
+                                                    $is_discount = false;
+                                                    @endphp
+                                                    @foreach ($cart->products->discounts as
+                                                    $discount)
+                                                    @if (date('Y-m-d') >= $discount->start
+                                                    && date('Y-m-d') < $discount->end)
+                                                        @php
+                                                        $diskon = ($discount->percentage /
+                                                        100) * $cart->products->price;
+
+                                                        @endphp
+                                                        @if ($diskon)
+                                                        @php
+                                                        $is_discount = true;
+                                                        @endphp
+                                                        {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
+                                                        @endif
+                                                        @endif
+                                                        @endforeach
+                                                        @if ($is_discount)
+                                                        <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
+                                                        @else
+                                                        {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                        @endif
+                                                </span>
                                     </li>
 
                                     @endforeach
@@ -325,12 +405,14 @@
                                 <p class="kobolg-mini-cart__total"><strong>Subtotal:</strong>
                                     <span class="kobolg-Price-amount amount sub-total">
                                         <span
-                                            class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total->total,2,',','.')}}</span>
+                                            class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total,2,',','.')}}</span>
                                     </span>
                                 </p>
                                 <p class="kobolg-mini-cart__buttons buttons">
-                                    <a href="{{Route('cart')}}" class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
-                                    <a href="{{Route('checkout')}}" class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
+                                    <a href="{{Route('cart')}}"
+                                        class="@if($carts->count() < 1) w-100 @endif button kobolg-forward">Viewcart</a>
+                                    <a href="{{Route('checkout')}}"
+                                        class="@if($carts->count() < 1) d-none @endif button checkout kobolg-forward">Checkout</a>
                                 </p>
                             </div>
                         </div>

@@ -42,19 +42,46 @@
                                             <form action="{{Route('delete',['cart'=>$cart->id])}}" method="post">
                                                 @method('delete')
                                                 @csrf
-                                            <button type="submit" class="btn btn-danger" aria-label="Remove this item"
-                                                data-product_id="27" data-product_sku="885B712"><i class="fa fa-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger"
+                                                    aria-label="Remove this item" data-product_id="27"
+                                                    data-product_sku="885B712"><i class="fa fa-trash"></i></button>
                                             </form>
-                                            </td>
+                                        </td>
                                         <td class="product-thumbnail">
                                             <a href="#"><img src="assets/images/apro134-1-600x778.jpg"
                                                     class="attachment-kobolg_thumbnail size-kobolg_thumbnail" alt="img"
                                                     width="600" height="778"></a></td>
                                         <td class="product-name" data-title="Product">
-                                            <a href="#">{{$cart->name}}</a></td>
+                                            <a href="#">{{$cart->products->product_name}}</a></td>
                                         <td class="product-price" data-title="Price">
-                                            <span class="kobolg-Price-amount amount">Rp
-                                                {{number_format($cart->price,2,',','.')}}</span></td>
+                                            <span class="kobolg-Price-amount amount">
+                                                @php
+                                                $is_discount = false;
+                                                @endphp
+                                                @foreach ($cart->products->discounts as
+                                                $discount)
+                                                @if (date('Y-m-d') >= $discount->start
+                                                && date('Y-m-d') < $discount->end)
+                                                    @php
+                                                    $diskon = ($discount->percentage /
+                                                    100) * $cart->products->price;
+
+                                                    @endphp
+                                                    @if ($diskon)
+                                                    @php
+                                                    $is_discount = true;
+                                                    @endphp
+                                                    {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
+                                                    <br>
+                                                    @endif
+                                                    @endif
+                                                    @endforeach
+                                                    @if ($is_discount)
+                                                    <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
+                                                    @else
+                                                    {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                    @endif
+                                            </span></td>
                                         <td class="product-quantity" data-title="Quantity">
                                             <div class="quantity">
                                                 <span class="qty-label">Quantiy:</span>
@@ -65,17 +92,22 @@
                                                             class="dec button btn-number qtyplus quantity-minus">-
                                                         </div>
                                                         <input type="text" class="incdec input-qty input-text"
-                                                            name="qty[]" id="value{{$cart->id}}"
-                                                            value="{{$cart->quantity}}" data-price="{{$cart->price}}" />
+                                                            name="qty[]" id="value{{$cart->id}}" value="{{$cart->qty}}"
+                                                            data-price="@if($is_discount){{$cart->products->price - $diskon}}@else{{$cart->products->price}}@endif" />
                                                         <div class="inc button btn-number qtyplus quantity-plus"
-                                                            data-max="{{$cart->stock}}">+</div>
+                                                            data-max="{{$cart->products->stock}}">+</div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="product-price" data-title="Price">
-                                            <span class="kobolg-Price-amount amount subtotal">Rp
-                                                {{number_format($cart->subprice,0,',','.')}}</span></td>
+                                            <span class="kobolg-Price-amount amount subtotal">
+                                                @if($is_discount)
+                                                {{"Rp " . number_format(($cart->products->price-$diskon)*$cart->qty,0,',','.')}}@else
+                                                {{"Rp " . number_format($cart->products->price*$cart->qty,0,',','.')}}@endif
+
+                                            </span></td>
+
                                     </tr>
                                     @endforeach
                                     <tr>
@@ -99,14 +131,14 @@
                                             <td data-title="Total">
                                                 <strong><span class="kobolg-Price-amount amount sub-total">
                                                         <span
-                                                            class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total->total,2,',','.')}}</span>
+                                                            class="kobolg-Price-currencySymbol-totals">{{"Rp " . number_format($total,2,',','.')}}</span>
                                                     </span></strong>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                             
-                                    
+
+
 
                                 <div class="kobolg-proceed-to-checkout @if ($carts->count() < 1) d-none @endif">
                                     <a href="{{Route('checkout')}}" class="checkout-button button alt kobolg-forward">

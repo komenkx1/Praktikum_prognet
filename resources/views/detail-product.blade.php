@@ -49,8 +49,8 @@
                                 <div
                                     class="kobolg-product-gallery kobolg-product-gallery--with-images kobolg-product-gallery--columns-4 images">
                                     <a href="#" class="kobolg-product-gallery__trigger">
-                                        <img draggable="false" class="emoji" alt="🔍"
-                                            src="/https://s.w.org/images/core/emoji/11/svg/1f50d.svg"></a>
+
+                                    </a>
                                     <div class="flex-viewport">
                                         <figure class="kobolg-product-gallery__wrapper">
                                             @foreach ($products->product_image as $immage)
@@ -58,7 +58,7 @@
                                             <div class="kobolg-product-gallery__image">
                                                 <img alt="img" src="/assets/images/apro131-2.jpg">
                                             </div>
-                                                                                           
+
                                             @endforeach
                                         </figure>
                                     </div>
@@ -74,9 +74,44 @@
                             <div class="summary entry-summary">
                                 <div class="flash">
                                     <span class="onnew"><span class="text">New</span></span></div>
-                                <h1 class="product_title entry-title">{{$products->product_name}}</h1>
-                                <p class="price"><span
-                                        class="kobolg-Price-amount amount">{{"Rp " . number_format($products->price,2,',','.')}}</span>
+                                <h1 class="product_title entry-title">
+                                    {{$products->product_name}}
+                                    @foreach ($products->discounts as $diskon)
+                                    @if (date('Y-m-d') >= $diskon->start && date('Y-m-d') < $diskon->end)
+
+                                        <span class="badge badge-danger">{{$diskon->percentage}}%</span>
+
+                                        @endif
+                                        @endforeach
+                                </h1>
+                                <p class="price"><span class="kobolg-Price-amount amount">
+                                        @php
+                                        $is_discount = false;
+                                        @endphp
+                                        @foreach ($products->discounts as
+                                        $discount)
+                                        @if (date('Y-m-d') >= $discount->start
+                                        && date('Y-m-d') < $discount->end)
+                                            @php
+                                            $diskon = ($discount->percentage /
+                                            100) * $products->price;
+
+                                            @endphp
+                                            @if ($diskon)
+                                            @php
+                                            $is_discount = true;
+                                            @endphp
+                                            {{"Rp " . number_format($products->price - $diskon,2,',','.')}}
+
+                                            @endif
+                                            @endif
+                                            @endforeach
+                                            @if ($is_discount)
+                                            <small><strike>{{ "Rp " . number_format($products->price, 2, ',', '.')}}</strike></small>
+                                            @else
+                                            {{"Rp " . number_format($products->price,2,',','.')}}
+                                            @endif
+                                    </span>
                                 </p>
                                 <p class="stock in-stock">
                                     Availability: <span>{{$products->stock}} In stock</span>
@@ -84,12 +119,13 @@
 
 
 
-                                    <div class="single_variation_wrap">
-                                        <div class="kobolg-variation single_variation"></div>
-                                        <div class="kobolg-variation-add-to-cart variations_button d-flex align-items-center">
-                                            <form action="{{Route('beli-product')}}" method="POST">
-                                                @csrf
-                                                <div class="d-flex align-items-center">
+                                <div class="single_variation_wrap">
+                                    <div class="kobolg-variation single_variation"></div>
+                                    <div
+                                        class="kobolg-variation-add-to-cart variations_button d-flex align-items-center">
+                                        <form action="{{Route('beli-product')}}" method="POST">
+                                            @csrf
+                                            <div class="d-flex align-items-center">
                                                 <div class="quantity m-0 mr-3 ">
                                                     <span class="qty-label">Quantiy:</span>
                                                     <div class="control">
@@ -99,22 +135,21 @@
                                                                 class="dec button btn-number qtyplus quantity-minus">-
                                                             </div>
                                                             <input type="text" class="incdec input-qty input-text"
-                                                                name="qty"
-                                                                value="0" />
+                                                                name="qty" value="0" />
                                                             <div class="inc button btn-number qtyplus quantity-plus"
                                                                 data-max="{{$products->stock}}">+</div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <button type="submit"
-                                                class="single_add_to_cart_button button alt kobolg-variation-selection-needed">
-                                               Beli Sekarang
-                                            </button>
-                                        </div>
+                                                <button type="submit"
+                                                    class="single_add_to_cart_button button alt kobolg-variation-selection-needed">
+                                                    Beli Sekarang
+                                                </button>
+                                            </div>
                                         </form>
-                                        </div>
                                     </div>
-                          
+                                </div>
+
 
                                 <div class="clear"></div>
 
@@ -125,10 +160,10 @@
                                     <span class="posted_in">
                                         Categories:
                                         @foreach ($products->category as $category)
-                                        <a href="#" rel="tag">{{$category->category_name}}</a></span>
+                                        <a href="#" rel="tag">{{$category->category_name}}</a>,
 
-                                    @endforeach
-
+                                        @endforeach
+                                    </span>
                                     <span class="rating">
                                         Rating:
                                         @if (!$avgrate->isEmpty())
@@ -159,7 +194,7 @@
 
                                 </div>
                                 <hr>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -169,8 +204,8 @@
                                 aria-controls="tab-description">
                                 <a href="#tab-description">Description</a>
                             </li>
-                        
-                            
+
+
                             <li class="reviews_tab" id="tab-title-reviews" role="tab" aria-controls="tab-reviews">
                                 <a href="#tab-reviews">Reviews ({{$products->reviews->count()}})</a>
                             </li>
@@ -178,112 +213,116 @@
                         <div class="kobolg-Tabs-panel kobolg-Tabs-panel--description panel entry-content kobolg-tab"
                             id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
                             <h2>Description</h2>
-                           
+
                             {{$products->description}}
                         </div>
-                  
+
                         <div class="kobolg-Tabs-panel kobolg-Tabs-panel--reviews panel entry-content kobolg-tab"
                             id="tab-reviews" role="tabpanel" aria-labelledby="tab-title-reviews">
                             <div id="reviews" class="kobolg-Reviews">
-                                <div  class="comments-list text-center text-md-left">
+                                <div class="comments-list text-center text-md-left">
                                     @if (!$products->reviews->count())
-                                      <div class="d-flex justify-content-center">    
+                                    <div class="d-flex justify-content-center">
                                         <div class="row mb-5">
-                                             <p><strong>Belum ada review produk.</strong></p> 
+                                            <p><strong>Belum ada review produk.</strong></p>
                                         </div>
-                                      </div>
+                                    </div>
                                     @else
-                                      @foreach ($products->reviews as $item)
-                                        <!-- First row -->
-                                        
-                                        <div class="row mb-5">
-                                          
-                                          <!-- Image column -->
-                                          <div class="col-sm-2 col-12 mb-3">
-                            
-                                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="sample image" class="avatar rounded-circle z-depth-1-half">
-                            
-                                          </div>
-                                          <!-- Image column -->
-                            
-                                          <!-- Content column -->
-                                          <div class="col-sm-10 col-12">
-                            
-                                            <a>
-                                              <h5 style="color:#333333" class="user-name font-weight-bold">{{$item->user->name}} 
-                                                <hr>  
-                                            </h5>
-                                            </a>
-                                            
-                                            <!-- Rating -->
-                                           
-                                              @for ($i = 0; $i < $item->rate; $i++)
-                                                
-                                                  <i class="fas fa-star text-warning"></i>
-                                                
-                                              @endfor
+                                    @foreach ($products->reviews as $item)
+                                    <!-- First row -->
 
-                                            <div class="card-data">
-                                              <ul class="list-unstyled mb-1">
-                                                <li class="comment-date font-small grey-text">
-                                                  <i class="far fa-clock-o"></i> {{$item->created_at}}</li>
-                                              </ul>
-                                            </div>
-                            
-                                            <p class="dark-grey-text article">{{$item->content}}</p>
-                            
-                                          </div>
-                                          <!-- Content column -->
-                            
+                                    <div class="row mb-5">
+
+                                        <!-- Image column -->
+                                        <div class="col-sm-2 col-12 mb-3">
+
+                                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                                                alt="sample image" class="avatar rounded-circle z-depth-1-half">
+
                                         </div>
-                                        <!-- First row -->
-                                            @if ($item->response->count())
-                                              <!-- Balasan -->
-                                              @foreach ($item->response as $balasan)
-                                              <div class="row mb-5 ml-5">
-                                                
-                                                <!-- Image column -->
-                                                <div class="col-sm-2 col-12 mb-3">
-                            
-                                                  <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg" alt="sample image" class="avatar rounded-circle z-depth-1-half">
-                            
-                                                </div>
-                                                <!-- Image column -->
-                            
-                                                <!-- Content column -->
-                                                <div class="col-sm-10 col-12">
-                            
-                                                  <a>
-                            
-                                                    <h5  class="user-name font-weight-bold"><span  class="mr-2 badge success-color">Admin</span>komang</h5>
-                            
-                                                  </a>
-                                                  <hr>
-                                                  <!-- Rating -->
-                                                  <div class="card-data">
+                                        <!-- Image column -->
+
+                                        <!-- Content column -->
+                                        <div class="col-sm-10 col-12">
+
+                                            <a>
+                                                <h5 style="color:#333333" class="user-name font-weight-bold">
+                                                    {{$item->user->name}}
+                                                    <hr>
+                                                </h5>
+                                            </a>
+
+                                            <!-- Rating -->
+
+                                            @for ($i = 0; $i < $item->rate; $i++)
+
+                                                <i class="fas fa-star text-warning"></i>
+
+                                                @endfor
+
+                                                <div class="card-data">
                                                     <ul class="list-unstyled mb-1">
-                                                      <li class="comment-date font-small grey-text">
-                                                        <i class="far fa-clock-o"></i> {{$balasan->created_at}}</li>
+                                                        <li class="comment-date font-small grey-text">
+                                                            <i class="far fa-clock-o"></i> {{$item->created_at}}</li>
                                                     </ul>
-                                                  </div>
-                            
-                                                  <p class="dark-grey-text article">{{$balasan->content}}</p>
-                            
                                                 </div>
-                                                <!-- Content column -->
-                            
-                                              </div>
-                            
-                                              @endforeach
-                                              <!-- Balasan -->
-                            
-                                            @endif
-                            
-                                      @endforeach
-                            
-                                    @endif
-                            
+
+                                                <p class="dark-grey-text article">{{$item->content}}</p>
+
+                                        </div>
+                                        <!-- Content column -->
+
+                                    </div>
+                                    <!-- First row -->
+                                    @if ($item->response->count())
+                                    <!-- Balasan -->
+                                    @foreach ($item->response as $balasan)
+                                    <div class="row mb-5 ml-5">
+
+                                        <!-- Image column -->
+                                        <div class="col-sm-2 col-12 mb-3">
+
+                                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                                                alt="sample image" class="avatar rounded-circle z-depth-1-half">
+
+                                        </div>
+                                        <!-- Image column -->
+
+                                        <!-- Content column -->
+                                        <div class="col-sm-10 col-12">
+
+                                            <a>
+
+                                                <h5 class="user-name font-weight-bold"><span
+                                                        class="mr-2 badge success-color">Admin</span>komang</h5>
+
+                                            </a>
+                                            <hr>
+                                            <!-- Rating -->
+                                            <div class="card-data">
+                                                <ul class="list-unstyled mb-1">
+                                                    <li class="comment-date font-small grey-text">
+                                                        <i class="far fa-clock-o"></i> {{$balasan->created_at}}</li>
+                                                </ul>
                                             </div>
+
+                                            <p class="dark-grey-text article">{{$balasan->content}}</p>
+
+                                        </div>
+                                        <!-- Content column -->
+
+                                    </div>
+
+                                    @endforeach
+                                    <!-- Balasan -->
+
+                                    @endif
+
+                                    @endforeach
+
+                                    @endif
+
+                                </div>
                                 <div class="clear"></div>
                             </div>
                         </div>
@@ -513,7 +552,7 @@
                                 </a>
                                 <div class="flash">
                                     <span class="onnew"><span class="text">New</span></span></div>
-                              
+
                                 <div class="group-button">
                                     <div class="yith-wcwl-add-to-wishlist">
                                         <div class="yith-wcwl-add-button show">
@@ -548,7 +587,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>

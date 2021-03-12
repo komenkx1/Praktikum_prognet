@@ -8,6 +8,8 @@ use App\Models\Cities;
 use App\Models\Carts;
 use App\Models\Transactions;
 use App\Models\TransactionDetails;
+use Illuminate\Support\Facades\DB;
+
 
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 
@@ -25,27 +27,31 @@ class CheckoutController extends Controller
 
         $provinsis = Provinces::all();
         $kurirs = Couriers::all();
-        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->select(
-                \DB::raw('products.price * carts.qty as subprice'),
-                'products.product_name as name',
-                'carts.qty as quantity',
-                'carts.id',
-                'products.id as product_id',
-                'products.price',
-                'products.stock',
-            )
-            ->get();
 
-        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight*carts.qty) as berattotal'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get()->first();
+        $price = 0;
+        $total = 0;
+        $berattotal = 0;
+        $subprice = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
+
+                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+            $berattotal = $berattotal + ($cart->products->weight * $cart->qty);
+            $subprice = $subprice + ($cart->products->price * $cart->qty);
+
+            // dd($cart->qty);
+        }
         // dd($carts);
-        return view('checkout', compact('provinsis', 'kurirs', 'carts', 'total'));
+        return view('checkout', compact('provinsis', 'kurirs', 'carts', 'total', 'berattotal', 'subprice'));
     }
     public function getkota(Request $request)
     {
@@ -86,16 +92,25 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        $carts = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get();
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
 
-        $total = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->select(\DB::raw('SUM(products.price * carts.qty) as total, SUM(products.weight * carts.qty) as berattotal'))
-            ->where('user_id', "=", '1')
-            ->where('status', '=', 'notyet')
-            ->get()->first();
+                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+          
+
+            // dd($cart->qty);
+        }
 
         $request->validate([
             'province'      => 'required',
@@ -112,8 +127,8 @@ class CheckoutController extends Controller
         $tomorrowDate = date("Y-m-d H:i:s", $datetime);
         $transaksaction = $request->all();
         $transaksaction['timeout'] = $tomorrowDate;
-        $transaksaction['total'] =  $request->shipping_cost + $total->total;
-        $transaksaction['sub_total'] = $total->total;
+        $transaksaction['total'] =  $request->shipping_cost + $total;
+        $transaksaction['sub_total'] = $total;
         $transaksaction['user_id'] = '1';
         $transaksaction['status'] = 'unverified';
         $transaksaction['telp'] = $request->telp;
@@ -126,7 +141,7 @@ class CheckoutController extends Controller
                 'transaction_id' => $idtransaksi->id,
                 'product_id' => $value->product_id,
                 'qty' => $value->qty,
-                'selling_price' => $value->price,
+                'selling_price' => $value->products->price,
             ]);
 
             Carts::where('user_id', "=", '1')->update([

@@ -141,11 +141,38 @@
                                         @foreach ($carts as $cart)
                                         <tr class="cart_item">
                                             <td class="product-name">
-                                                {{$cart->name}}&nbsp;&nbsp; <strong class="product-quantity">×
-                                                    {{$cart->quantity}}</strong></td>
+                                                {{$cart->products->product_name}}&nbsp;&nbsp; <strong
+                                                    class="product-quantity">×
+                                                    {{$cart->qty}}</strong></td>
                                             <td class="product-total">
-                                                <span
-                                                    class="kobolg-Price-amount amount">{{"Rp " . number_format($cart->subprice,0,',','.')}}</span>
+                                                <span class="kobolg-Price-amount amount">
+                                                    @php
+                                                    $is_discount = false;
+                                                    @endphp
+                                                    @foreach ($cart->products->discounts as
+                                                    $discount)
+                                                    @if (date('Y-m-d') >= $discount->start
+                                                    && date('Y-m-d') < $discount->end)
+                                                        @php
+                                                        $diskon = ($discount->percentage /
+                                                        100) * $cart->products->price;
+
+                                                        @endphp
+                                                        @if ($diskon)
+                                                        @php
+                                                        $is_discount = true;
+                                                        @endphp
+                                                        {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
+                                                        <br>
+                                                        @endif
+                                                        @endif
+                                                        @endforeach
+                                                        @if ($is_discount)
+                                                        <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
+                                                        @else
+                                                        {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                        @endif
+                                                </span>
                                             </td>
                                         </tr>
                                         @endforeach
@@ -154,7 +181,7 @@
                                         <tr class="cart-subtotal">
                                             <th>Sub Total</th>
                                             <td><span
-                                                    class="kobolg-Price-amount amount">{{"Rp " . number_format($total->total,0,',','.')}}</span>
+                                                    class="kobolg-Price-amount amount">{{"Rp " . number_format($total,0,',','.')}}</span>
                                             </td>
                                         </tr>
                                         <tr class="cart-subtotal">
@@ -164,13 +191,13 @@
                                         <tr class="cart-subtotal">
                                             <th>Berat Total</th>
                                             <td><span class="kobolg-Price-amount amount" id="berat"
-                                                    data-berat="{{$total->berattotal}}">{{$total->berattotal}} Kg</span>
+                                                    data-berat="{{$berattotal}}">{{$berattotal}} Kg</span>
                                             </td>
                                         </tr>
                                         <tr class="order-total">
                                             <th>Total</th>
-                                            <td><strong><span data-total="{{$total->total}}" id="total"
-                                                        class="kobolg-Price-amount amount">{{"Rp " . number_format($total->total,0,',','.')}}</span></strong>
+                                            <td><strong><span data-total="{{$total}}" id="total"
+                                                        class="kobolg-Price-amount amount">{{"Rp " . number_format($total,0,',','.')}}</span></strong>
                                             </td>
                                         </tr>
                                     </tfoot>

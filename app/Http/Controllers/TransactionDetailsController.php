@@ -6,6 +6,8 @@ use App\Models\TransactionDetails;
 use App\Models\Transactions;
 use App\Models\Carts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class TransactionDetailsController extends Controller
 {
@@ -22,28 +24,30 @@ class TransactionDetailsController extends Controller
         ->join('transactions','transaction_details.transaction_id','=','transactions.id')
         ->where('transactions.id','=',$id)
         ->select(
-            \DB::raw('SUM(transaction_details.selling_price * transaction_details.qty) as price'),
+            DB::raw('SUM(transaction_details.selling_price * transaction_details.qty) as price'),
             'transaction_details.product_id',
             'transaction_details.qty as quantity',)
          ->groupBy('transaction_details.product_id', 'transaction_details.qty')
         ->get();
-        $carts = Carts::join('products','carts.product_id','=','products.id')
-        ->where('user_id',"=",'1')
-        ->where('status','=','notyet')
-        ->select(
-           \DB::raw('products.price * carts.qty as subprice'),
-           'products.product_name as name',
-           'carts.qty as quantity',
-           'carts.id',
-           'products.id as product_id',
-           'products.price',)
-        ->get();
-        $total = Carts::join('products','carts.product_id','=','products.id')
-        ->select(\DB::raw('SUM(products.price * carts.qty) as total'))
-         ->where('user_id',"=",'1')
-         ->where('status','=','notyet')
-         ->get()->first();
-// dd($transaksidetails);
+        $price = 0;
+        $total = 0;
+        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        foreach ($carts as $cart) {
+            foreach ($cart->products->discounts as $diskon) {
+
+                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+
+            // dd($cart->qty);
+        }
+
         return view('detail-transaksi',compact('transaksi','transaksidetails','carts','total'));
     }
 

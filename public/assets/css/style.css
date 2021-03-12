@@ -7788,7 +7788,10 @@ body.admin-bar #yith-quick-view-modal {
     text-align: left;
     padding-left: 16px;
 }
-
+header{
+    z-index: 99999999;
+    background-color: white;
+}
 .product-item.style-02 .yith-wcqv-button:hover {
     background-color: #e52e06;
     color: #fff;
