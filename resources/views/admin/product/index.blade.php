@@ -41,6 +41,7 @@
                                 <th>Harga</th>
                                 <th>category</th>
                                 <th>Stock</th>
+                                <th>Rate</th>
                                 <th>Berat</th>
                                 <th>Discount</th>
                                 <th class="text-center">Action</th>
@@ -50,31 +51,70 @@
                             @php
                             $no = 1;
                             @endphp
+
+
+
                             @foreach ($products as $product)
+          
+
+
                             <tr>
                                 <td>{{$no++}}</td>
                                 <td>{{$product->product_name}}</td>
-                                <td>{{$product->price}}</td> 
+                                <td>{{$product->price}}</td>
                                 <td>
                                     @foreach ($product->category as $category)
                                     {{$category->category_name}}
                                     @endforeach
-                                </td>  
-                                <td>{{$product->stock}}</td> 
-                                <td>{{$product->weight}}</td> 
+                                </td>
+                                <td>{{$product->stock}}</td>
+                                <td>
+
+                                    @if ($product->reviews->avg('rate'))
+
+                                    @for ($i = 0; $i < 5; $i++) @if (floor($product->reviews->avg('rate')) - $i >= 1)
+                                        {{--Full Start--}}
+                                        <i class="fas fa-star text-warning"> </i>
+                                        @elseif ($product->reviews->avg('rate') - $i > 0)
+                                        {{--Half Start--}}
+                                        <i class="fas fa-star-half-alt text-warning"> </i>
+                                        @else
+                                        {{--Empty Start--}}
+                                        <i class="far fa-star text-warning"> </i>
+                                        @endif
+                                        @endfor
+
+
+                                        @else
+                                        @for ($i = 0; $i < 5; $i++) <i class="far fa-star"> </i>
+                                            @endfor
+                                            @endif
+
+
+                                </td>
+                                <td>{{$product->weight}} Kg</td>
                                 <td>
                                     @foreach ($product->discounts as $discount)
                                     {{$discount->percentage}}%,
                                     @endforeach
-                                   
-                                </td> 
+
+                                </td>
                                 <td class="text-center">
-                                    <a href="#editmodalForm" data-id="{{$product->id}}" data-nama="{{$product->category_name}}" class="edit modal-with-form btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a>
-                                    <a href="{{Route('show-product',['product'=>$product->id])}}"  class=" btn btn-sm btn-dark"><i class="fas fa-eye"></i></a>
-                                    <a href="#DeletemodalForm" data-id="{{$product->id}}" data-nama="{{$product->category_name}}" class="trash modal-with-form btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
+                                    <a href="#editmodalForm" data-id="{{$product->id}}"
+                                        data-nama="{{$product->category_name}}"
+                                        class="edit modal-with-form btn btn-sm btn-primary"><i
+                                            class="fas fa-pencil-alt"></i></a>
+                                    <a href="{{Route('show-product',['product'=>$product->id])}}"
+                                        class=" btn btn-sm btn-dark"><i class="fas fa-eye"></i></a>
+                                    <a href="#DeletemodalForm" data-id="{{$product->id}}"
+                                        data-nama="{{$product->category_name}}"
+                                        class="trash modal-with-form btn btn-sm btn-danger"><i
+                                            class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
+                            
+
                         </tbody>
                     </table>
                 </div>

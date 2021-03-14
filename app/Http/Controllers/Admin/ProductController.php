@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ReviewProducts;
 use Illuminate\Support\Facades\DB;
 
 
@@ -18,8 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Products::paginate(8);      
-        return view('admin/product/index',compact('products'));
+        $products = Products::all(); 
+        return view('admin/product/index', compact('products'));
     }
 
     /**
@@ -30,8 +31,7 @@ class ProductController extends Controller
     public function create()
     {
         $categorys = Category::all();
-        return view('admin/product/add',compact('categorys'));
-        
+        return view('admin/product/add', compact('categorys'));
     }
 
     /**
@@ -53,8 +53,8 @@ class ProductController extends Controller
      */
     public function show(Products $product)
     {
-        
-      return view('/admin/product/show',compact('product'));
+
+        return view('/admin/product/show', compact('product'));
     }
 
     /**
