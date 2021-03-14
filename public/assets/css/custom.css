@@ -1,0 +1,25 @@
+/* Add here all your CSS customizations */
+.card-img{
+overflow: hidden!important;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+
+  background-image: none;
+}
+.carousel-control-next-icon:after
+{
+    font-family: 'Font Awesome 5 Free';
+  content: "\f105";
+  font-size: 55px;
+  color: black;
+  font-weight: bolder;
+}
+
+.carousel-control-prev-icon:after {
+    font-family: 'Font Awesome 5 Free';
+    content: "\f104";
+    font-size: 55px;
+    color: black;
+    font-weight: bolder;
+}

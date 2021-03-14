@@ -13,6 +13,12 @@
         </div>
     </div>
 </div>
+@if ($errors->has('total'))
+<h3 class="text-danger text-center">{{ $errors->first('total') }}</h3>
+@elseif($errors->has('sub_total'))
+<h3 class="text-danger text-center">{{ $errors->first('sub_total') }}</h3>
+@endif
+
 <main class="site-main  main-container no-sidebar">
     <div class="container">
         <div class="row">

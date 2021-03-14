@@ -27,8 +27,8 @@
                                     <tr>
                                         <th class="product-no">No</th>
                                         <th class="product-adress">Alamat</th>
-                                        <th class="product-status">Status</th>
                                         <th class="product-telp">Telepon</th>
+                                        <th class="product-status">Status</th>
                                         <th class="product-subtotal">Total</th>
                                         <th class="product-action">action</th>
                                     </tr>

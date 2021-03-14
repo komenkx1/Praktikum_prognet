@@ -9,6 +9,7 @@ use App\Models\Carts;
 use App\Models\Transactions;
 use App\Models\TransactionDetails;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 
 use Kavist\RajaOngkir\Facades\RajaOngkir;
@@ -112,15 +113,18 @@ class CheckoutController extends Controller
             // dd($cart->qty);
         }
 
-        $request->validate([
-            'province'      => 'required',
-            'regency'  => 'required',
-            'address'  => 'required',
-            'courier_id'  => 'required',
-            'shipping_cost'  => 'required',
-            'telp'  => 'required',
-        ]);
-
+    //     $request->validate([
+    //         'province'      => 'required',
+    //         'regency'  => 'required',
+    //         'address'  => 'required',
+    //         'courier_id'  => 'required',
+    //         'shipping_cost'  => 'required',
+    //         'telp'  => 'required',
+    //         'total'  => 'numeric|not_in:0',
+    //     ],
+    //     ['total.not_in:0' => 'Minimal 1 Barang di keranjang untuk melakukan checkout']
+    // );
+    
         $transaksi = new Transactions;
 
         $datetime = strtotime("+1 day");
@@ -132,10 +136,34 @@ class CheckoutController extends Controller
         $transaksaction['user_id'] = '1';
         $transaksaction['status'] = 'unverified';
         $transaksaction['telp'] = $request->telp;
+        // dd($transaksaction);
+        $validator = Validator::make($transaksaction, [
+        'province'      => 'required',
+        'regency'  => 'required',
+        'address'  => 'required',
+        'courier_id'  => 'required',
+        'shipping_cost'  => 'required',
+        'telp'  => 'required',
+        'total'  => 'required|numeric|not_in:0',
+        'sub_total'  => 'required|numeric|not_in:0',
+    ],
+    ['sub_total.required' => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    'sub_total.numeric' => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    'sub_total.not_in' => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    'total.required'  => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    'total.numeric'  => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    'total.not_in'  => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
+    
+    ]);
+    if ($validator->fails()) {
+        return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+    }
         $idtransaksi = $transaksi->create($transaksaction);
 
 
-
+        
         foreach ($carts as $key => $value) {
             $idtransaksidetail = TransactionDetails::create([
                 'transaction_id' => $idtransaksi->id,
