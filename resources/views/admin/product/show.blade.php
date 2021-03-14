@@ -98,8 +98,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Rate</th>
-                                <td>{{$product->product_rate}}</td>
+                                <th>Description</th>
+                                <td>{{$product->description}}</td>
                             </tr>
                             <tr>
                                 <th>Stock</th>

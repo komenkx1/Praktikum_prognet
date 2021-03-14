@@ -43,12 +43,7 @@ class HomeController extends Controller
         $data = '';
         if ($request->ajax()) {
             foreach ($products as $product) {
-                $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
-                    ->select(
-                        'product_reviews.product_id',
-                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
-                    )
-                    ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
+               
                     
                 $data .= '<div
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
@@ -73,15 +68,15 @@ class HomeController extends Controller
                     <div class="product-info"> 
                     <div class="rating-wapper nostar">';
 
-                if (!$avgrate->isEmpty()) {
+                if ($product->reviews->avg('rate')) {
 
-                    foreach ($avgrate as $item) {
+                 
 
                         for ($i = 0; $i < 5; $i++) {
-                            if (floor($item->AverageRating) - $i >= 1) {
+                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
                                 $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($item->AverageRating - $i > 0) {
+                            } elseif ($product->reviews->avg('rate') - $i > 0) {
 
                                 $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
                             } else {
@@ -89,7 +84,7 @@ class HomeController extends Controller
                                 $data .= ' <i class="far fa-star text-warning"> </i>';
                             }
                         }
-                    }
+                    
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';
@@ -158,12 +153,6 @@ class HomeController extends Controller
         $data = '';
         if ($request->ajax()) {
             foreach ($products as $product) {
-                $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
-                    ->select(
-                        'product_reviews.product_id',
-                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
-                    )
-                    ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
                 $data .= '<div
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
                 <div class="product-inner tooltip-top">
@@ -185,15 +174,13 @@ class HomeController extends Controller
                     <div class="product-info">
                     <div class="rating-wapper nostar">';
 
-                if (!$avgrate->isEmpty()) {
-
-                    foreach ($avgrate as $item) {
+                if ($product->reviews->avg('rate')) {
 
                         for ($i = 0; $i < 5; $i++) {
-                            if (floor($item->AverageRating) - $i >= 1) {
+                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
                                 $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($item->AverageRating - $i > 0) {
+                            } elseif ($product->reviews->avg('rate') - $i > 0) {
 
                                 $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
                             } else {
@@ -201,7 +188,6 @@ class HomeController extends Controller
                                 $data .= ' <i class="far fa-star text-warning"> </i>';
                             }
                         }
-                    }
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';
@@ -265,12 +251,6 @@ class HomeController extends Controller
         $data = '';
         if ($request->ajax()) {
             foreach ($products as $product) {
-                $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
-                    ->select(
-                        'product_reviews.product_id',
-                        DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
-                    )
-                    ->groupBy('product_reviews.product_id')->where('product_id', $product->id)->get();
                 $data .= '<div
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
                 <div class="product-inner tooltip-top">
@@ -291,15 +271,13 @@ class HomeController extends Controller
                     <div class="product-info">
                     <div class="rating-wapper nostar">';
 
-                if (!$avgrate->isEmpty()) {
-
-                    foreach ($avgrate as $item) {
+                if ($product->reviews->avg('rate')) {
 
                         for ($i = 0; $i < 5; $i++) {
-                            if (floor($item->AverageRating) - $i >= 1) {
+                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
                                 $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($item->AverageRating - $i > 0) {
+                            } elseif ($product->reviews->avg('rate') - $i > 0) {
 
                                 $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
                             } else {
@@ -307,7 +285,6 @@ class HomeController extends Controller
                                 $data .= ' <i class="far fa-star text-warning"> </i>';
                             }
                         }
-                    }
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';
@@ -403,12 +380,6 @@ class HomeController extends Controller
      */
     public function show(Products $products)
     {
-        $avgrate = Products::join('product_reviews', 'product_reviews.product_id', 'products.id')
-            ->select(
-                'product_reviews.product_id',
-                DB::raw('ROUND(AVG(product_reviews.rate),1) as AverageRating')
-            )
-            ->groupBy('product_reviews.product_id')->where('product_id', $products->id)->get();
 
         $categories = Category::all();
         $price = 0;
@@ -428,7 +399,7 @@ class HomeController extends Controller
         }
 
 
-        return view('detail-product', compact('products', 'carts', 'total', 'avgrate'));
+        return view('detail-product', compact('products', 'carts', 'total'));
     }
 
     /**

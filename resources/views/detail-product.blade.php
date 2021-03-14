@@ -1,31 +1,3 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    nama product : {{$products->product_name}}
-<hr>
-<h3>review</h3>
-
-@foreach ($products->reviews as $review)
-<div class="review">
-    <div class="name-user">
-        <p> {{$review->user->name}}</p>
-    </div>
-    <div class="content">
-        <p> {{$review->content}}</p>
-    </div>
-    <button class="btn-reply" data-id="{{$review->id}}">Balas</button>
-</div>
-<hr>
-@endforeach
-</body>
-
-</html> --}}
 @extends('layouts/master')
 @section('content')
 <div class="banner-wrapper no_background">
@@ -166,14 +138,15 @@
                                     </span>
                                     <span class="rating">
                                         Rating:
-                                        @if (!$avgrate->isEmpty())
 
-                                        @foreach ($avgrate as $item)
 
-                                        @for ($i = 0; $i < 5; $i++) @if (floor($item->AverageRating) - $i >= 1)
+                                        @if ($products->reviews->avg('rate'))
+
+                                        @for ($i = 0; $i < 5; $i++) @if (floor($products->reviews->avg('rate')) - $i >=
+                                            1)
                                             {{--Full Start--}}
                                             <i class="fas fa-star text-warning"> </i>
-                                            @elseif ($item->AverageRating - $i > 0)
+                                            @elseif ($products->reviews->avg('rate') - $i > 0)
                                             {{--Half Start--}}
                                             <i class="fas fa-star-half-alt text-warning"> </i>
                                             @else
@@ -181,7 +154,7 @@
                                             <i class="far fa-star text-warning"> </i>
                                             @endif
                                             @endfor
-                                            @endforeach {{--Start Rating--}}
+
 
                                             @else
                                             @for ($i = 0; $i < 5; $i++) <i class="far fa-star"> </i>
