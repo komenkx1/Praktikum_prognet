@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Response;
 use App\Models\ReviewProducts;
 use Illuminate\Support\Facades\DB;
 
@@ -53,8 +54,8 @@ class ProductController extends Controller
      */
     public function show(Products $product)
     {
-
-        return view('/admin/product/show', compact('product'));
+        $responses = Response::all();
+        return view('/admin/product/show', compact('product','responses'));
     }
 
     /**

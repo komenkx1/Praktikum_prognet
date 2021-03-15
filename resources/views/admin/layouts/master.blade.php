@@ -76,7 +76,7 @@
                             <h2 class=" text-dark">Praktikum Prognet @ 2020</h2>
                         </div>
                     </div>
-                ]
+
                 </div>
             </div>
        

@@ -18,9 +18,9 @@
             <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
         </div>
     </header>
-    <!-- start: page -->
+    @include('admin/layouts/notif')
     <div class="row">
-        @include('admin/layouts/notif')
+       
         <div class="col-4">
             <section class="card ">
                 <header class="card-header">
@@ -144,6 +144,7 @@
                                 <th>User</th>
                                 <th>Rate</th>
                                 <th>Review</th>
+                                <th>Response</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -159,7 +160,18 @@
                                     @endfor
                                 </td>
                                 <td>{{$review->content}}</td>
-                                <td class="text-center"><button class="btn btn-sm btn-success" data-toggle="modal" data-target="#respondform">Balas</button></td>
+                                <td>
+                                    @foreach($responses as $response)
+                                    @if($review->id == $response->review_id)
+                                      {{ $response->content }},
+                                    @endif
+                                  @endforeach
+                              </td>
+                               
+                                <td class="text-center">
+                                    <button data-id="{{$review->id}}" data-nama="{{$review->user->name}}" class="respond btn btn-sm btn-success" data-toggle="modal" data-target="#respondform">Balas</button>
+                                
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -177,19 +189,24 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title">Berikan Repond Pada Ulasan</h1>
+                <h4 class="modal-title" id="title-name"></h4>
             </div>
             <div class="modal-body">
 
-
+                <form action="{{Route('respond-product')}}" method="post">
+                    @csrf
                 <div class="form-group">
                     <label for="ulasan">Respond</label>
                     <textarea class="form-control" name="content" id="content" cols="5" rows="5"></textarea>
 
                 </div>
-                <br>
-                <button class="btn btn-primary" type="button" id="btn-submit" data-id="">Submit</button>
+                <div class="form-group">
+                  <input type="hidden" id="id_review" value="" name="review_id">
 
+                </div>
+                <br>
+                <button class="btn btn-primary" type="submit" id="btn-submit" data-id="">Submit</button>
+            </form>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -216,11 +233,11 @@
     //     lessLink: '<a href="#" class="d-block text-center p-3">Load less</a>',
     //     moreLink: '<a class="d-block text-center p-3" href="#">Load More</a>',
     // });
-    $(".dataTable").on('click','.edit', function () { 
+    $(document).on('click','.respond', function () { 
       var id = $(this).data('id');
       var nama = $(this).data('nama');
-      $('#formEdit').attr('action', '/admin/category/update/' + id);
-      $('#namainput').attr('value',nama);
+      $('#id_review').attr('value',id);
+      $('#title-name').html('Berikan Repond Pada Ulasan : '+nama);
     });
 
     $(".dataTable").on('click','.trash', function () { 

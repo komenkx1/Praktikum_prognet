@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewProductController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ResponseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,5 +72,7 @@ Route::post('store-review', [ReviewProductController::class, 'store'])->name('st
  Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
  Route::get('/admin/product/add', [ProductController::class, 'create'])->name('add-product');
  Route::get('/admin/product/show/{product:id}', [ProductController::class, 'show'])->name('show-product');
+ //respond
+ Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');
 
 

@@ -1,9 +1,9 @@
 <?php
-
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Response;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ResponseController extends Controller
 {
@@ -35,7 +35,10 @@ class ResponseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $respond = $request->all();
+        $respond['admin_id'] = '1';
+        Response::create($respond);
+        return redirect()->back()->with('success', 'berhasil membalas review pengguna');
     }
 
     /**
