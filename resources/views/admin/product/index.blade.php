@@ -43,7 +43,7 @@
                                 <th>Stock</th>
                                 <th>Rate</th>
                                 <th>Berat</th>
-                                <th>Discount</th>
+                                <th class="text-center">Discount</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -55,7 +55,7 @@
 
 
                             @foreach ($products as $product)
-          
+
 
 
                             <tr>
@@ -83,8 +83,6 @@
                                         <i class="far fa-star text-warning"> </i>
                                         @endif
                                         @endfor
-
-
                                         @else
                                         @for ($i = 0; $i < 5; $i++) <i class="far fa-star"> </i>
                                             @endfor
@@ -93,10 +91,23 @@
 
                                 </td>
                                 <td>{{$product->weight}} Kg</td>
-                                <td>
-                                    @foreach ($product->discounts as $discount)
-                                    {{$discount->percentage}}%,
-                                    @endforeach
+                                <td class="text-center">
+
+                                    <a href="#" class="btn btn-sm btn-success">
+                                        @if ($product->discounts->isEmpty())
+                                        0 %
+                                        @else
+                                        @foreach ($product->discounts as $discount)
+                                        @if (date('Y-m-d') >= $discount->start && date('Y-m-d') < $discount->end)
+                                            {{$discount->percentage}} %
+                                            @else
+                                            0 %
+                                            @endif
+                                            @endforeach
+                                            @endif
+                                    </a>
+
+
 
                                 </td>
                                 <td class="text-center">
@@ -113,7 +124,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                            
+
 
                         </tbody>
                     </table>
