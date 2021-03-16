@@ -197,7 +197,7 @@
                                         <tr class="cart-subtotal">
                                             <th>Berat Total</th>
                                             <td><span class="kobolg-Price-amount amount" id="berat"
-                                                    data-berat="{{$berattotal}}">{{$berattotal}} Kg</span>
+                                                    data-berat="{{$berattotal}}">{{$berattotal}} g</span>
                                             </td>
                                         </tr>
                                         <tr class="order-total">
