@@ -67,7 +67,7 @@ class CheckoutController extends Controller
     {
         $asal = Cities::where('city_id', '128')->get()->first();
         $cost = RajaOngkir::ongkosKirim([
-            'origin'        => $asal->id,     // ID kota/kabupaten asal
+            'origin'        => $asal->city_id,     // ID kota/kabupaten asal
             'destination'   => $request->kota,      // ID kota/kabupaten tujuan
             'weight'        => $request->berat,    // berat barang dalam gram
             'courier'       => $request->kurir    // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
