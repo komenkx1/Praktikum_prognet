@@ -11,7 +11,7 @@
                         <i class="fas fa-home"></i>
                     </a>
                 </li>
-                <li><span>Category</span></li>
+                <li><span>Product</span></li>
 
             </ol>
 
@@ -93,7 +93,7 @@
                                 <td>{{$product->weight}} g</td>
                                 <td class="text-center">
 
-                                    <a href="#" class="btn btn-sm btn-success">
+                                    <a href="{{Route('discounts',['product'=>$product->id])}}" class="btn btn-sm btn-success">
                                         @if ($product->discounts->isEmpty())
                                         0 %
                                         @else
@@ -129,30 +129,6 @@
 
 <!-- end: page -->
 </section>
-<!-- Modal Form -->
-<div id="modalForm" class="modal-block modal-block-primary mfp-hide">
-    <section class="card">
-        <header class="card-header">
-            <h2 class="card-title">Category Form</h2>
-        </header>
-        <div class="card-body">
-            <form class="form-horizontal form-bordered form-bordered container" enctype="multipart/form-data"
-                action="{{Route('store-category')}}" method="POST">
-                @csrf
-                <div class="form-group row">
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Input Category</label>
-                        {{-- <input type="text" name="categorys[]" multiple id="tags-input" data-role="tagsinput" data-tag-class="badge badge-primary" class="form-control" />
-                         --}}
-                        <select name="categorys[]" id="" multiple id="tags-input" required data-role="tagsinput"
-                            data-tag-class="badge badge-primary" class="form-control">
-
-                        </select>
-                        <small class="text-danger">* Silahkan masukkan nama category (dapat memasukan lebih dari satu
-                            nama)</small>
-                    </div>
-                </div>
-        </div>
         <footer class="card-footer">
             <div class="row">
                 <div class="col-md-12 text-right">
@@ -165,39 +141,7 @@
 
     </section>
 </div>
-<div id="editmodalForm" class="modal-block modal-block-primary mfp-hide">
-    <section class="card">
-        <header class="card-header">
-            <h2 class="card-title">Category Form</h2>
-        </header>
-        <div class="card-body">
-            <form id="formEdit" class="form-horizontal form-bordered form-bordered container"
-                enctype="multipart/form-data" action="#" method="POST">
-                @method('put')
-                @csrf
-                <div class="form-group row">
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Input Category</label>
-                        <input id="namainput" type="text" class="form-control" name="category_name" value="">
 
-                        </select>
-                        <small class="text-danger">* Silahkan masukkan nama category (dapat memasukan lebih dari satu
-                            nama)</small>
-                    </div>
-                </div>
-        </div>
-        <footer class="card-footer">
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                    <button class="btn btn-default modal-dismiss">Cancel</button>
-                </div>
-            </div>
-        </footer>
-        </form>
-
-    </section>
-</div>
 
 <div class="modal-block modal-block-primary mfp-hide" id="DeletemodalForm" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">

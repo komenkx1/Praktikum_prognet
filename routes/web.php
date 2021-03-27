@@ -10,6 +10,7 @@ use App\Http\Controllers\ReviewProductController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DiscountController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\ProductImagesController;
 
@@ -60,7 +61,6 @@ Route::post('pagination/fetch', 'PaginationController@index')->name('pagination.
 Route::get('review-product/{product:id}', [ReviewProductController::class, 'index'])->name('review-product');
 Route::post('store-review', [ReviewProductController::class, 'store'])->name('store-review');
 
-
 //admin
 
 //dashboard
@@ -82,5 +82,11 @@ Route::get('/admin/product/show/{product:id}', [ProductController::class, 'show'
 //product image
 Route::delete('/admin/product/productimage/destroy/{productImages:id}', [ProductImagesController::class, 'destroy'])->name('thumbnail-destroy');
 Route::post('/admin/product/productimage/store', [ProductImagesController::class, 'store'])->name('thumbnail-store');
+
+//discount admin
+Route::get('/admin/discount/{product:id}', [ProductController::class, 'discounts'])->name('discounts');
+Route::delete('/admin/discount/destroy/{product:id}', [ProductController::class, 'discounts_destroy'])->name('discounts-destroy');
+Route::post('/admin/discount/store', [ProductController::class, 'discounts_store'])->name('discounts-store');
+
 //respond
 Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');

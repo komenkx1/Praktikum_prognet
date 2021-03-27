@@ -89,6 +89,21 @@ class ProductController extends Controller
         return view('/admin/product/show', compact('product', 'responses'));
     }
 
+    public function discounts(Products $product)
+    {
+        
+        return view('/admin/discounts/index', compact('product'));
+    }
+
+    public function discounts_store(Request $request)
+    {
+   
+    $discounts = $request->all();
+    Discounts::create($discounts);
+    return redirect()->back()->with('success','Diskon Berhasil Ditambahkan');
+
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

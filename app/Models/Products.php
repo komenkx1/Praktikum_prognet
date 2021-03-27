@@ -28,6 +28,6 @@ class Products extends Model
         return $this->hasMany(ReviewProducts::class,'product_id');
     }
     public function discounts(){
-        return $this->hasMany(Discounts::class, 'id_product', 'id');
+        return $this->hasMany(Discounts::class, 'id_product', 'id')->orderBy('id','DESC')->limit(1);
     }
 }
