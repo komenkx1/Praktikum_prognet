@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ResponseController;
+use App\Http\Controllers\Admin\ProductImagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::put('cancel/{transactions:id}', [TransactionController::class, 'cancel'])
 Route::put('verifikasi-barang/{transactions:id}', [TransactionController::class, 'verifbarang'])->name('verif-barang-diterima');
 
 //ongkir
-Route::post('cekongkir',[CheckoutController::class, 'cekongkir'])->name('cekongkir');
+Route::post('cekongkir', [CheckoutController::class, 'cekongkir'])->name('cekongkir');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('checkout-all', [CheckoutController::class, 'store'])->name('checkout-all');
 Route::get('getkota', [CheckoutController::class, 'getkota'])->name('getkota');
@@ -61,18 +62,25 @@ Route::post('store-review', [ReviewProductController::class, 'store'])->name('st
 
 
 //admin
- //dashboard
- Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
- //category
- Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
- Route::post('/admin/category/add/store', [CategoryController::class, 'store'])->name('store-category');
- Route::put('/admin/category/update/{category:id}', [CategoryController::class, 'update'])->name('update-category');
- Route::delete('/admin/category/delete/{category:id}', [CategoryController::class, 'destroy'])->name('delete-category');
- //product
- Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
- Route::get('/admin/product/add', [ProductController::class, 'create'])->name('add-product');
- Route::get('/admin/product/show/{product:id}', [ProductController::class, 'show'])->name('show-product');
- //respond
- Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');
 
+//dashboard
+Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
+//category
+Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
+Route::post('/admin/category/add/store', [CategoryController::class, 'store'])->name('store-category');
+Route::put('/admin/category/update/{category:id}', [CategoryController::class, 'update'])->name('update-category');
+Route::delete('/admin/category/delete/{category:id}', [CategoryController::class, 'destroy'])->name('delete-category');
+//product
+Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
+Route::get('/admin/product/add', [ProductController::class, 'create'])->name('add-product');
+Route::get('/admin/product/edit/{product:id}', [ProductController::class, 'edit'])->name('edit-product');
+Route::post('/admin/product/store', [ProductController::class, 'store'])->name('store-product');
+Route::put('/admin/product/update/{product:id}', [ProductController::class, 'update'])->name('update-product');
+Route::delete('/admin/product/destroy/{product:id}', [ProductController::class, 'destroy'])->name('destroy-product');
+Route::get('/admin/product/show/{product:id}', [ProductController::class, 'show'])->name('show-product');
 
+//product image
+Route::delete('/admin/product/productimage/destroy/{productImages:id}', [ProductImagesController::class, 'destroy'])->name('thumbnail-destroy');
+Route::post('/admin/product/productimage/store', [ProductImagesController::class, 'store'])->name('thumbnail-store');
+//respond
+Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');

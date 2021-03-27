@@ -50,8 +50,12 @@
                                 <td>{{$no++}}</td>
                                 <td>{{$item->category_name}}</td>
                                 <td class="text-center">
-                                    <a href="#editmodalForm" data-id="{{$item->id}}" data-nama="{{$item->category_name}}" class="edit modal-with-form btn btn-sm btn-primary">Edit</a>
-                                    <a href="#DeletemodalForm" data-id="{{$item->id}}" data-nama="{{$item->category_name}}" class="trash modal-with-form btn btn-sm btn-danger">Hapus</a>
+                                    <a href="#editmodalForm" data-id="{{$item->id}}"
+                                        data-nama="{{$item->category_name}}"
+                                        class="edit modal-with-form btn btn-sm btn-primary">Edit</a>
+                                    <a href="#DeletemodalForm" data-id="{{$item->id}}"
+                                        data-nama="{{$item->category_name}}"
+                                        class="trash modal-with-form btn btn-sm btn-danger">Hapus</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -107,14 +111,14 @@
             <h2 class="card-title">Category Form</h2>
         </header>
         <div class="card-body">
-            <form id="formEdit" class="form-horizontal form-bordered form-bordered container" enctype="multipart/form-data"
-                action="#" method="POST">
+            <form id="formEdit" class="form-horizontal form-bordered form-bordered container"
+                enctype="multipart/form-data" action="#" method="POST">
                 @method('put')
                 @csrf
                 <div class="form-group row">
                     <div class="col-lg-12">
                         <label for="tags-input" class="control-label">Input Category</label>
-                      <input id="namainput" type="text" class="form-control" name="category_name" value="">
+                        <input id="namainput" type="text" class="form-control" name="category_name" value="">
 
                         </select>
                         <small class="text-danger">* Silahkan masukkan nama category (dapat memasukan lebih dari satu
@@ -135,44 +139,33 @@
     </section>
 </div>
 
-<div class="modal-block modal-block-primary mfp-hide" id="DeletemodalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="myModalLabel">Delete Confirmation</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      </div>
-      <div class="modal-body">
-        <p class="error-text">
-          <i class="fa fa-warning modal-icon"></i>
-          apakah anda yakin ingin menghapus item ini?
-        </p>
-      </div>
-      <div class="modal-footer">
-        <form id="formDelete" action="#" method="post">
-          @method('delete')
-          @csrf
-          <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
-          <button type="submit" class="btn btn-danger">Hapus</button>
-        </form>
-      </div>
+<div class="modal-block modal-block-primary mfp-hide" id="DeletemodalForm" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="myModalLabel">Delete Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <p class="error-text">
+                    <i class="fa fa-warning modal-icon"></i>
+                    apakah anda yakin ingin menghapus item ini?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form id="formDelete" action="#" method="post">
+                    @method('delete')
+                    @csrf
+                    <button class="btn btn-default modal-dismiss">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 @endsection
 @section('footer')
-<!-- Specific Page Vendor -->
-<script src="/assets/vendor/select2/js/select2.js"></script>
-<script src="/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="/assets/vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
-<script src="/assets/js/examples/examples.datatables.default.js"></script>
-<!-- Specific Page Vendor -->
-<script src="/assets/vendor/select2/js/select2.js"></script>
-<script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-<!-- Examples -->
-<script src="/assets/js/examples/examples.advanced.form.js"></script>
-<script src="/assets/js/examples/examples.modals.js"></script>
+
 
 <script>
     $(".dataTable").on('click','.edit', function () { 

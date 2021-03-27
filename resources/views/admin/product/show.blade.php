@@ -20,8 +20,8 @@
     </header>
     @include('admin/layouts/notif')
     <div class="row">
-       
-        <div class="col-4">
+
+        <div class="col-12 col-lg-4">
             <section class="card ">
                 <header class="card-header">
                     <div class="card-actions">
@@ -29,8 +29,9 @@
                         <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                     </div>
 
-                    <a href="{{Route('add-product')}}" class=" btn btn-sm btn-success"><i class="fa fa-plus"></i>
-                        Tambah Gambar</a>
+                    <button class=" btn btn-sm btn-success" data-toggle="modal" data-target="#FormUpload"><i
+                            class="fa fa-plus"></i>
+                        Tambah Gambar</button>
                 </header>
                 <div class="card-body">
                     <div class="card-img p-1 m-1">
@@ -38,19 +39,26 @@
                             <div class="carousel-inner">
                                 @foreach ($product->product_image as $image)
                                 <div class="carousel-item text-center">
-                                    <img class="text-center" style="width:250px;height:250px"
-                                        src="https://previews.123rf.com/images/wisaanu99/wisaanu991711/wisaanu99171100022/89060121-worker-warehouse-checking-boxes-with-tablet-product-on-stock-vector-illustration.jpg"
+                                    <img class="text-center" style="width:250px;height:250px" src="{{ $image->image }}"
                                         alt="">
+                                    <form method="POST"
+                                        action="{{Route('thumbnail-destroy',['productImages'=>$image->id])}}"
+                                        class="  m-3">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger m-0"><i
+                                                class="fa fa-trash"></i></button>
+                                    </form>
                                 </div>
                                 @endforeach
                             </div>
-                            <a class="carousel-control-prev @if($product->product_image->count() < 2) d-none @endif" href="#carouselExampleControls" role="button"
-                                data-slide="prev">
+                            <a class="carousel-control-prev @if($product->product_image->count() < 2) d-none @endif"
+                                href="#carouselExampleControls" role="button" data-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
                             </a>
-                            <a class="carousel-control-next @if($product->product_image->count() < 2) d-none @endif" href="#carouselExampleControls" role="button"
-                                data-slide="next">
+                            <a class="carousel-control-next @if($product->product_image->count() < 2) d-none @endif"
+                                href="#carouselExampleControls" role="button" data-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
                             </a>
@@ -59,21 +67,23 @@
 
                         {{-- <div class="image-product text-center">
                     </div> --}}
-                        <hr>
-                        <p class="p-0 m-0 text-center font-weight-bold">Product Memiliki {{$product->product_image->count()}} Gambar</p>
+                        <hr class="p-0 m-0">
+                        <p class="p-0 m-0 text-center font-weight-bold">Product Memiliki
+                            {{$product->product_image->count()}} Gambar</p>
                     </div>
                 </div>
 
             </section>
         </div>
-        <div class="col-8">
+        <div class="col-12 col-lg-8">
             <section class="card">
                 <header class="card-header">
                     <div class="card-actions">
                         <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
                         <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                     </div>
-                    <a href="{{Route('add-product')}}" class=" btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i>
+                    <a href="{{Route('edit-product',['product'=>$product->id])}}" class=" btn btn-sm btn-primary"><i
+                            class="fas fa-pencil-alt"></i>
                         Edit Product</a>
                 </header>
                 <div class="card-body">
@@ -99,7 +109,7 @@
                             </tr>
                             <tr>
                                 <th>Description</th>
-                                <td>{{$product->description}}</td>
+                                <td>{!!$product->description!!}</td>
                             </tr>
                             <tr>
                                 <th>Stock</th>
@@ -135,7 +145,7 @@
                         <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
                         <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                     </div>
-                   <h5 class="font-weight-bold text-dark">product review</h5>
+                    <h5 class="font-weight-bold text-dark">product review</h5>
                 </header>
                 <div class="card-body">
                     <table class="table table-striped">
@@ -155,22 +165,24 @@
                                 <td>
                                     @for ($i = 0; $i < $review->rate; $i++)
 
-                                    <i class="fas fa-star text-warning"></i>
+                                        <i class="fas fa-star text-warning"></i>
 
-                                    @endfor
+                                        @endfor
                                 </td>
                                 <td>{{$review->content}}</td>
                                 <td>
                                     @foreach($responses as $response)
                                     @if($review->id == $response->review_id)
-                                      {{ $response->content }},
+                                    {{ $response->content }},
                                     @endif
-                                  @endforeach
-                              </td>
-                               
+                                    @endforeach
+                                </td>
+
                                 <td class="text-center">
-                                    <button data-id="{{$review->id}}" data-nama="{{$review->user->name}}" class="respond btn btn-sm btn-success" data-toggle="modal" data-target="#respondform">Balas</button>
-                                
+                                    <button data-id="{{$review->id}}" data-nama="{{$review->user->name}}"
+                                        class="respond btn btn-sm btn-success" data-toggle="modal"
+                                        data-target="#respondform">Balas</button>
+
                                 </td>
                             </tr>
                             @endforeach
@@ -195,35 +207,46 @@
 
                 <form action="{{Route('respond-product')}}" method="post">
                     @csrf
-                <div class="form-group">
-                    <label for="ulasan">Respond</label>
-                    <textarea class="form-control" name="content" id="content" cols="5" rows="5"></textarea>
+                    <div class="form-group">
+                        <label for="ulasan">Respond</label>
+                        <textarea class="form-control" name="content" id="content" cols="5" rows="5"></textarea>
 
-                </div>
-                <div class="form-group">
-                  <input type="hidden" id="id_review" value="" name="review_id">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" id="id_review" value="" name="review_id">
 
-                </div>
-                <br>
-                <button class="btn btn-primary" type="submit" id="btn-submit" data-id="">Submit</button>
-            </form>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary" type="submit" id="btn-submit" data-id="">Submit</button>
+                </form>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div id="FormUpload" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="title-name"></h4>
+            </div>
+            <div class="modal-body">
+
+                <form action="{{Route('thumbnail-store')}}" method="POST" class="form-group"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" required name="files[]" multiple class="form-control">
+                    <input type="hidden" value="{{$product->id}}" name="product_id">
+                    <button class="float-right btn btn-success mt-3">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 @endsection
 @section('footer')
-<!-- Specific Page Vendor -->
-<script src="/assets/vendor/select2/js/select2.js"></script>
-<script src="/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="/assets/vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
-<script src="/assets/js/examples/examples.datatables.default.js"></script>
-<!-- Specific Page Vendor -->
-<script src="/assets/vendor/select2/js/select2.js"></script>
-<script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
-<!-- Examples -->
-<script src="/assets/js/examples/examples.advanced.form.js"></script>
-<script src="/assets/js/examples/examples.modals.js"></script>
+<script src="/assets/dropzone/dist/dropzone.js"></script>
 
 <script>
     $('.carousel-item').first().addClass('active')
@@ -240,10 +263,6 @@
       $('#title-name').html('Berikan Repond Pada Ulasan : '+nama);
     });
 
-    $(".dataTable").on('click','.trash', function () { 
-      var id = $(this).data('id');
-      var nama = $(this).data('nama');
-      $('#formDelete').attr('action', '/admin/category/delete/' + id);
-    });
+  
 </script>
 @endsection

@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\ProductImages;
+
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+
 
 class ProductImagesController extends Controller
 {
@@ -35,16 +39,30 @@ class ProductImagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $files = [];
+        foreach ($request->file('files') as $file) {
+            if ($file->isValid()) {
+                $nama_image = md5(now() . "_") . $file->getClientOriginalName();
+                $file->storeAs("img/products_image", $nama_image);
+                $files[] = [
+                    'product_id' => $request->product_id,
+                    'image_name' => $nama_image,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+        ProductImage::insert($files);
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ProductImages  $productImages
+     * @param  \App\Models\ProductImage  $productImages
      * @return \Illuminate\Http\Response
      */
-    public function show(ProductImages $productImages)
+    public function show(ProductImage $productImages)
     {
         //
     }
@@ -52,10 +70,10 @@ class ProductImagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ProductImages  $productImages
+     * @param  \App\Models\ProductImage  $productImages
      * @return \Illuminate\Http\Response
      */
-    public function edit(ProductImages $productImages)
+    public function edit(ProductImage $productImages)
     {
         //
     }
@@ -64,10 +82,10 @@ class ProductImagesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ProductImages  $productImages
+     * @param  \App\Models\ProductImage  $productImages
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductImages $productImages)
+    public function update(Request $request, ProductImage $productImages)
     {
         //
     }
@@ -75,11 +93,13 @@ class ProductImagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ProductImages  $productImages
+     * @param  \App\Models\ProductImage  $productImages
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductImages $productImages)
+    public function destroy(ProductImage $productImages)
     {
-        //
+        Storage::delete('img/products_image/' . $productImages->image_name);
+        $productImages->delete();
+        return redirect()->back()->with('error', 'Gambar Telah Dihapus');
     }
 }

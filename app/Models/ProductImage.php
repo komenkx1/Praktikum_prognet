@@ -12,4 +12,8 @@ class ProductImage extends Model
     public function product(){
         return $this->belongsTo(Products::class,'product_id','id');
     }
+    public function getImageAttribute()
+    {
+        return $this->image_name ? asset('storage/img/products_image/' . $this->image_name) : asset('assets/img/holder/default-thumbnail.jpg');
+    }
 }

@@ -29,23 +29,23 @@
     <link rel="stylesheet" href="/assets/vendor/select2/css/select2.css" />
     <link rel="stylesheet" href="/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/vendor/datatables/media/css/dataTables.bootstrap4.css" />
-	<link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" />
-	<link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
 
     <!-- Specific Page Vendor CSS -->
-		<link rel="stylesheet" href="/assets/vendor/jquery-ui/jquery-ui.css" />
-		<link rel="stylesheet" href="/assets/vendor/jquery-ui/jquery-ui.theme.css" />
-		<link rel="stylesheet" href="/assets/vendor/select2/css/select2.css" />
-		<link rel="stylesheet" href="/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css" />
-		<link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" />
-		<link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
-		<link rel="stylesheet" href="/assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
-		<link rel="stylesheet" href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.css" />
-		<link rel="stylesheet" href="/assets/vendor/dropzone/basic.css" />
-		<link rel="stylesheet" href="/assets/vendor/dropzone/dropzone.css" />
-		<link rel="stylesheet" href="/assets/vendor/summernote/summernote-bs4.css" />
-		<link rel="stylesheet" href="/assets/vendor/codemirror/lib/codemirror.css" />
-		<link rel="stylesheet" href="/assets/vendor/codemirror/theme/monokai.css"/>
+    <link rel="stylesheet" href="/assets/vendor/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="/assets/vendor/jquery-ui/jquery-ui.theme.css" />
+    <link rel="stylesheet" href="/assets/vendor/select2/css/select2.css" />
+    <link rel="stylesheet" href="/assets/vendor/select2-bootstrap-theme/select2-bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-multiselect/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-colorpicker/css/bootstrap-colorpicker.css" />
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-timepicker/css/bootstrap-timepicker.css" />
+    <link rel="stylesheet" href="/assets/vendor/dropzone/basic.css" />
+    <link rel="stylesheet" href="/assets/vendor/dropzone/dropzone.css" />
+    <link rel="stylesheet" href="/assets/vendor/summernote/summernote-bs4.css" />
+    <link rel="stylesheet" href="/assets/vendor/codemirror/lib/codemirror.css" />
+    <link rel="stylesheet" href="/assets/vendor/codemirror/theme/monokai.css" />
 
 
     <!-- Theme CSS -->
@@ -68,18 +68,18 @@
         @include('admin/layouts/sidebar')
         @yield('content')
     </section>
-        <section class=" bg-light">
-            <div class="container container-with-sidebar">
-                <div class="row">
-                    <div class="col-xl-9 p-0">
-                        <div class="call-to-action-content ml-4 pt-xl-5 pb-4">
-                            <h2 class=" text-dark">Praktikum Prognet @ 2020</h2>
-                        </div>
+    <section class=" bg-light">
+        <div class="container container-with-sidebar">
+            <div class="row">
+                <div class="col-xl-9 p-0">
+                    <div class="call-to-action-content ml-4 pt-xl-5 pb-4">
+                        <h2 class=" text-dark">Praktikum Prognet @ 2020</h2>
                     </div>
-
                 </div>
+
             </div>
-       
+        </div>
+
     </section>
 
 
@@ -102,6 +102,17 @@
     <script src="/assets/vendor/flot/jquery.flot.pie.js"></script>
     <script src="/assets/vendor/flot/jquery.flot.categories.js"></script>
 
+    <!-- Specific Page Vendor -->
+    <script src="/assets/vendor/select2/js/select2.js"></script>
+    <script src="/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/js/examples/examples.datatables.default.js"></script>
+    <!-- Specific Page Vendor -->
+    <script src="/assets/vendor/select2/js/select2.js"></script>
+    <script src="/assets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+    <!-- Examples -->
+    <script src="/assets/js/examples/examples.advanced.form.js"></script>
+    <script src="/assets/js/examples/examples.modals.js"></script>
 
     <!-- Theme Base, Components and Settings -->
     <script src="/assets/js/theme.js"></script>
