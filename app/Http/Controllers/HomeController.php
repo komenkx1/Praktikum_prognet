@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Products;
 use App\Models\Carts;
 use App\Models\Category;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,6 +23,7 @@ class HomeController extends Controller
         $totalDsic = 0;
         $products = Products::paginate(8);
         $categories = Category::all();
+
 
 
         $price = 0;
@@ -43,16 +45,22 @@ class HomeController extends Controller
         $data = '';
         if ($request->ajax()) {
             foreach ($products as $product) {
-               
-                    
+
+
                 $data .= '<div
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
                 <div class="product-inner tooltip-top">
                     <div class="product-thumb">
-                        <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">
-                            <img class="img-responsive" src="assets/images/apro61-1-270x350.jpg"
-                                alt="' . $product->product_name . '" width="270" height="350">
-                        </a>
+                        <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">';
+                $Count = 0;
+                foreach ($product->product_image as $image) {
+                    $Count++;
+                    if ($Count == 1) {
+                        $data .= '<img class="img-responsive" src="' . $image->image . '"
+                                alt="' . $product->product_name . '" width="270" height="350">';
+                    }
+                }
+                $data .= '</a>
                         <div class="flash">
                             <span class="onnew"><span class="text">New</span></span></div>';
 
@@ -70,21 +78,20 @@ class HomeController extends Controller
 
                 if ($product->reviews->avg('rate')) {
 
-                 
 
-                        for ($i = 0; $i < 5; $i++) {
-                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
-                                $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($product->reviews->avg('rate') - $i > 0) {
+                    for ($i = 0; $i < 5; $i++) {
+                        if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
-                                $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
-                            } else {
+                            $data .= ' <i class="fas fa-star text-warning"> </i>';
+                        } elseif ($product->reviews->avg('rate') - $i > 0) {
 
-                                $data .= ' <i class="far fa-star text-warning"> </i>';
-                            }
+                            $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
+                        } else {
+
+                            $data .= ' <i class="far fa-star text-warning"> </i>';
                         }
-                    
+                    }
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';
@@ -157,10 +164,16 @@ class HomeController extends Controller
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
                 <div class="product-inner tooltip-top">
                     <div class="product-thumb">
-                        <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">
-                            <img class="img-responsive" src="assets/images/apro61-1-270x350.jpg"
-                                alt="' . $product->product_name . '" width="270" height="350">
-                        </a>
+                    <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">';
+                $Count = 0;
+                foreach ($product->product_image as $image) {
+                    $Count++;
+                    if ($Count == 1) {
+                        $data .= '<img class="img-responsive" src="' . $image->image . '"
+                            alt="' . $product->product_name . '" width="270" height="350">';
+                    }
+                }
+                $data .= '</a>
                         <div class="flash">
                             <span class="onnew"><span class="text">New</span></span></div>';
 
@@ -176,18 +189,18 @@ class HomeController extends Controller
 
                 if ($product->reviews->avg('rate')) {
 
-                        for ($i = 0; $i < 5; $i++) {
-                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
+                    for ($i = 0; $i < 5; $i++) {
+                        if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
-                                $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($product->reviews->avg('rate') - $i > 0) {
+                            $data .= ' <i class="fas fa-star text-warning"> </i>';
+                        } elseif ($product->reviews->avg('rate') - $i > 0) {
 
-                                $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
-                            } else {
+                            $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
+                        } else {
 
-                                $data .= ' <i class="far fa-star text-warning"> </i>';
-                            }
+                            $data .= ' <i class="far fa-star text-warning"> </i>';
                         }
+                    }
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';
@@ -255,10 +268,16 @@ class HomeController extends Controller
                 class="product-item col-lg-3 col-6 col-md-4 featured_products style-02 rows-space-30 post-34 product type-product status-publish has-post-thumbnail product_cat-light product_cat-new-arrivals product_tag-light product_tag-hat product_tag-sock first instock sale featured shipping-taxable product-type-grouped">
                 <div class="product-inner tooltip-top">
                     <div class="product-thumb">
-                        <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">
-                            <img class="img-responsive" src="assets/images/apro61-1-270x350.jpg"
-                                alt="' . $product->product_name . '" width="270" height="350">
-                        </a>
+                    <a class="thumb-link" href="detail-product/' . $product->id . '" tabindex="0">';
+                $Count = 0;
+                foreach ($product->product_image as $image) {
+                    $Count++;
+                    if ($Count == 1) {
+                        $data .= '<img class="img-responsive" src="' . $image->image . '"
+                            alt="' . $product->product_name . '" width="270" height="350">';
+                    }
+                }
+                $data .= '</a>
                         <div class="flash">
                             <span class="onnew"><span class="text">New</span></span></div>';
 
@@ -273,18 +292,18 @@ class HomeController extends Controller
 
                 if ($product->reviews->avg('rate')) {
 
-                        for ($i = 0; $i < 5; $i++) {
-                            if (floor($product->reviews->avg('rate')) - $i >= 1) {
+                    for ($i = 0; $i < 5; $i++) {
+                        if (floor($product->reviews->avg('rate')) - $i >= 1) {
 
-                                $data .= ' <i class="fas fa-star text-warning"> </i>';
-                            } elseif ($product->reviews->avg('rate') - $i > 0) {
+                            $data .= ' <i class="fas fa-star text-warning"> </i>';
+                        } elseif ($product->reviews->avg('rate') - $i > 0) {
 
-                                $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
-                            } else {
+                            $data .= ' <i class="fas fa-star-half-alt text-warning"> </i>';
+                        } else {
 
-                                $data .= ' <i class="far fa-star text-warning"> </i>';
-                            }
+                            $data .= ' <i class="far fa-star text-warning"> </i>';
                         }
+                    }
                 } else {
                     for ($i = 0; $i < 5; $i++) {
                         $data .= '<i class="far fa-star"> </i>';

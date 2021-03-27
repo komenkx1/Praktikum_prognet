@@ -25,19 +25,19 @@
                                     </a>
                                     <div class="flex-viewport">
                                         <figure class="kobolg-product-gallery__wrapper">
-                                            @foreach ($products->product_image as $immage)
+                                            @foreach ($products->product_image as $image)
 
                                             <div class="kobolg-product-gallery__image">
-                                                <img alt="img" src="/assets/images/apro131-2.jpg">
+                                                <img alt="img" src="{{$image->image}}">
                                             </div>
 
                                             @endforeach
                                         </figure>
                                     </div>
                                     <ol class="flex-control-nav flex-control-thumbs">
-                                        @foreach ($products->product_image as $immage)
+                                        @foreach ($products->product_image as $image)
 
-                                        <li><img src="/assets/images/apro131-2-100x100.jpg" alt="img">
+                                        <li><img src="{{$image->image}}" alt="img">
                                         </li>
                                         @endforeach
                                     </ol>

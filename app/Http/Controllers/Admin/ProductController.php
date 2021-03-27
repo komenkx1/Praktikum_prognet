@@ -6,8 +6,11 @@ use App\Models\Category;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Carts;
+use App\Models\Discounts;
 use App\Models\ProductImage;
 use App\Models\Response;
+use App\Models\ReviewProducts;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -123,11 +126,20 @@ class ProductController extends Controller
      */
     public function destroy(Products $product)
     {
+        foreach ($product->reviews as $review) {
+            Response::where('review_id', $review->id)->delete();
+        }
+        Carts::where('product_id', $product->id)->delete();
+
+        $product->Transactions()->detach();
         $product->category()->detach();
+        Discounts::where('id_product', $product->id)->delete();
+
         foreach ($product->product_image as $image) {
             Storage::delete('img/products_image/' . $image->image_name);
         }
         ProductImage::where('product_id', $product->id)->delete();
+        ReviewProducts::where('product_id', $product->id)->delete();
 
         $product->delete();
         return redirect(Route('product'))->with('error', 'Data Telah Dihapus');

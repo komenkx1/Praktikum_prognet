@@ -14,6 +14,6 @@ class ProductImage extends Model
     }
     public function getImageAttribute()
     {
-        return $this->image_name ? asset('storage/img/products_image/' . $this->image_name) : asset('assets/img/holder/default-thumbnail.jpg');
+        return $this->image_name ? asset('storage/img/products_image/' . $this->image_name) : asset('assets/img/default-thumbnail.jpg');
     }
 }
