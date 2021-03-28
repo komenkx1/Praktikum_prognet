@@ -29,11 +29,9 @@
                         <a href="#" class="card-action card-action-dismiss" data-card-dismiss></a>
                     </div>
 
-                    
-                    <a href="#modalForm" data-id="{{$product->id}}"
-                        data-nama="{{$product->product_name}}"
-                        class=" btn modal-with-form btn-sm btn-success"><i
-                            class="fa fa-plus"></i> Tambah Diskon</a>
+
+                    <a href="#modalForm" data-id="{{$product->id}}" data-nama="{{$product->product_name}}"
+                        class=" btn modal-with-form btn-sm btn-success"><i class="fa fa-plus"></i> Tambah Diskon</a>
                 </header>
                 <div class="card-body">
                     <table class="dataTable table table-bordered table-striped mb-0 responsive" id="datatable-default">
@@ -50,21 +48,15 @@
                             @php
                             $no = 1;
                             @endphp
-
-
-
-                            @foreach ($product->discounts as $diskon)
-
-
-
+                            @foreach ($discounts as $diskon)
                             <tr>
                                 <td>{{$no++}}</td>
                                 <td>{{$diskon->percentage}}</td>
                                 <td>{{$diskon->start}}</td>
                                 <td>{{$diskon->end}}</td>
-                                <td> <a href="#modalForm"
-                                    class="trash modal-with-form btn btn-sm btn-success"><i
-                                        class="fa fa-trash"></i></a></td>
+                                <td class="text-center"> <a href="#DeletemodalForm" data-id="{{$diskon->id}}"
+                                        class="trash modal-with-form btn btn-sm btn-danger"><i
+                                            class="fa fa-trash"></i></a></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -90,16 +82,18 @@
                 <div class="form-group row">
                     <div class="col-lg-12">
                         <label for="tags-input" class="control-label">Presentase</label>
-                      <input type="text" name="percentage" class="form-control" required placeholder="Input Prrcentase">
+                        <input type="text" name="percentage" class="form-control" required
+                            placeholder="Input Prrcentase">
                     </div>
                     <div class="col-lg-12">
                         <label for="tags-input" class="control-label">Tanggal Mulai</label>
-                      <input type="date" name="start" class="form-control" required placeholder="Input Tanggal Mulai">
+                        <input type="date" name="start" class="form-control" required placeholder="Input Tanggal Mulai">
                     </div>
                     <div class="col-lg-12">
                         <label for="tags-input" class="control-label">Tanggal Berakhir</label>
-                      <input type="date" name="end" class="form-control" required placeholder="Input Tanggal Berakhir">
-                    <input type="hidden" value="{{$product->id}}" name="id_product">
+                        <input type="date" name="end" class="form-control" required
+                            placeholder="Input Tanggal Berakhir">
+                        <input type="hidden" value="{{$product->id}}" name="id_product">
                     </div>
                 </div>
         </div>
@@ -116,41 +110,6 @@
     </section>
 </div>
 
-<div id="editmodalForm" class="modal-block modal-block-primary mfp-hide">
-    <section class="card">
-        <header class="card-header">
-            <h2 class="card-title">Category Form</h2>
-        </header>
-        <div class="card-body">
-            <form class="form-horizontal form-bordered form-bordered container" enctype="multipart/form-data"
-                action="{{Route('store-category')}}" method="POST">
-                @csrf
-                <div class="form-group row">
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Input Category</label>
-                        {{-- <input type="text" name="categorys[]" multiple id="tags-input" data-role="tagsinput" data-tag-class="badge badge-primary" class="form-control" />
-                         --}}
-                        <select name="categorys[]" id="" multiple id="tags-input" required data-role="tagsinput"
-                            data-tag-class="badge badge-primary" class="form-control">
-
-                        </select>
-                        <small class="text-danger">* Silahkan masukkan nama category (dapat memasukan lebih dari satu
-                            nama)</small>
-                    </div>
-                </div>
-        </div>
-        <footer class="card-footer">
-            <div class="row">
-                <div class="col-md-12 text-right">
-                    <button class="btn btn-primary" type="submit">Submit</button>
-                    <button class="btn btn-default modal-dismiss">Cancel</button>
-                </div>
-            </div>
-        </footer>
-        </form>
-
-    </section>
-</div>
 
 <div class="modal-block modal-block-primary mfp-hide" id="DeletemodalForm" tabindex="-1" role="dialog"
     aria-labelledby="myModalLabel" aria-hidden="true">
@@ -182,8 +141,7 @@
 <script>
     $(".dataTable").on('click','.trash', function () { 
       var id = $(this).data('id');
-      var nama = $(this).data('nama');
-      $('#formDelete').attr('action', '/admin/product/destroy/' + id);
+      $('#formDelete').attr('action', '/admin/discount/destroy/' + id);
     });
 </script>
 @endsection

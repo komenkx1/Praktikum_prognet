@@ -91,19 +91,23 @@ class ProductController extends Controller
 
     public function discounts(Products $product)
     {
-        
-        return view('/admin/discounts/index', compact('product'));
+        $discounts =  Discounts::where('id_product', $product->id)->get();
+        return view('/admin/discounts/index', compact('product', 'discounts'));
     }
 
     public function discounts_store(Request $request)
     {
-   
-    $discounts = $request->all();
-    Discounts::create($discounts);
-    return redirect()->back()->with('success','Diskon Berhasil Ditambahkan');
 
+        $discounts = $request->all();
+        Discounts::create($discounts);
+        return redirect()->back()->with('success', 'Diskon Berhasil Ditambahkan');
     }
-    
+
+    public function discounts_destroy(Discounts $discounts)
+    {
+        $discounts->delete();
+        return redirect()->back()->with('error', 'Data Telah Dihapus');
+    }
     /**
      * Show the form for editing the specified resource.
      *

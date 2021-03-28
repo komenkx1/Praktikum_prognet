@@ -187,7 +187,7 @@
                             id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
                             <h2>Description</h2>
 
-                            {{$products->description}}
+                            {!!$products->description!!}
                         </div>
 
                         <div class="kobolg-Tabs-panel kobolg-Tabs-panel--reviews panel entry-content kobolg-tab"

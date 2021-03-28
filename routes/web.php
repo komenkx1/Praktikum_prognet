@@ -85,7 +85,7 @@ Route::post('/admin/product/productimage/store', [ProductImagesController::class
 
 //discount admin
 Route::get('/admin/discount/{product:id}', [ProductController::class, 'discounts'])->name('discounts');
-Route::delete('/admin/discount/destroy/{product:id}', [ProductController::class, 'discounts_destroy'])->name('discounts-destroy');
+Route::delete('/admin/discount/destroy/{discounts:id}', [ProductController::class, 'discounts_destroy'])->name('discounts-destroy');
 Route::post('/admin/discount/store', [ProductController::class, 'discounts_store'])->name('discounts-store');
 
 //respond

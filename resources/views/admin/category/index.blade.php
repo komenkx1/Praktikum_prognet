@@ -52,10 +52,12 @@
                                 <td class="text-center">
                                     <a href="#editmodalForm" data-id="{{$item->id}}"
                                         data-nama="{{$item->category_name}}"
-                                        class="edit modal-with-form btn btn-sm btn-primary">Edit</a>
+                                        class="edit modal-with-form btn btn-sm btn-primary"><i
+                                            class="fas fa-pencil-alt"></i></a>
                                     <a href="#DeletemodalForm" data-id="{{$item->id}}"
                                         data-nama="{{$item->category_name}}"
-                                        class="trash modal-with-form btn btn-sm btn-danger">Hapus</a>
+                                        class="trash modal-with-form btn btn-sm btn-danger"><i
+                                            class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
