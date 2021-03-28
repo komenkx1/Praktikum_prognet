@@ -70,7 +70,7 @@
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                                                     <a class="block-link" href="my-account.html">
                                                         <i class="fas fa-bell"></i>
-                                                        <span class="count countcarts">0</span>
+                                                        <span class="count countcart">0</span>
                                                     </a>
                                                     <ul class="sub-menu notif">
                                                         <li
@@ -226,7 +226,7 @@
                     <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                         <a class="block-link" href="my-account.html">
                             <i class="fas fa-bell"></i>
-                            <span class="count countcarts">0</span>
+                            <span class="count countcart">0</span>
                         </a>
                         <ul class="sub-menu notif">
                             <li
