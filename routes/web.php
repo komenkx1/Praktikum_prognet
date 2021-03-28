@@ -10,7 +10,7 @@ use App\Http\Controllers\ReviewProductController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\DiscountController;
+use App\Http\Controllers\Admin\CouriersController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\ProductImagesController;
 
@@ -70,6 +70,7 @@ Route::get('/admin/category', [CategoryController::class, 'index'])->name('categ
 Route::post('/admin/category/add/store', [CategoryController::class, 'store'])->name('store-category');
 Route::put('/admin/category/update/{category:id}', [CategoryController::class, 'update'])->name('update-category');
 Route::delete('/admin/category/delete/{category:id}', [CategoryController::class, 'destroy'])->name('delete-category');
+
 //product
 Route::get('/admin/product', [ProductController::class, 'index'])->name('product');
 Route::get('/admin/product/add', [ProductController::class, 'create'])->name('add-product');
@@ -86,7 +87,14 @@ Route::post('/admin/product/productimage/store', [ProductImagesController::class
 //discount admin
 Route::get('/admin/discount/{product:id}', [ProductController::class, 'discounts'])->name('discounts');
 Route::delete('/admin/discount/destroy/{discounts:id}', [ProductController::class, 'discounts_destroy'])->name('discounts-destroy');
+Route::put('/admin/discount/update/{discounts:id}', [ProductController::class, 'discounts_update'])->name('discounts-update');
 Route::post('/admin/discount/store', [ProductController::class, 'discounts_store'])->name('discounts-store');
+
+//kurir
+Route::get('/admin/couriers', [CouriersController::class, 'index'])->name('couriers');
+Route::delete('/admin/couriers/destroy/{couriers:id}', [CouriersController::class, 'destroy'])->name('couriers-destroy');
+Route::put('/admin/couriers/update/{couriers:id}', [CouriersController::class, 'update'])->name('couriers-update');
+Route::post('/admin/couriers/store', [CouriersController::class, 'store'])->name('couriers-store');
 
 //respond
 Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');

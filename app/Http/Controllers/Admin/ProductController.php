@@ -108,6 +108,14 @@ class ProductController extends Controller
         $discounts->delete();
         return redirect()->back()->with('error', 'Data Telah Dihapus');
     }
+
+    public function discounts_update(Discounts $discounts,Request $request)
+    {
+
+         $discount = $request->all();
+        $discounts->update($discount);
+        return redirect()->back()->with('info', 'Diskon Berhasil Update');
+    }
     /**
      * Show the form for editing the specified resource.
      *

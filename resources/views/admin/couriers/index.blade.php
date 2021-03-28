@@ -1,4 +1,4 @@
-@extends('/admin/layouts/master',['title'=>'Discounts'])
+@extends('/admin/layouts/master',['title'=>'Couriers'])
 @section('content')
 <section role="main" class="content-body">
     <header class="page-header">
@@ -11,7 +11,7 @@
                         <i class="fas fa-home"></i>
                     </a>
                 </li>
-                <li><span>Discounts</span></li>
+                <li><span>Couriers</span></li>
 
             </ol>
 
@@ -30,17 +30,15 @@
                     </div>
 
 
-                    <a href="#modalForm" data-id="{{$product->id}}" data-nama="{{$product->product_name}}"
-                        class=" btn modal-with-form btn-sm btn-success"><i class="fa fa-plus"></i> Tambah Diskon</a>
+                    <a href="#modalForm" class=" btn modal-with-form btn-sm btn-success"><i class="fa fa-plus"></i>
+                        Tambah Kurir</a>
                 </header>
                 <div class="card-body">
                     <table class="dataTable table table-bordered table-striped mb-0 responsive" id="datatable-default">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Presentase</th>
-                                <th>Mulai</th>
-                                <th>Berakhir</th>
+                                <th>Nama Kurir</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -48,18 +46,14 @@
                             @php
                             $no = 1;
                             @endphp
-                            @foreach ($discounts as $diskon)
+                            @foreach ($couriers as $kurir)
                             <tr>
                                 <td>{{$no++}}</td>
-                                <td>{{$diskon->percentage}}</td>
-                                <td>{{$diskon->start}}</td>
-                                <td>{{$diskon->end}}</td>
-                                <td class="text-center"> <a href="#DeletemodalForm" data-id="{{$diskon->id}}"
+                                <td>{{$kurir->courier}}</td>
+                                <td class="text-center"> <a href="#DeletemodalForm" data-id="{{$kurir->id}}"
                                         class="trash modal-with-form btn btn-sm btn-danger"><i
                                             class="fa fa-trash"></i></a>
-                                    <a href="#modalEditForm" data-id="{{$diskon->id}}"
-                                        data-persen="{{$diskon->percentage}}" data-start="{{$diskon->start}}"
-                                        data-end="{{$diskon->end}}"
+                                    <a href="#modalEditForm" data-id="{{$kurir->id}}" data-kurir="{{$kurir->courier}}"
                                         class="edit modal-with-form btn btn-sm btn-primary"><i
                                             class="fas fa-pencil-alt"></i></a></td>
                             </tr>
@@ -78,28 +72,18 @@
 <div id="modalForm" class="modal-block modal-block-primary mfp-hide">
     <section class="card">
         <header class="card-header">
-            <h2 class="card-title">Discount Form</h2>
+            <h2 class="card-title">Courier Form</h2>
         </header>
         <div class="card-body">
             <form class="form-horizontal form-bordered form-bordered container" enctype="multipart/form-data"
-                action="{{Route('discounts-store')}}" method="POST">
+                action="{{Route('couriers-store')}}" method="POST">
                 @csrf
                 <div class="form-group row">
                     <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Presentase</label>
-                        <input type="text" name="percentage" class="form-control" required
-                            placeholder="Input Prrcentase">
+                        <label for="tags-input" class="control-label">nama Kurir</label>
+                        <input type="text" name="courier" class="form-control" required placeholder="Input Nama Kurir">
                     </div>
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Tanggal Mulai</label>
-                        <input type="date" name="start" class="form-control" required placeholder="Input Tanggal Mulai">
-                    </div>
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Tanggal Berakhir</label>
-                        <input type="date" name="end" class="form-control" required
-                            placeholder="Input Tanggal Berakhir">
-                        <input type="hidden" value="{{$product->id}}" name="id_product">
-                    </div>
+
                 </div>
         </div>
         <footer class="card-footer">
@@ -119,7 +103,7 @@
 <div id="modalEditForm" class="modal-block modal-block-primary mfp-hide">
     <section class="card">
         <header class="card-header">
-            <h2 class="card-title">Discount Edit Form</h2>
+            <h2 class="card-title">Edit Courier Form</h2>
         </header>
         <div class="card-body">
             <form class="form-horizontal form-bordered form-bordered container" id="EditFormDiscounts"
@@ -128,20 +112,11 @@
                 @csrf
                 <div class="form-group row">
                     <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Presentase</label>
-                        <input type="text" id="percentage" value="" name="percentage" class="form-control" required
-                            placeholder="Input Prrcentase">
+                        <label for="tags-input" class="control-label">Nama Kurir</label>
+                        <input type="text" id="kurir" value="" name="courier" class="form-control" required
+                            placeholder="Input Nama Kurir">
                     </div>
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Tanggal Mulai</label>
-                        <input type="date" id="start" value="" name="start" class="form-control" required
-                            placeholder="Input Tanggal Mulai">
-                    </div>
-                    <div class="col-lg-12">
-                        <label for="tags-input" class="control-label">Tanggal Berakhir</label>
-                        <input type="date" name="end" id="end" value="" class="form-control" required
-                            placeholder="Input Tanggal Berakhir">
-                    </div>
+
                 </div>
         </div>
         <footer class="card-footer">
@@ -188,18 +163,15 @@
 <script>
     $(".dataTable").on('click','.trash', function () { 
       var id = $(this).data('id');
-      $('#formDelete').attr('action', '/admin/discount/destroy/' + id);
+      $('#formDelete').attr('action', '/admin/couriers/destroy/' + id);
     });
 
     $(".dataTable").on('click','.edit', function () { 
       var id = $(this).data('id');
-      var persen = $(this).data('persen');
-      var start = $(this).data('start');
-      var end = $(this).data('end');
-      $('#EditFormDiscounts').attr('action', '/admin/discount/update/' + id);
-      $('#percentage').attr('value', persen);
-      $('#start').attr('value', start);
-      $('#end').attr('value', end);
+      var kurir = $(this).data('kurir');
+      $('#EditFormDiscounts').attr('action', '/admin/couriers/update/' + id);
+      $('#kurir').attr('value', kurir);
+     
     });
 </script>
 @endsection

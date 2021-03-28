@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
+
 
 use App\Models\Couriers;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CouriersController extends Controller
 {
@@ -14,7 +16,8 @@ class CouriersController extends Controller
      */
     public function index()
     {
-        //
+        $couriers = Couriers::all();
+        return view('admin/couriers/index',compact('couriers'));
     }
 
     /**
@@ -35,7 +38,10 @@ class CouriersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $couriers = $request->all();
+        $couriers['code'] = strtolower($request->courier);
+        Couriers::create($couriers);
+        return redirect()->back()->with('success','Berhasil Menambahkan Kurir');
     }
 
     /**
@@ -69,7 +75,10 @@ class CouriersController extends Controller
      */
     public function update(Request $request, Couriers $couriers)
     {
-        //
+        $courier = $request->all();
+        $courier['code'] = strtolower($request->courier);
+      $couriers->update($courier);
+        return redirect()->back()->with('info','Berhasil Mengupdate Kurir');
     }
 
     /**
@@ -80,6 +89,8 @@ class CouriersController extends Controller
      */
     public function destroy(Couriers $couriers)
     {
-        //
+        $couriers->delete();
+        return redirect()->back()->with('error','Data Telah Dihapus');
+        
     }
 }
