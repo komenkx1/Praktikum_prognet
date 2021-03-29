@@ -29,3 +29,6 @@ overflow: hidden!important;
     color: black;
     font-weight: bolder;
 }
+.dropdown-menu.notification-menu.show{
+  transform: translate3d(-14px, 30px, 0px)!important;
+}
