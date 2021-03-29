@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouriersController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\ProductImagesController;
+use App\Http\Controllers\Admin\TransactionAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,12 @@ Route::get('/admin/couriers', [CouriersController::class, 'index'])->name('couri
 Route::delete('/admin/couriers/destroy/{couriers:id}', [CouriersController::class, 'destroy'])->name('couriers-destroy');
 Route::put('/admin/couriers/update/{couriers:id}', [CouriersController::class, 'update'])->name('couriers-update');
 Route::post('/admin/couriers/store', [CouriersController::class, 'store'])->name('couriers-store');
+
+//transaksi admin
+Route::get('/admin/transaksi', [TransactionAdminController::class, 'index'])->name('transaksi-admin');
+Route::get('/admin/transaksi/show/{transaction:id}', [TransactionAdminController::class, 'show'])->name('show-transaksi');
+Route::put('/admin/transaksi/update/{transaction:id}', [TransactionAdminController::class, 'update'])->name('update-transaksi');
+
 
 //respond
 Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');

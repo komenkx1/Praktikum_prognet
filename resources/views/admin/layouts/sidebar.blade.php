@@ -41,6 +41,12 @@
                                 <span>Couriers</span>
                             </a>
                         </li>
+                        <li @if($title=='Transaction' ) class="nav-active" @endif>
+                            <a class="nav-link" href="{{Route('transaksi-admin')}}">
+                                <i class="fa fa-file" aria-hidden="true"></i>
+                                <span>Transaksi</span>
+                            </a>
+                        </li>
 
 
                     </ul>

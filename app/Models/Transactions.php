@@ -21,4 +21,12 @@ class Transactions extends Model
     public function courier(){
         return $this->belongsTo(Couriers::class, 'courier_id', 'id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function getImageAttribute()
+    {
+        return $this->proof_of_payment ? asset('storage/' . $this->proof_of_payment) : asset('assets/img/default-thumbnail.jpg');
+    }
 }
