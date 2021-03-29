@@ -39,8 +39,10 @@
                             <div class="carousel-inner">
                                 @foreach ($product->product_image as $image)
                                 <div class="carousel-item text-center">
+                                    <a href="{{$image->image}}" data-fancybox="gallery"
+                                    data-caption='{{ $image->image_name }}'>
                                     <img class="text-center" style="width:250px;height:250px" src="{{ $image->image }}"
-                                        alt="">
+                                        alt=""></a>
                                     <form method="POST"
                                         action="{{Route('thumbnail-destroy',['productImages'=>$image->id])}}"
                                         class="  m-3">
@@ -109,7 +111,7 @@
                             </tr>
                             <tr>
                                 <th>Description</th>
-                                <td>{!!$product->description!!}</td>
+                                <td class="dsc">{!!$product->description!!}</td>
                             </tr>
                             <tr>
                                 <th>Stock</th>
@@ -250,12 +252,12 @@
 
 <script>
     $('.carousel-item').first().addClass('active')
-    // $('.card-img').readmore({
-    //     speed: 400,
-    //     collapsedHeight: 255,
-    //     lessLink: '<a href="#" class="d-block text-center p-3">Load less</a>',
-    //     moreLink: '<a class="d-block text-center p-3" href="#">Load More</a>',
-    // });
+    $('td.dsc p').readmore({
+        speed: 400,
+        collapsedHeight: 30,
+        lessLink: '<a href="#" class="d-block">Load less</a>',
+        moreLink: '<a class="d-block" href="#">Load More</a>',
+    });
     $(document).on('click','.respond', function () { 
       var id = $(this).data('id');
       var nama = $(this).data('nama');
