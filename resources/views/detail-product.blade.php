@@ -209,8 +209,8 @@
                                         <!-- Image column -->
                                         <div class="col-sm-2 col-12 mb-3">
 
-                                            <img src="{{Auth::user()->image}}"
-                                                alt="sample image" class="avatar rounded-circle z-depth-1-half">
+                                            <img src="{{Auth::user()->image}}" alt="sample image"
+                                                class="avatar rounded-circle z-depth-1-half">
 
                                         </div>
                                         <!-- Image column -->
@@ -267,7 +267,8 @@
                                             <a>
 
                                                 <h5 class="user-name font-weight-bold"><span
-                                                        class="mr-2 badge success-color">Admin</span>{{$balasan->admin->name}}</h5>
+                                                        class="mr-2 badge success-color">Admin</span>{{$balasan->admin->name}}
+                                                </h5>
 
                                             </a>
                                             <hr>

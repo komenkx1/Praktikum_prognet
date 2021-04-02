@@ -16,7 +16,8 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {$price = 0;
+    {
+        $price = 0;
         $total = 0;
         $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
@@ -35,10 +36,10 @@ class UserController extends Controller
             // dd($cart->qty);
         }
         $user = User::where('id', Auth::user()->id)->first();
-        return view('profile',compact('user','carts','total'));
+        return view('profile', compact('user', 'carts', 'total'));
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -73,7 +74,7 @@ class UserController extends Controller
     public function sendEmailVerif(User $user)
     {
         $user->sendEmailVerificationNotification();
-        return redirect()->back()->with('success','Email Verifikasi Terkirim');
+        return redirect()->back()->with('success', 'Email Verifikasi Terkirim');
     }
     /**
      * Show the form for editing the specified resource.
@@ -97,11 +98,11 @@ class UserController extends Controller
     {
         $user->name = $request->name;
 
-        if ($user->email !=$request->email ) {
+        if ($user->email != $request->email) {
             $user->email = $request->email;
             $user->email_verified_at = null;
         }
-      
+
         if ($request->file('profile_image')) {
             Storage::delete($user->profile_image);
             $gambar = $request->file('profile_image');
@@ -111,7 +112,7 @@ class UserController extends Controller
         }
         // dd($users);
         $user->update();
-        return redirect()->back()->with('success','Profile Telah Diupdate');
+        return redirect()->back()->with('success', 'Profile Telah Diupdate');
     }
 
     /**

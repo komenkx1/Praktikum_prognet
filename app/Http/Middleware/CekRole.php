@@ -16,9 +16,9 @@ class CekRole
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (in_array($request->user()->role,$roles)) {
-        return $next($request);
+        if (in_array($request->user()->role, $roles)) {
+            return $next($request);
         }
-        return redirect('/admin')->with('denied','anda tak berhak masuk kehalaman tersebut!');
+        return redirect('/admin')->with('denied', 'anda tak berhak masuk kehalaman tersebut!');
     }
 }

@@ -27,7 +27,7 @@
             @elseif ($transaksi->status == 'expired')
             <h2> TRANSAKSI EXPIRED</h2>
             @else
-            @if (!$transaksi->proof_of_payment && $transaksi->status == 'unverified'||  $transaksi->status == 'failed')
+            @if (!$transaksi->proof_of_payment && $transaksi->status == 'unverified'|| $transaksi->status == 'failed')
             <div id="countdown"> </div>
             <form action="{{Route('cancel',['transactions' => $transaksi->id])}}" method="POST"
                 enctype="multipart/form-data">
@@ -43,7 +43,8 @@
         </div>
 
         <div class="row pt-5">
-            @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status == 'failed' )
+            @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status ==
+            'failed' )
 
             <div class="main-content col-md-6">
 
