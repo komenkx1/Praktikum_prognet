@@ -19,6 +19,7 @@
         </div>
     </header>
     <!-- start: page -->
+    @include('/admin/layouts/notif')
     <div class="row">
         <div class="col-lg-12 mb-3">
             <section class="card">

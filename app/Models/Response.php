@@ -10,4 +10,8 @@ class Response extends Model
     use HasFactory;
     protected $table = 'response';
     protected $guarded = [];
+
+    public function admin(){
+        return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
 }

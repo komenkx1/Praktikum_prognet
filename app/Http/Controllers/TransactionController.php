@@ -7,6 +7,7 @@ use App\Models\Products;
 use App\Models\TransactionDetails;
 use App\Models\Carts;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -19,7 +20,7 @@ class TransactionController extends Controller
     {
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -35,7 +36,7 @@ class TransactionController extends Controller
 
             // dd($cart->qty);
         }
-        $transaksis = Transactions::where('user_id', '=', '1')->get();
+        $transaksis = Transactions::where('user_id', '=', Auth::user()->id)->get();
         return view('transaksi', compact('transaksis', 'carts', 'total'));
     }
 
@@ -95,6 +96,7 @@ class TransactionController extends Controller
             $gambar = $request->file('proof_of_payment');
             $urlgambar = $gambar->storeAs("img/bukti", md5('Bukti' . $transactions->id . microtime()) . '.' . $gambar->extension());
             $transactions->proof_of_payment = $urlgambar;
+            $transactions->status = 'unverified';
             $transactions->update();
         }
         return redirect()->back();

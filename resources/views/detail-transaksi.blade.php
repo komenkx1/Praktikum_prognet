@@ -27,7 +27,7 @@
             @elseif ($transaksi->status == 'expired')
             <h2> TRANSAKSI EXPIRED</h2>
             @else
-            @if (!$transaksi->proof_of_payment && $transaksi->status == 'unverified')
+            @if (!$transaksi->proof_of_payment && $transaksi->status == 'unverified'||  $transaksi->status == 'failed')
             <div id="countdown"> </div>
             <form action="{{Route('cancel',['transactions' => $transaksi->id])}}" method="POST"
                 enctype="multipart/form-data">
@@ -43,7 +43,7 @@
         </div>
 
         <div class="row pt-5">
-            @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null)
+            @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status == 'failed' )
 
             <div class="main-content col-md-6">
 
@@ -79,7 +79,7 @@
 
             @endif
             <div
-                class="main-content @if($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null) col-md-6 @else col-md-12 @endif">
+                class="main-content @if($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status == 'failed') col-md-6 @else col-md-12 @endif">
                 <div class="page-main-content">
                     <div class="kobolg">
                         <div class="kobolg-notices-wrapper"></div>
@@ -234,7 +234,7 @@
 			}
 		});
 	});
-    @if(!$transaksi->proof_of_payment && $transaksi->status == 'unverified')
+    @if(!$transaksi->proof_of_payment && $transaksi->status == 'unverified' || $transaksi->status == 'failed')
          CountDownTimer('{{$transaksi->created_at}}', 'countdown');
     function CountDownTimer(dt, id)
     {
@@ -262,7 +262,7 @@
             document.getElementById(id).innerHTML += hours + ' hrs ';
             document.getElementById(id).innerHTML += minutes + ' mins ';
             document.getElementById(id).innerHTML += seconds + ' secs';
-            document.getElementById(id).innerHTML +='<h2>BATAS WAKTU PEMBAYARAN';
+            document.getElementById(id).innerHTML +=@if($transaksi->status == 'failed')'<h2>Bukti Pembayaran Tidak dapat di verifikasi, silahkan upload kembali bukti pembayaran</h2>'@else '<h2>BATAS WAKTU PEMBAYARAN</h2>' @endif;
         }
         timer = setInterval(showRemaining, 1000);
     }

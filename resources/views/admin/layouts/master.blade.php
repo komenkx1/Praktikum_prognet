@@ -1,3 +1,7 @@
+
+@php
+$admin = Auth::guard('admin')->user();    
+@endphp
 <!doctype html>
 <html class="fixed">
 

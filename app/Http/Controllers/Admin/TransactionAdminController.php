@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\TransactionDetails;
 use App\Models\Transactions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TransactionAdminController extends Controller
 {
@@ -77,6 +78,8 @@ class TransactionAdminController extends Controller
            $transaction->status = 'verified';
         }elseif ($request->submit == 'Reject') {
             $transaction->status =  'failed';
+            Storage::delete($transaction->proof_of_payment);
+            $transaction->proof_of_payment = null;
         }elseif ($request->submit == 'Delivery') {
             $transaction->status =  'delivered';
         }

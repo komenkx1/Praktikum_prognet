@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\CouriersController;
 use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\ProductImagesController;
 use App\Http\Controllers\Admin\TransactionAdminController;
+use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +30,10 @@ use App\Http\Controllers\Admin\TransactionAdminController;
 */
 
 
+Auth::routes(['verify' => true]);
+
+Route::middleware('auth')->group(function(){
+Route::get('sendEmaliVerif/{user:id}', [UserController::class, 'sendEmailVerif'])->name('send-email');
 
 //transaksi
 Route::get('detail-transaksi/{transactions:id}', [TransactionDetailsController::class, 'index'])->name('detail-transaksi');
@@ -51,17 +58,24 @@ Route::delete('delete-cart', [CartController::class, 'destroy'])->name('delete-c
 Route::delete('delete/{cart:id}', [CartController::class, 'destroy'])->name('delete');
 
 //product
+
+Route::post('beli', [HomeController::class, 'store'])->name('beli-product');
+
+//user profile
+Route::get('profile',[UserController::class,'index'])->name('profile');
+Route::put('profile/update/{user:id}',[UserController::class,'update'])->name('profile.update');
+//review product
+Route::get('review-product/{product:id}', [ReviewProductController::class, 'index'])->name('review-product');
+Route::post('store-review', [ReviewProductController::class, 'store'])->name('store-review');
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('product');
 Route::get('detail-product/{products:id}', [HomeController::class, 'show'])->name('detail-product');
-Route::post('beli', [HomeController::class, 'store'])->name('beli-product');
 Route::get('filter-category', [HomeController::class, 'categoryFilter'])->name('filter-category');
 Route::get('filter-search', [HomeController::class, 'searchFilter'])->name('filter-search');
 Route::post('pagination/fetch', 'PaginationController@index')->name('pagination.fetch');
 
-//review product
-Route::get('review-product/{product:id}', [ReviewProductController::class, 'index'])->name('review-product');
-Route::post('store-review', [ReviewProductController::class, 'store'])->name('store-review');
-
+Route::group(['middleware' => ['auth:admin']],function(){
 //admin
 
 //dashboard
@@ -97,11 +111,22 @@ Route::delete('/admin/couriers/destroy/{couriers:id}', [CouriersController::clas
 Route::put('/admin/couriers/update/{couriers:id}', [CouriersController::class, 'update'])->name('couriers-update');
 Route::post('/admin/couriers/store', [CouriersController::class, 'store'])->name('couriers-store');
 
+Route::group(['middleware' => ['roles:super admin']], function () {
 //transaksi admin
 Route::get('/admin/transaksi', [TransactionAdminController::class, 'index'])->name('transaksi-admin');
 Route::get('/admin/transaksi/show/{transaction:id}', [TransactionAdminController::class, 'show'])->name('show-transaksi');
 Route::put('/admin/transaksi/update/{transaction:id}', [TransactionAdminController::class, 'update'])->name('update-transaksi');
-
+});
 
 //respond
 Route::post('/admin/product/respond', [ResponseController::class, 'store'])->name('respond-product');
+});
+//login
+
+// Auth::routes();
+
+Route::get('admin/login', [AdminAuthController::class, 'getLogin'])->name('admin.login');
+Route::post('admin/login', [AdminAuthController::class, 'postLogin']);
+Route::get('admin/logout', [AdminAuthController::class, 'postLogout']);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

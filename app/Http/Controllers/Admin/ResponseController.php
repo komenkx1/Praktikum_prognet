@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ResponseController extends Controller
 {
@@ -36,7 +37,7 @@ class ResponseController extends Controller
     public function store(Request $request)
     {
         $respond = $request->all();
-        $respond['admin_id'] = '1';
+        $respond['admin_id'] = Auth::guard('admin')->user()->id;
         Response::create($respond);
         return redirect()->back()->with('success', 'berhasil membalas review pengguna');
     }

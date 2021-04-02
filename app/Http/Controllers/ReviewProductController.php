@@ -6,6 +6,7 @@ use App\Models\ReviewProducts;
 use App\Models\TransactionDetails;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewProductController extends Controller
 {
@@ -44,7 +45,7 @@ class ReviewProductController extends Controller
         $review->product_id = $request->id;
         $review->rate = $request->rate;
         $review->content = $request->content;
-        $review->user_id = '1';
+        $review->user_id = Auth::user()->id;
         $review->save();
         echo 'Review Terkirim. Terima kasi sudah memberikan review anda';
     }

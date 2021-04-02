@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -47,5 +47,10 @@ class User extends Authenticatable
 
     public function transaction(){
         return $this->hasMany(Transactions::class,'user_id');
+    }
+
+    public function getImageAttribute()
+    {
+        return $this->profile_image ? asset('storage/' . $this->profile_image) : asset('assets/images/default-user.jpg');
     }
 }

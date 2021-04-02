@@ -18587,3 +18587,6 @@ ul .sub-menu.notif {
     box-shadow: 0 3px 18px 0 rgb(0 0 0 / 5%);
     border-top: 2px solid #e52e06;
 }
+a.verif:hover{
+    color: white!important;
+}

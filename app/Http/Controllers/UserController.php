@@ -2,37 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TransactionDetails;
-use App\Models\Transactions;
 use App\Models\Carts;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
-
-class TransactionDetailsController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($transactions)
-    {
-        $id = decrypt($transactions);
-        $transaksi = Transactions::with('TransactionDetails')->where('id','=',$id)->get()->first();
-        $transaksidetails = TransactionDetails::with('Transaction')
-        ->join('transactions','transaction_details.transaction_id','=','transactions.id')
-        ->where('transactions.id','=',$id)
-        ->select(
-            DB::raw('SUM(transaction_details.selling_price * transaction_details.qty) as price'),
-            'transaction_details.product_id',
-            'transaction_details.qty as quantity',)
-         ->groupBy('transaction_details.product_id', 'transaction_details.qty')
-        ->get();
-        $price = 0;
+    public function index()
+    {$price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=",Auth::user()->id)->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -48,10 +34,11 @@ class TransactionDetailsController extends Controller
 
             // dd($cart->qty);
         }
-
-        return view('detail-transaksi',compact('transaksi','transaksidetails','carts','total'));
+        $user = User::where('id', Auth::user()->id)->first();
+        return view('profile',compact('user','carts','total'));
     }
 
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -76,21 +63,25 @@ class TransactionDetailsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\TransactionDetails  $transactionDetails
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(TransactionDetails $transactionDetails)
+    public function show($id)
     {
         //
     }
-
+    public function sendEmailVerif(User $user)
+    {
+        $user->sendEmailVerificationNotification();
+        return redirect()->back()->with('success','Email Verifikasi Terkirim');
+    }
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\TransactionDetails  $transactionDetails
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(TransactionDetails $transactionDetails)
+    public function edit($id)
     {
         //
     }
@@ -99,21 +90,37 @@ class TransactionDetailsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TransactionDetails  $transactionDetails
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TransactionDetails $transactionDetails)
+    public function update(Request $request, User $user)
     {
-        //
+        $user->name = $request->name;
+
+        if ($user->email !=$request->email ) {
+            $user->email = $request->email;
+            $user->email_verified_at = null;
+        }
+      
+        if ($request->file('profile_image')) {
+            Storage::delete($user->profile_image);
+            $gambar = $request->file('profile_image');
+            $nama_image = md5(now() . "_") . $request->file('profile_image')->getClientOriginalName();
+            $urlgambar = $gambar->storeAs("img/profile_image", $nama_image);
+            $user->profile_image = $urlgambar;
+        }
+        // dd($users);
+        $user->update();
+        return redirect()->back()->with('success','Profile Telah Diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\TransactionDetails  $transactionDetails
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TransactionDetails $transactionDetails)
+    public function destroy($id)
     {
         //
     }

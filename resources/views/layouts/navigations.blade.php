@@ -1,6 +1,9 @@
 <header id="header" class="header style-04 header-dark sticky-top">
-
-
+    @auth
+    @if(!Auth::user()->email_verified_at) 
+<div class="bg-unverif w-100 bg-danger p-4 m-0 text-center"><h4 class="p-0 m-0 text-white"> Email Anda Belum Tervirifikasi, jika anda belum menerima kode verifikasi klik <a class="verif" href="{{Route('send-email',['user'=>Auth::user()->id])}}"><u>disini</u></a>  </h4></div>
+@endif
+@endauth
     <div class="header-wrap-stick">
         <div class="header-position">
             <div class="header-nav">
@@ -37,38 +40,42 @@
                                             <div class="meta-dreaming">
 
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown">
-                                                    <a class="block-link" href="my-account.html">
-                                                        <span class="flaticon-profile"></span>
+                                                    @guest
+                                                    <a class="block-link"  href="/login">
+                                                       Login
+                                                    </a>    
+                                                    @endguest
+                                                    @auth
+                                                    <a class="block-link" href="javascript:void(0)">
+                                                        <figure class="profile-picture">
+                                                            <img src="{{Auth::user()->image}}" alt="Joseph Doe" class="rounded-circle"
+                                                                data-lock-picture="{{Auth::user()->image}}" />
+                                                        </figure>
                                                     </a>
+                                                    
                                                     <ul class="sub-menu">
-                                                        <li
-                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-                                                            <a href="#">Dashboard</a>
-                                                        </li>
+                                                    
+                                             
                                                         <li
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--orders">
                                                             <a href="{{Route('transaksi')}}">Transaction List</a>
                                                         </li>
-                                                        <li
-                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--downloads">
-                                                            <a href="#">Downloads</a>
-                                                        </li>
-                                                        <li
-                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-addresses">
-                                                            <a href="#">Addresses</a>
-                                                        </li>
+                                                    
                                                         <li
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-account">
-                                                            <a href="#">Account details</a>
+                                                            <a href="{{Route('profile')}}">Account details</a>
                                                         </li>
                                                         <li
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--customer-logout">
-                                                            <a href="#">Logout</a>
+                                                            <a href="#" onclick="$('#form-logout').submit()">Logout</a>
                                                         </li>
+                                                                                                                
+                                                 
                                                     </ul>
+                                                  
                                                 </div>
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
-                                                    <a class="block-link" href="my-account.html">
+                                                    <a class="block-link" href="javascript:void(0)">
                                                         <i class="fas fa-bell"></i>
                                                         <span class="count countcart">0</span>
                                                     </a>
@@ -162,6 +169,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @endauth
                                             </div>
                                         </div>
                                     </div>
@@ -193,38 +201,39 @@
             <div class="header-control-inner">
                 <div class="meta-dreaming">
                     <div class="menu-item block-user block-dreaming kobolg-dropdown">
-                        <a class="block-link" href="my-account.html">
-                            <span class="flaticon-profile"></span>
+                        @guest
+                        <a href="/login">
+                           Login
+                        </a>    
+                        @endguest
+                        @auth
+                        <a class="block-link" href="javascript:void(0)">
+                            <figure class="profile-picture">
+                                <img src="{{Auth::user()->image}}" alt="Joseph Doe" class="rounded-circle"
+                                    data-lock-picture="{{Auth::user()->image}}" />
+                            </figure>
                         </a>
                         <ul class="sub-menu">
-                            <li
-                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-                                <a href="#">Dashboard</a>
-                            </li>
                             <li
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--orders">
                                 <a href="{{Route('transaksi')}}">Transaction List</a>
                             </li>
-                            <li
-                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--downloads">
-                                <a href="#">Downloads</a>
-                            </li>
-                            <li
-                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-addresses">
-                                <a href="#">Addresses</a>
-                            </li>
+                        
                             <li
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-account">
-                                <a href="#">Account details</a>
+                                <a href="{{Route('profile')}}">Account details</a>
                             </li>
                             <li
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--customer-logout">
-                                <a href="#">Logout</a>
+                                <a href="#" onclick="$('#form-logout').submit()">Logout</a>
                             </li>
+                                                            
+                         
                         </ul>
+
                     </div>
                     <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
-                        <a class="block-link" href="my-account.html">
+                        <a class="block-link" href="javascript:void(0)">
                             <i class="fas fa-bell"></i>
                             <span class="count countcart">0</span>
                         </a>
@@ -241,6 +250,9 @@
                             </li>
 
                         </ul>
+                        <form id="form-logout" action="{{ route('logout') }}" method="post">
+                            @csrf
+                        </form>
                     </div>
                     <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
                         <div class="shopcart-dropdown block-cart-link" data-kobolg="kobolg-dropdown">
@@ -313,6 +325,7 @@
                             </div>
                         </div>
                     </div>
+                    @endauth
                 </div>
             </div>
         </div>

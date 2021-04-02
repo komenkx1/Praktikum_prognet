@@ -82,8 +82,8 @@
                         data-lock-picture="/assets/img/!logged-user.jpg" />
                 </figure>
                 <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
-                    <span class="name">John Doe Junior</span>
-                    <span class="role">administrator</span>
+                    <span class="name">{{$admin->name}}</span>
+                    <span class="role">{{$admin->role}}</span>
                 </div>
 
                 <i class="fa custom-caret"></i>
@@ -96,12 +96,9 @@
                         <a role="menuitem" tabindex="-1" href="pages-user-profile.html"><i class="fas fa-user"></i> My
                             Profile</a>
                     </li>
+                  
                     <li>
-                        <a role="menuitem" tabindex="-1" href="#" data-lock-screen="true"><i class="fas fa-lock"></i>
-                            Lock Screen</a>
-                    </li>
-                    <li>
-                        <a role="menuitem" tabindex="-1" href="pages-signin.html"><i class="fas fa-power-off"></i>
+                        <a role="menuitem" tabindex="-1" href="/admin/logout"><i class="fas fa-power-off"></i>
                             Logout</a>
                     </li>
                 </ul>

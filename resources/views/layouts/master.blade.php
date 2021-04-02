@@ -10,7 +10,6 @@
         rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/animate.css" />
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
@@ -175,6 +174,10 @@
     <script>
         @if ($message = Session::get('error'))
     toastr.error('{{ session('error') }}');
+    @elseif ($message = Session::get('warning'))
+    toastr.warning('{{ session('warning') }}');
+    @elseif ($message = Session::get('success'))
+    toastr.success('{{ session('success') }}');
 @endif
         $.ajaxSetup({
   headers: {
@@ -223,6 +226,13 @@ function loadtotal(){
 }
 
             $(document).on('click','.btn-add',function(){
+                @guest
+                toastr.warning('Silahkan Login terlebih Dahulu');
+                @endguest
+                @auth
+                @if(!Auth::user()->email_verified_at)
+                toastr.warning('Email Anda Belum Terverifikasi, silahkan verifikasi email terlebih dahulu');
+                 @else
 		var id = $(this).data('id');
 		var stock = $(this).data('stock');
 		$.ajax({
@@ -233,14 +243,17 @@ function loadtotal(){
                 loadcount();
                 loadcarts();
                 loadtotal();
+                
                 if (data == 'stok habis') {
                     toastr.error(data);
                 }else{
                     toastr.success(data);
-                }
-               
+                } 
 			}
+
 		});
+        @endif
+        @endauth
 	});
 
     $(document).on('click','.delete',function(){

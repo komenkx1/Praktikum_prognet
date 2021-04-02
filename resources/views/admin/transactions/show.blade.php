@@ -102,6 +102,7 @@
                             <button data-toggle="modal" data-target="#modalVerif" data-input="Verif"
                                 class="verfif btn btn-success mr-2">Verif @if($transaction->status == 'failed') Lagi
                                 @endif</button>
+                           
                             <button data-toggle="modal" data-target="#modalVerif" data-input="Reject"
                                 class="reject btn btn-danger mr-2">Reject</button>
                             @elseif($transaction->status == 'verified')

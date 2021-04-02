@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Carts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 
 class CartController extends Controller
@@ -18,7 +19,7 @@ class CartController extends Controller
     {
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -75,7 +76,7 @@ class CartController extends Controller
     public function count()
     {
         $data = Carts::join('products', 'carts.product_id', '=', 'products.id')
-            ->where('user_id', "=", '1')
+            ->where('user_id', "=", Auth::user()->id)
             ->where('status', '=', 'notyet')
             ->get()->count();
         return json_encode($data);
@@ -85,7 +86,7 @@ class CartController extends Controller
     {
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -121,7 +122,7 @@ class CartController extends Controller
     public function store(Request $request)
     {
         $carts = new Carts;
-        $checkCarts = $carts->where('user_id', '=', '1')
+        $checkCarts = $carts->where('user_id', '=', Auth::user()->id)
             ->where('product_id', '=', $request->id)
             ->where('status', '=', 'notyet')
             ->get()->first();
@@ -133,7 +134,7 @@ class CartController extends Controller
 
                 if ($checkCarts->product_id == $request->id) {
                     $qty = $checkCarts->qty + 1;
-                    Carts::where('user_id', '=', '1')
+                    Carts::where('user_id', '=', Auth::user()->id)
                         ->where('product_id', '=', $request->id)
                         ->where('status', '=', 'notyet')
                         ->update([
@@ -142,7 +143,7 @@ class CartController extends Controller
                 }
             } else {
                 $carts->product_id = $request->id;
-                $carts->user_id  = 1;
+                $carts->user_id  = Auth::user()->id;
                 $carts->qty = 1;
                 $carts->status = 'notyet';
                 $carts->save();

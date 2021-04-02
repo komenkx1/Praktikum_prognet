@@ -10,6 +10,8 @@ use App\Models\Transactions;
 use App\Models\TransactionDetails;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
 
 
 use Kavist\RajaOngkir\Facades\RajaOngkir;
@@ -33,7 +35,7 @@ class CheckoutController extends Controller
         $total = 0;
         $berattotal = 0;
         $subprice = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -95,7 +97,7 @@ class CheckoutController extends Controller
     {
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -133,7 +135,7 @@ class CheckoutController extends Controller
         $transaksaction['timeout'] = $tomorrowDate;
         $transaksaction['total'] =  $request->shipping_cost + $total;
         $transaksaction['sub_total'] = $total;
-        $transaksaction['user_id'] = '1';
+        $transaksaction['user_id'] = Auth::user()->id;
         $transaksaction['status'] = 'unverified';
         $transaksaction['telp'] = $request->telp;
         // dd($transaksaction);
@@ -172,7 +174,7 @@ class CheckoutController extends Controller
                 'selling_price' => $value->products->price,
             ]);
 
-            Carts::where('user_id', "=", '1')->update([
+            Carts::where('user_id', "=", Auth::user()->id)->update([
                 'status' => 'checkedout',
             ]);
         }

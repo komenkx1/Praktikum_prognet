@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -28,7 +28,7 @@ class HomeController extends Controller
 
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id ?? '')->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
                 if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
@@ -377,18 +377,21 @@ class HomeController extends Controller
 
     public function store(Request $request)
     {
-
+        if(Auth::user()->email_verified_at){
         $carts = new Carts;
         if ($request->qty < 1) {
             return redirect()->back()->with('error', 'pembelian minimal 1 product');
         } else {
             $carts->product_id = $request->id;
-            $carts->user_id  = 1;
+            $carts->user_id  = Auth::user()->id ?? '';
             $carts->qty = $request->qty;
             $carts->status = 'notyet';
             $carts->save();
             return redirect('checkout');
         }
+    }else {
+        return redirect()->back()->with('warning','Email Belun Terverifikasi, silahkan verifikasi email terlebihdahulu');
+    }
     }
 
     /**
@@ -403,7 +406,7 @@ class HomeController extends Controller
         $categories = Category::all();
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=", '1')->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id ?? '')->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
                 if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
