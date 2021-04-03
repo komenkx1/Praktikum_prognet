@@ -7000,6 +7000,7 @@ ul.products li.product-category a .kobolg-loop-category__title mark {
 .product-thumb,
 .thumb-link {
     position: relative;
+    min-height: 250px;
 }
 
 .product-thumb img {

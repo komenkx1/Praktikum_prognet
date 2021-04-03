@@ -48,11 +48,11 @@
                         <div class="row">
                             <div class="col-md-4 container-flex align-self-center justify-content-center ">
        
-                                <img id="blah" style="width: 100%x; height:300px; border-radius:5px;"
-                                    src="{{$adminUser->image}}" alt="your image" />
+                                <img id="blah" style="width: 100%; height:300px; border-radius:5px;"
+                                    src="{{$adminUser->image}}" alt="your image" class="p-3" />
                             
                                 <div class="break"></div>
-                                <input name="profile_image" type='file' id="imgInp" class="d-block pt-2 mt-2 w-100" />
+                                <input name="profile_image" type='file' id="imgInp" class="d-block p-3 pt-2 mt-2 w-100" />
 
                             </div>
                             <div class="col-md-8">

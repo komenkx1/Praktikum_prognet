@@ -209,7 +209,7 @@
                                         <!-- Image column -->
                                         <div class="col-sm-2 col-12 mb-3">
 
-                                            <img src="{{Auth::user()->image}}" alt="sample image"
+                                            <img src="{{$item->user->image}}" alt="sample image"
                                                 class="avatar rounded-circle z-depth-1-half">
 
                                         </div>
@@ -255,7 +255,7 @@
                                         <!-- Image column -->
                                         <div class="col-sm-2 col-12 mb-3">
 
-                                            <img src="https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg"
+                                            <img src="{{$balasan->admin->image}}"
                                                 alt="sample image" class="avatar rounded-circle z-depth-1-half">
 
                                         </div>
