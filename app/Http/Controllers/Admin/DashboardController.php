@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
@@ -78,7 +80,13 @@ class DashboardController extends Controller
     public function update(Request $request, Admin $admin)
     {
         $admins = $request->all();
-
+        if ($request->input('password')) {
+            if (Hash::check($request->password, Auth::guard('admin')->user()->password)) {
+                $admins['password'] = bcrypt($request->new_password);
+        }else{
+            return redirect()->back()->with('error','Password Lama Salah');
+        }
+    }
         if ($request->file('profile_image')) {
             Storage::delete($admin->profile_image);
             $gambar = $request->file('profile_image');
@@ -86,10 +94,12 @@ class DashboardController extends Controller
             $urlgambar = $gambar->storeAs("img/profile_image", $nama_image);
             $admins['profile_image'] = $urlgambar;
         }
-
-        $admin->update($admins);
+        $result = array_filter($admins);
+        // dd($result);
+        $admin->update($result);
         return redirect()->back()->with('info','Profile Berhasil Di Update');
     }
+
 
     /**
      * Remove the specified resource from storage.

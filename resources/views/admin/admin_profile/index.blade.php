@@ -1,6 +1,15 @@
 @extends('/admin/layouts/master',['title'=>'Profile'])
 @section('content')
-
+<style>
+    .break {
+  flex-basis: 100%;
+  height: 0;
+}
+.container-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>
 <section role="main" class="content-body">
     <header class="page-header">
         <h2>Admin</h2>
@@ -37,10 +46,14 @@
                         @method('put')
                         @csrf
                         <div class="row">
-                            <div class="col-md-4 text-center">
+                            <div class="col-md-4 container-flex align-self-center justify-content-center ">
+       
                                 <img id="blah" style="width: 100%x; height:300px; border-radius:5px;"
                                     src="{{$adminUser->image}}" alt="your image" />
+                            
+                                <div class="break"></div>
                                 <input name="profile_image" type='file' id="imgInp" class="d-block pt-2 mt-2 w-100" />
+
                             </div>
                             <div class="col-md-8">
                                 <div class="form-group">
@@ -62,6 +75,19 @@
                                     <input type="text" name="phone" required value="{{$adminUser->phone}}"
                                         class="form-control w-100">
                                 </div>
+
+                            <hr>
+                            <p class="m-0 p-0 font-weight-bolder">Change Pssword</p>
+                            <div class="form-group">
+                                <label for="">Old Password</label>
+                                <input type="password" name="password"
+                                    class="form-control w-100">
+                            </div>
+                            <div class="form-group">
+                                <label for="">New Password</label>
+                                <input type="password" name="new_password"
+                                    class="form-control w-100">
+                            </div>
                                 <button class="btn btn-success float-right clearfix mt-3">Submit</button>
                             </div>
                         </div>
