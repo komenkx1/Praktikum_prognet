@@ -40,8 +40,7 @@ class AdminAuthController extends Controller
 
             return redirect()
                 ->back()
-                ->withInput()
-                ->withErrors(["Incorrect user login details!"]);
+                ->with('error','Incorrect user login details!');
         }
     }
 

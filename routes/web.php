@@ -136,7 +136,7 @@ Route::post('/admin/product/respond', [ResponseController::class, 'store'])->nam
 });
 //login
 
-// Auth::routes();
+// Auth::routes admin;
 
 Route::get('admin/login', [AdminAuthController::class, 'getLogin'])->name('admin.login');
 Route::post('admin/login', [AdminAuthController::class, 'postLogin']);
