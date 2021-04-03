@@ -61,7 +61,10 @@
                                         id="billing_bukti_1_field" data-priority="50"><label for="billing_bukti_1"
                                             class="">Bukti Pembayaran&nbsp;<abbr class="required"
                                                 title="required">*</abbr></label><span
-                                            class="kobolg-input-wrapper"><input type="file" id="file-upload"
+                                            class="kobolg-input-wrapper">
+                                            <img id="blah" style="width: 100%; height:300px; border-radius:5px;"
+                                    src="{{$transaksi->id}}" alt="-" class="p-3" />
+                                            <input type="file" id="imgInp"
                                                 class="input-name form-control" name="proof_of_payment"
                                                 id="billing_bukti_1" placeholder="bukti Lengkap" value=""
                                                 autocomplete="bukti-line1" data-placeholder="bukti Lengkap"></span>
@@ -268,5 +271,21 @@
         timer = setInterval(showRemaining, 1000);
     }
     @endif
+
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+      $('#blah').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
+
+$("#imgInp").change(function() {
+  readURL(this);
+})
 </script>
 @endsection
