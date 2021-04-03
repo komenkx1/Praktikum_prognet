@@ -49,7 +49,12 @@
                                 <span>Transaksi</span>
                             </a>
                         </li>
-                            
+                        <li @if($title=='User' ) class="nav-active" @endif>
+                            <a class="nav-link" href="{{Route('admin.add')}}">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                <span>User</span>
+                            </a>
+                        </li>   
                         @endif
 
                     </ul>

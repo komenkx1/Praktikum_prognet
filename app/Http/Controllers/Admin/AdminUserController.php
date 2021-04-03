@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class DashboardController extends Controller
+class AdminUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,14 +17,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('admin/dashboard');
+        $adminUser = Admin::all();
+        return view('admin/add_admin/index',compact('adminUser'));
     }
 
-    public function userProfile()
-    {
-        $adminUser = Admin::where('id',Auth::guard('admin')->user()->id)->first();
-        return view('admin/admin_profile/index',compact('adminUser'));
-    }
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +28,8 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('admin/add_admin/add');
     }
 
     /**
@@ -43,7 +40,17 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $admins = $request->all();
+        $admins['password'] = bcrypt($request->password);
+        if ($request->file('profile_image')) {
+            $gambar = $request->file('profile_image');
+            $nama_image = md5(now() . "_") . $request->file('profile_image')->getClientOriginalName();
+            $urlgambar = $gambar->storeAs("img/profile_image", $nama_image);
+            $admins['profile_image'] = $urlgambar;
+        }
+        Admin::create($admins);
+        return redirect('admin/add')->with('success','User Telah Ditambahkan');
+
     }
 
     /**
@@ -63,9 +70,9 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Admin $admin)
     {
-        //
+        return view('admin/add_admin/edit',compact('admin'));
     }
 
     /**
@@ -86,9 +93,8 @@ class DashboardController extends Controller
             $urlgambar = $gambar->storeAs("img/profile_image", $nama_image);
             $admins['profile_image'] = $urlgambar;
         }
-
         $admin->update($admins);
-        return redirect()->back()->with('info','Profile Berhasil Di Update');
+        return redirect('admin/add')->with('info','Data Berhasil Diupdate');
     }
 
     /**
@@ -97,8 +103,10 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Admin $admin)
     {
-        //
+        Storage::delete($admin->profile_image);
+        $admin->delete();
+        return redirect()->back()->with('error','Data Telah Dihapus');
     }
 }

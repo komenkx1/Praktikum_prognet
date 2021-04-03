@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
@@ -80,6 +81,10 @@ Route::group(['middleware' => ['auth:admin']],function(){
 
 //dashboard
 Route::get('/admin', [DashboardController::class, 'index'])->name('admin');
+// admin profile
+Route::get('/admin/profile', [DashboardController::class, 'userProfile'])->name('admin.profile');
+Route::put('/admin/profile/update/{admin:id}', [DashboardController::class, 'update'])->name('admin.profile.update');
+
 //category
 Route::get('/admin/category', [CategoryController::class, 'index'])->name('category');
 Route::post('/admin/category/add/store', [CategoryController::class, 'store'])->name('store-category');
@@ -116,6 +121,14 @@ Route::group(['middleware' => ['roles:super admin']], function () {
 Route::get('/admin/transaksi', [TransactionAdminController::class, 'index'])->name('transaksi-admin');
 Route::get('/admin/transaksi/show/{transaction:id}', [TransactionAdminController::class, 'show'])->name('show-transaksi');
 Route::put('/admin/transaksi/update/{transaction:id}', [TransactionAdminController::class, 'update'])->name('update-transaksi');
+
+// Add Admin
+Route::get('/admin/add', [AdminUserController::class, 'index'])->name('admin.add');
+Route::get('/admin/create', [AdminUserController::class, 'create'])->name('admin.create');
+Route::post('/admin/store', [AdminUserController::class, 'store'])->name('admin.store');
+Route::get('/admin/edit/{admin:id}', [AdminUserController::class, 'edit'])->name('admin.edit');
+Route::put('/admin/update/{admin:id}', [AdminUserController::class, 'update'])->name('admin.update');
+Route::delete('/admin/destroy/{admin:id}', [AdminUserController::class, 'destroy'])->name('admin.destroy');
 });
 
 //respond

@@ -13,8 +13,14 @@ class Admin extends Authenticable
     protected $guard = 'admin';
 
     protected $fillable = [
-        'name', 'email', 'username', 'password','email_verfied_at'
+        'name', 'email', 'username', 'password','email_verfied_at','profile_image','phone'
     ];
 
     protected $hidden = ['password'];
+
+    public function getImageAttribute()
+    {
+        return $this->profile_image ? asset('storage/' . $this->profile_image) : asset('assets/images/default-user.jpg');
+    }
 }
+
