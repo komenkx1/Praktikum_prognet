@@ -92,13 +92,14 @@ class CartController extends Controller
 
                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
                     $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                    $total += $price*$cart->qty;
+                }else{
+                    $total += $cart->products->price * $cart->qty;
                 }
+
             }
-            if ($price == 0) {
-                $total = $total + ($cart->products->price * $cart->qty);
-            } else {
-                $total = $total + ($price * $cart->qty);
-            }
+               
+            
         }
         $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total, 2, ',', '.') . '</span>';
         echo ($output);

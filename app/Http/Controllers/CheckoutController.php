@@ -40,14 +40,13 @@ class CheckoutController extends Controller
             foreach ($cart->products->discounts as $diskon) {
 
                 if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
-                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
-                }
-            }
-            if ($price == 0) {
-                $total = $total + ($cart->products->price * $cart->qty);
-            } else {
-                $total = $total + ($price * $cart->qty);
-            }
+                     $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                     $total += $price*$cart->qty;
+                 }else{
+                     $total += $cart->products->price * $cart->qty;
+                 }
+ 
+             }
             $berattotal = $berattotal + ($cart->products->weight * $cart->qty);
             $subprice = $subprice + ($cart->products->price * $cart->qty);
 
@@ -102,14 +101,14 @@ class CheckoutController extends Controller
             foreach ($cart->products->discounts as $diskon) {
 
                 if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
-                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
-                }
-            }
-            if ($price == 0) {
-                $total = $total + ($cart->products->price * $cart->qty);
-            } else {
-                $total = $total + ($price * $cart->qty);
-            }
+                     $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                     $total += $price*$cart->qty;
+                 }else{
+                     $total += $cart->products->price * $cart->qty;
+                 }
+ 
+             }
+          
           
 
             // dd($cart->qty);
@@ -157,6 +156,7 @@ class CheckoutController extends Controller
     'total.not_in'  => 'Minimal 1 Barang di keranjang untuk melakukan checkout',
     
     ]);
+    // dd($request->harga_diskon);
     if ($validator->fails()) {
         return redirect()->back()
                     ->withErrors($validator)
@@ -167,19 +167,22 @@ class CheckoutController extends Controller
 
         
         foreach ($carts as $key => $value) {
+    // echo($request->harga_diskon[$key]);
+          
             $idtransaksidetail = TransactionDetails::create([
                 'transaction_id' => $idtransaksi->id,
                 'product_id' => $value->product_id,
                 'qty' => $value->qty,
-                'selling_price' => $value->products->price,
+                'selling_price' => $request->harga_diskon[$key],
             ]);
 
             Carts::where('user_id', "=", Auth::user()->id)->update([
                 'status' => 'checkedout',
             ]);
+        // dd($idtransaksidetail);
+
         }
 
-        // dd($transaksiDetails);
         return redirect(Route('detail-transaksi', ['transactions' => encrypt($idtransaksi->id)]));
     }
 

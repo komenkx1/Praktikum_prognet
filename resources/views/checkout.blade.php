@@ -168,8 +168,9 @@
                                                         @php
                                                         $is_discount = true;
                                                         @endphp
-                                                        {{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}
-                                                        <br>
+                                                       <span id="hargadiskon" data-harga="{{$cart->products->price - $diskon}}">{{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}</span> 
+                                                        <input type="hidden"name="harga_diskon[]" multiple  value="{{$cart->products->price - $diskon ?? '0'}}">
+                                                       <br>
                                                         @endif
                                                         @endif
                                                         @endforeach
@@ -177,6 +178,7 @@
                                                         <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
                                                         @else
                                                         {{"Rp " . number_format($cart->products->price,2,',','.')}}
+                                                        <input type="hidden"name="harga_diskon[]" multiple  value="{{$cart->products->price}}">
                                                         @endif
                                                 </span>
                                             </td>
