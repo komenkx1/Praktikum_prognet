@@ -3809,7 +3809,7 @@ td {
 .block-minicart .widget_shopping_cart {
     position: fixed;
     top: 0;
-    right: -450px;
+    right: -850px;
     min-width: 450px;
     z-index: 9999;
     background-color: #fff;
