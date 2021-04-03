@@ -101,6 +101,7 @@ class UserController extends Controller
         if ($user->email != $request->email) {
             $user->email = $request->email;
             $user->email_verified_at = null;
+            $user->sendEmailVerificationNotification();
         }
 
         if ($request->file('profile_image')) {
