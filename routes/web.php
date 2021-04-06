@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionDetailsController;
@@ -60,7 +60,7 @@ Route::delete('delete/{cart:id}', [CartController::class, 'destroy'])->name('del
 
 //product
 
-Route::post('beli', [HomeController::class, 'store'])->name('beli-product');
+Route::post('beli', [MainController::class, 'store'])->name('beli-product');
 
 //user profile
 Route::get('profile',[UserController::class,'index'])->name('profile');
@@ -70,10 +70,10 @@ Route::get('review-product/{product:id}', [ReviewProductController::class, 'inde
 Route::post('store-review', [ReviewProductController::class, 'store'])->name('store-review');
 });
 
-Route::get('/', [HomeController::class, 'index'])->name('product');
-Route::get('detail-product/{products:id}', [HomeController::class, 'show'])->name('detail-product');
-Route::get('filter-category', [HomeController::class, 'categoryFilter'])->name('filter-category');
-Route::get('filter-search', [HomeController::class, 'searchFilter'])->name('filter-search');
+Route::get('/', [MainController::class, 'index'])->name('product');
+Route::get('detail-product/{products:id}', [MainController::class, 'show'])->name('detail-product');
+Route::get('filter-category', [MainController::class, 'categoryFilter'])->name('filter-category');
+Route::get('filter-search', [MainController::class, 'searchFilter'])->name('filter-search');
 Route::post('pagination/fetch', 'PaginationController@index')->name('pagination.fetch');
 
 Route::group(['middleware' => ['auth:admin']],function(){
@@ -142,4 +142,4 @@ Route::get('admin/login', [AdminAuthController::class, 'getLogin'])->name('admin
 Route::post('admin/login', [AdminAuthController::class, 'postLogin']);
 Route::get('admin/logout', [AdminAuthController::class, 'postLogout']);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
