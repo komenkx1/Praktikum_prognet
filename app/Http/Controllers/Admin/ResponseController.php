@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Products;
+use App\Models\ReviewProducts;
+use App\Models\User;
+use App\Notifications\UserNotification;
 use Illuminate\Support\Facades\Auth;
 
 class ResponseController extends Controller
@@ -40,6 +44,10 @@ class ResponseController extends Controller
         $respond = $request->all();
         $respond['admin_id'] = Auth::guard('admin')->user()->id;
         Response::create($respond);
+        $review = ReviewProducts::where('id', $request->review_id)->first();
+        $product = Products::find($review->product_id);
+        $user = User::find($review->user_id);
+        $user->notify(new UserNotification("<a href ='/detail-product/" . $review->product_id . "'>Reviewmu di produk " . $product->product_name . " telah direspon oleh admin</a>"));
         return redirect()->back()->with('success', 'berhasil membalas review pengguna');
     }
 

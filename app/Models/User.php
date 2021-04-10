@@ -54,4 +54,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->profile_image ? asset('storage/' . $this->profile_image) : asset('assets/images/default-user.jpg');
     }
+    public function notifications()
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable')
+            ->orderBy('created_at', 'desc');
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->morphMany(UserNotification::class, 'notifiable')->where('read_at',null)
+            ->orderBy('created_at', 'desc');
+    }
+    
 }

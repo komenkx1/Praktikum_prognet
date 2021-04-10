@@ -377,21 +377,21 @@ class MainController extends Controller
 
     public function store(Request $request)
     {
-        if(Auth::user()->email_verified_at){
-        $carts = new Carts;
-        if ($request->qty < 1) {
-            return redirect()->back()->with('error', 'pembelian minimal 1 product');
+        if (Auth::user()->email_verified_at) {
+            $carts = new Carts;
+            if ($request->qty < 1) {
+                return redirect()->back()->with('error', 'pembelian minimal 1 product');
+            } else {
+                $carts->product_id = $request->id;
+                $carts->user_id  = Auth::user()->id ?? '';
+                $carts->qty = $request->qty;
+                $carts->status = 'notyet';
+                $carts->save();
+                return redirect('checkout');
+            }
         } else {
-            $carts->product_id = $request->id;
-            $carts->user_id  = Auth::user()->id ?? '';
-            $carts->qty = $request->qty;
-            $carts->status = 'notyet';
-            $carts->save();
-            return redirect('checkout');
+            return redirect()->back()->with('warning', 'Email Belun Terverifikasi, silahkan verifikasi email terlebihdahulu');
         }
-    }else {
-        return redirect()->back()->with('warning','Email Belun Terverifikasi, silahkan verifikasi email terlebihdahulu');
-    }
     }
 
     /**
@@ -402,7 +402,16 @@ class MainController extends Controller
      */
     public function show(Products $products)
     {
+        $notificationId = request('p');
 
+        $userUnreadNotification = auth()->user()
+            ->unreadNotifications
+            ->where('id', $notificationId)
+            ->first();
+        // dd($notificationId);
+        if ($userUnreadNotification) {
+            $userUnreadNotification->update(['read_at' => now()]);
+        }
         $categories = Category::all();
         $price = 0;
         $total = 0;

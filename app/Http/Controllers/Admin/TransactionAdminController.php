@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\TransactionDetails;
 use App\Models\Transactions;
+use App\Models\User;
+use App\Notifications\UserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +20,7 @@ class TransactionAdminController extends Controller
     public function index()
     {
         $transactions = Transactions::all();
-        return view('admin/transactions/index',compact('transactions'));
+        return view('admin/transactions/index', compact('transactions'));
     }
 
     /**
@@ -49,8 +52,8 @@ class TransactionAdminController extends Controller
      */
     public function show(Transactions $transaction)
     {
-        $detail = TransactionDetails::where('transaction_id',$transaction->id)->get()->first();
-        return view('admin/transactions/show',compact('transaction','detail'));
+        $detail = TransactionDetails::where('transaction_id', $transaction->id)->get()->first();
+        return view('admin/transactions/show', compact('transaction', 'detail'));
     }
 
     /**
@@ -73,19 +76,22 @@ class TransactionAdminController extends Controller
      */
     public function update(Request $request, Transactions $transaction)
     {
-       
+
         if ($request->submit == 'Verif') {
-           $transaction->status = 'verified';
-        }elseif ($request->submit == 'Reject') {
+            $transaction->status = 'verified';
+        } elseif ($request->submit == 'Reject') {
             $transaction->status =  'failed';
             Storage::delete($transaction->proof_of_payment);
             $transaction->proof_of_payment = null;
-        }elseif ($request->submit == 'Delivery') {
+        } elseif ($request->submit == 'Delivery') {
             $transaction->status =  'delivered';
         }
         // dd($request->submit);
         $transaction->update();
-        return redirect(Route('transaksi-admin'))->with('success','Transaksi Berhasil Diupdate');
+        $user = User::find($transaction->user_id);
+        // dd($user);
+        $user->notify(new UserNotification("<a class='submit-form' data-submits='' href ='/detail-transaksi/" . encrypt($transaction->id) . "'>Status Transaksi Telah Dirubah Ke " . $request->submit . " oleh admin</a>"));
+        return redirect(Route('transaksi-admin'))->with('success', 'Transaksi Berhasil Diupdate');
     }
 
     /**

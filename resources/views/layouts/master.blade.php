@@ -12,7 +12,8 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/animate.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/chosen.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/jquery.scrollbar.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/lightbox.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/magnific-popup.css" />
@@ -272,8 +273,8 @@ function loadtotal(){
 	});
     </script>
 
-<script>
-    var price;
+    <script>
+        var price;
 var qty;
 var total;
 
@@ -337,8 +338,43 @@ $('.dec.button').click(function(){
     }
 });
 
-</script>
+    </script>
     <script src="/assets/js/functions.js"></script>
+    <script>
+        var array = [];
+        $('.listnotif').each(function(){
+            // var subit = $('.listnotif').attr('data-submit')
+            array.push($(this).attr('data-submit'));
+            // console.log(subit);
+
+        })
+        var allDiv = document.querySelectorAll('a.submit-form');
+allDiv.forEach(function(item, i){
+        console.log(array[i]);
+  item.setAttribute('data-submits', array[i]);
+});
+        // $.each(array,function( index, value ) {
+        //     console.log(array[index]);
+        //     $('.submit-form').attr('data-submits',array[index]);
+
+
+        // })
+            // var datasub = ;
+
+        $('a.submit-form').click(function(){
+  //add the value to be sent to the input in the form
+  $('#link-extra-info input').val($(this).data('submits'));
+  console.log($(this).data('submits'));
+  //the href in the link becomes the action of the form
+  $('#link-extra-info').attr('action', $(this).attr('href'));
+  
+  //submit the form
+  $('#link-extra-info').submit();
+  
+  //return false to cancel the normal action for the click event
+  return false;
+});
+    </script>
 </body>
 
 

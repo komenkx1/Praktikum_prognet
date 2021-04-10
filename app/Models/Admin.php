@@ -13,7 +13,7 @@ class Admin extends Authenticable
     protected $guard = 'admin';
 
     protected $fillable = [
-        'name', 'email', 'username', 'password','email_verfied_at','profile_image','phone'
+        'name', 'email', 'username', 'password', 'email_verfied_at', 'profile_image', 'phone'
     ];
 
     protected $hidden = ['password'];
@@ -22,5 +22,9 @@ class Admin extends Authenticable
     {
         return $this->profile_image ? asset('storage/' . $this->profile_image) : asset('assets/images/default-user.jpg');
     }
-}
 
+    public function notifications()
+    {
+        return $this->morphMany(AdminNotification::class, 'notifiable')->orderBy('created_at', 'desc');
+    }
+}

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Transactions;
 use App\Models\Products;
 use App\Models\TransactionDetails;
 use App\Models\Carts;
+use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class TransactionController extends Controller
 {
@@ -99,6 +102,19 @@ class TransactionController extends Controller
             $transactions->status = 'unverified';
             $transactions->update();
         }
+        // $admin = Admin::where('role', 'super admin')->get();
+        $admin = Admin::whereIn('role', ['super admin'])->get();
+        // dd($admin);
+
+        $notif = "<a class='dropdown-item' href='/admin/transaksi/detail/" . $transactions->id . "'>" .
+            "<div class='item-content flex-grow'>" .
+            "<h6 class='ellipsis font-weight-normal'>" . Auth::user()->name . "</h6>" .
+            "<p class='font-weight-light small-text text-muted mb-0'>Bukti Bayar Diupload" .
+            "</p>" .
+            "</div>" .
+            "</a>";
+        // $admin->notify(new AdminNotification(['role'=>'super admin'],$notif));
+        Notification::send($admin, new AdminNotification($notif)); // multiple notification
         return redirect()->back();
     }
 

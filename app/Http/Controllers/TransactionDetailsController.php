@@ -17,22 +17,24 @@ class TransactionDetailsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($transactions)
+    public function index($transactions, Request $request)
     {
+
         $id = decrypt($transactions);
-        $transaksi = Transactions::with('TransactionDetails')->where('id','=',$id)->get()->first();
+        $transaksi = Transactions::with('TransactionDetails')->where('id', '=', $id)->get()->first();
         $transaksidetails = TransactionDetails::with('Transaction')
-        ->join('transactions','transaction_details.transaction_id','=','transactions.id')
-        ->where('transactions.id','=',$id)
-        ->select(
-            DB::raw('SUM(transaction_details.selling_price * transaction_details.qty) as price'),
-            'transaction_details.product_id',
-            'transaction_details.qty as quantity',)
-         ->groupBy('transaction_details.product_id', 'transaction_details.qty')
-        ->get();
+            ->join('transactions', 'transaction_details.transaction_id', '=', 'transactions.id')
+            ->where('transactions.id', '=', $id)
+            ->select(
+                DB::raw('SUM(transaction_details.selling_price * transaction_details.qty) as price'),
+                'transaction_details.product_id',
+                'transaction_details.qty as quantity',
+            )
+            ->groupBy('transaction_details.product_id', 'transaction_details.qty')
+            ->get();
         $price = 0;
         $total = 0;
-        $carts = Carts::where('user_id', "=",Auth::user()->id)->where('status', '=', 'notyet')->get();
+        $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -48,8 +50,17 @@ class TransactionDetailsController extends Controller
 
             // dd($cart->qty);
         }
+        $notificationId = request('p');
 
-        return view('detail-transaksi',compact('transaksi','transaksidetails','carts','total'));
+        $userUnreadNotification = auth()->user()
+            ->unreadNotifications
+            ->where('id', $notificationId)
+            ->first();
+        // dd($notificationId);
+        if ($userUnreadNotification) {
+            $userUnreadNotification->update(['read_at' => now()]);
+        }
+        return view('detail-transaksi', compact('transaksi', 'transaksidetails', 'carts', 'total'));
     }
 
     /**

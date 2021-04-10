@@ -1,9 +1,12 @@
 <header id="header" class="header style-04 header-dark sticky-top">
     @auth
-    @if(!Auth::user()->email_verified_at) 
-<div class="bg-unverif w-100 bg-danger p-4 m-0 text-center"><h4 class="p-0 m-0 text-white"> Email Anda Belum Tervirifikasi, jika anda belum menerima kode verifikasi klik <a class="verif" href="{{Route('send-email',['user'=>Auth::user()->id])}}"><u>disini</u></a>  </h4></div>
-@endif
-@endauth
+    @if(!Auth::user()->email_verified_at)
+    <div class="bg-unverif w-100 bg-danger p-4 m-0 text-center">
+        <h4 class="p-0 m-0 text-white"> Email Anda Belum Tervirifikasi, jika anda belum menerima kode verifikasi klik <a
+                class="verif" href="{{Route('send-email',['user'=>Auth::user()->id])}}"><u>disini</u></a> </h4>
+    </div>
+    @endif
+    @endauth
     <div class="header-wrap-stick">
         <div class="header-position">
             <div class="header-nav">
@@ -41,26 +44,27 @@
 
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown">
                                                     @guest
-                                                    <a class="block-link"  href="/login">
-                                                       Login
-                                                    </a>    
+                                                    <a class="block-link" href="/login">
+                                                        Login
+                                                    </a>
                                                     @endguest
                                                     @auth
                                                     <a class="block-link" href="javascript:void(0)">
                                                         <figure class="profile-picture">
-                                                            <img src="{{Auth::user()->image}}" alt="Joseph Doe" class="rounded-circle"
+                                                            <img src="{{Auth::user()->image}}" alt="Joseph Doe"
+                                                                class="rounded-circle"
                                                                 data-lock-picture="{{Auth::user()->image}}" />
                                                         </figure>
                                                     </a>
-                                                    
+
                                                     <ul class="sub-menu">
-                                                    
-                                             
+
+
                                                         <li
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--orders">
                                                             <a href="{{Route('transaksi')}}">Transaction List</a>
                                                         </li>
-                                                    
+
                                                         <li
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-account">
                                                             <a href="{{Route('profile')}}">Account details</a>
@@ -69,27 +73,29 @@
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--customer-logout">
                                                             <a href="#" onclick="$('#form-logout').submit()">Logout</a>
                                                         </li>
-                                                                                                                
-                                                 
+
+
                                                     </ul>
-                                                  
+
                                                 </div>
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                                                     <a class="block-link" href="javascript:void(0)">
                                                         <i class="fas fa-bell"></i>
-                                                        <span class="count countcart">0</span>
+                                                        <span
+                                                            class="count countcart">{{Auth()->user()->unreadNotifications->count()}}</span>
                                                     </a>
                                                     <ul class="sub-menu notif">
-                                                        <li
+                                                        <form id="link-extra-info">
+                                                            <input type="hidden" name="p" value="0">
+                                                        </form>
+                                                        @foreach (Auth()->user()->unreadNotifications as $notif)
+                                                        <li class="listnotif" data-submit="{!!$notif->id!!}"
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-                                                            <a href="#">
 
-                                                                <div class="notif">
-                                                                    <p>Status Transaksi telah Berubah Ke diantar</p>
-                                                                </div>
-                                                            </a>
+                                                            {!!$notif->data!!}
                                                             <hr>
                                                         </li>
+                                                        @endforeach
 
                                                     </ul>
                                                 </div>
@@ -203,8 +209,8 @@
                     <div class="menu-item block-user block-dreaming kobolg-dropdown">
                         @guest
                         <a href="/login">
-                           Login
-                        </a>    
+                            Login
+                        </a>
                         @endguest
                         @auth
                         <a class="block-link" href="javascript:void(0)">
@@ -218,7 +224,7 @@
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--orders">
                                 <a href="{{Route('transaksi')}}">Transaction List</a>
                             </li>
-                        
+
                             <li
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--edit-account">
                                 <a href="{{Route('profile')}}">Account details</a>
@@ -227,32 +233,30 @@
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--customer-logout">
                                 <a href="#" onclick="$('#form-logout').submit()">Logout</a>
                             </li>
-                                                            
-                         
+
+
                         </ul>
 
                     </div>
                     <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                         <a class="block-link" href="javascript:void(0)">
                             <i class="fas fa-bell"></i>
-                            <span class="count countcart">0</span>
+                            <span class="count countcart">{{Auth()->user()->unreadNotifications->count()}}</span>
                         </a>
                         <ul class="sub-menu notif">
-                            <li
+                            <form id="link-extra-info">
+                                <input type="hidden" name="p" value="0">
+                            </form>
+                            @foreach (Auth()->user()->unreadNotifications as $notif)
+                            <li class="listnotif" data-submit="{!!$notif->id!!}"
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-                                <a href="#">
 
-                                    <div class="notif">
-                                        <p>Status Transaksi telah Berubah Ke diantar</p>
-                                    </div>
-                                </a>
+                                {!!$notif->data!!}
                                 <hr>
                             </li>
+                            @endforeach
 
                         </ul>
-                        <form id="form-logout" action="{{ route('logout') }}" method="post">
-                            @csrf
-                        </form>
                     </div>
                     <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
                         <div class="shopcart-dropdown block-cart-link" data-kobolg="kobolg-dropdown">
