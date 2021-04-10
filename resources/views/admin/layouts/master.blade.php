@@ -12,6 +12,7 @@ $admin = Auth::guard('admin')->user();
     <title>{{$title ?? 'admin'}}</title>
     <meta name="keywords" content="admin toko onlen" />
     <meta name="description" content="admin toko onlen">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="tokoonlen.net">
 
     <!-- Mobile Metas -->
@@ -94,6 +95,16 @@ $admin = Auth::guard('admin')->user();
 
     <!-- Vendor -->
     <script src="/assets/vendor/jquery/jquery.js"></script>
+    <script src="/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/assets/js/examples/examples.datatables.default.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
     <script src="/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
     <script src="/assets/vendor/popper/umd/popper.min.js"></script>
     <script src="/assets/vendor/bootstrap/js/bootstrap.js"></script>
@@ -113,16 +124,7 @@ $admin = Auth::guard('admin')->user();
 
     <!-- Specific Page Vendor -->
     <script src="/assets/vendor/select2/js/select2.js"></script>
-    <script src="/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script src="/assets/vendor/datatables/media/js/dataTables.bootstrap4.min.js"></script>
-    <script src="/assets/js/examples/examples.datatables.default.js"></script>
-
-    <script src="https://cdn.datatables.net/responsive/2.2.6/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    
     <script src=" https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
     <!-- Specific Page Vendor -->
     <script src="/assets/vendor/select2/js/select2.js"></script>
@@ -130,6 +132,8 @@ $admin = Auth::guard('admin')->user();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
         integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
         crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+			<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <!-- Examples -->
     <script src="/assets/js/examples/examples.advanced.form.js"></script>
     <script src="/assets/js/examples/examples.modals.js"></script>
@@ -149,6 +153,14 @@ $admin = Auth::guard('admin')->user();
     @yield('footer')
 
     <script>
+           $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
+
+
         var array = [];
         $('.listnotif').each(function(){
             // var subit = $('.listnotif').attr('data-submit')

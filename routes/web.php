@@ -122,6 +122,13 @@ Route::get('/admin/transaksi', [TransactionAdminController::class, 'index'])->na
 Route::get('/admin/transaksi/show/{transaction:id}', [TransactionAdminController::class, 'show'])->name('show-transaksi');
 Route::put('/admin/transaksi/update/{transaction:id}', [TransactionAdminController::class, 'update'])->name('update-transaksi');
 
+
+//report
+Route::post('/admin/transaksi/sort', 'TransactionController@sort');
+Route::post('/report-bulan', [DashboardController::class, 'filterBulan']);
+Route::post('/report-tahun',[DashboardController::class,'filterTahun']);
+Route::post('/grafik', [DashboardController::class,'grafik']);
+
 // Add Admin
 Route::get('/admin/add', [AdminUserController::class, 'index'])->name('admin.add');
 Route::get('/admin/create', [AdminUserController::class, 'create'])->name('admin.create');

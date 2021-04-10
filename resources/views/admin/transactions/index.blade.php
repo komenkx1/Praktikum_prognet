@@ -85,15 +85,7 @@
 
 <!-- end: page -->
 </section>
-<footer class="card-footer">
-    <div class="row">
-        <div class="col-md-12 text-right">
-            <button class="btn btn-primary" type="submit">Submit</button>
-            <button class="btn btn-default modal-dismiss">Cancel</button>
-        </div>
-    </div>
-</footer>
-</form>
+
 
 </section>
 </div>
@@ -138,7 +130,7 @@
 
     $(document).ready(function() {
 
-
+        $.noConflict();
         $('#datatableFilter').DataTable({
            "columnDefs": [
                 { responsivePriority: 1, targets: 0 },
