@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Couriers;
 use App\Models\Provinces;
 use App\Models\Cities;
 use App\Models\Carts;
 use App\Models\Transactions;
 use App\Models\TransactionDetails;
+use App\Notifications\AdminNotification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutController extends Controller
 {
@@ -173,6 +176,7 @@ class CheckoutController extends Controller
                 'transaction_id' => $idtransaksi->id,
                 'product_id' => $value->product_id,
                 'qty' => $value->qty,
+                'discount' => $request->diskon[$key],
                 'selling_price' => $request->harga_diskon[$key],
             ]);
 
@@ -182,7 +186,18 @@ class CheckoutController extends Controller
         // dd($idtransaksidetail);
 
         }
+        $admin = Admin::whereIn('role', ['super admin'])->get();
+        // dd($admin);
 
+        $notif = "<a class='dropdown-item submit-form' data-submits='' href='/admin/transaksi/show/" . $idtransaksi->id . "'>" .
+            "<div class='item-content flex-grow'>" .
+            "<h6 class='ellipsis font-weight-normal'>" . Auth::user()->name . "</h6>" .
+            "<p class='font-weight-light small-text text-muted mb-0'>Transaksi Baru Telah Dibuat" .
+            "</p>" .
+            "</div>" .
+            "</a>";
+        // $admin->notify(new AdminNotification(['role'=>'super admin'],$notif));
+        Notification::send($admin, new AdminNotification($notif)); // multiple notification
         return redirect(Route('detail-transaksi', ['transactions' => encrypt($idtransaksi->id)]));
     }
 

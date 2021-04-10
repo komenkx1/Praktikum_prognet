@@ -52,6 +52,16 @@ class TransactionAdminController extends Controller
      */
     public function show(Transactions $transaction)
     {
+        $notificationId = request('id');
+
+        $adminUnreadNotification = auth()->user()
+            ->unreadNotifications
+            ->where('id', $notificationId)
+            ->first();
+        // dd($notificationId);
+        if ($adminUnreadNotification) {
+            $adminUnreadNotification->update(['read_at' => now()]);
+        }
         $detail = TransactionDetails::where('transaction_id', $transaction->id)->get()->first();
         return view('admin/transactions/show', compact('transaction', 'detail'));
     }
@@ -78,7 +88,11 @@ class TransactionAdminController extends Controller
     {
 
         if ($request->submit == 'Verif') {
+            if(!$transaction->proof_of_payment){
+        return redirect()->back()->with('warning', 'Bukti Pembayaran Belum Diupload');
+            }else{
             $transaction->status = 'verified';
+        }
         } elseif ($request->submit == 'Reject') {
             $transaction->status =  'failed';
             Storage::delete($transaction->proof_of_payment);

@@ -6,6 +6,8 @@
         <div class="bayar">
             <h1 class="text-center text-danger font-weight-bolder">
                 {{"Rp " . number_format($transaksi->total,2,',','.')}}
+                <br>
+                <small>Transfer To : 0988465775</small>
                 <hr>
             </h1>
         </div>

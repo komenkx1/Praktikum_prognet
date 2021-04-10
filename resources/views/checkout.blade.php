@@ -168,17 +168,23 @@
                                                         @php
                                                         $is_discount = true;
                                                         @endphp
-                                                       <span id="hargadiskon" data-harga="{{$cart->products->price - $diskon}}">{{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}</span> 
-                                                        <input type="hidden"name="harga_diskon[]" multiple  value="{{$cart->products->price - $diskon ?? '0'}}">
-                                                       <br>
+                                                        <span id="hargadiskon"
+                                                            data-harga="{{$cart->products->price - $diskon}}">{{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}</span>
+                                                        <input type="hidden" name="harga_diskon[]" multiple
+                                                            value="{{$cart->products->price - $diskon ?? '0'}}">
+                                                        <br>
                                                         @endif
                                                         @endif
+                                                        <input type="hidden" name="diskon[]" multiple
+                                                            value="{{$discount->percentage}}">
+
                                                         @endforeach
                                                         @if ($is_discount)
                                                         <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
                                                         @else
                                                         {{"Rp " . number_format($cart->products->price,2,',','.')}}
-                                                        <input type="hidden"name="harga_diskon[]" multiple  value="{{$cart->products->price}}">
+                                                        <input type="hidden" name="harga_diskon[]" multiple
+                                                            value="{{$cart->products->price}}">
                                                         @endif
                                                 </span>
                                             </td>
@@ -217,10 +223,8 @@
                                                 value="bacs" checked="checked" data-order_button_text="">
                                             <label for="payment_method_bacs">
                                                 Direct bank transfer </label>
-                                            <div class="payment_box payment_method_bacs">
-                                                <p>Make your payment directly into our bank account. Please use your
-                                                    Order ID as the payment reference. Your order will not be shipped
-                                                    until the funds have cleared in our account.</p>
+                                            <div class="payment_box payment_method_bacs text-center">
+                                                <p>Transfer To : 0988465775</p>
                                             </div>
                                         </li>
 

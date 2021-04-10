@@ -402,7 +402,7 @@ class MainController extends Controller
      */
     public function show(Products $products)
     {
-        $notificationId = request('p');
+        $notificationId = request('id');
 
         $userUnreadNotification = auth()->user()
             ->unreadNotifications

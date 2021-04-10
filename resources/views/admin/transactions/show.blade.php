@@ -85,10 +85,15 @@
                     <div class="col-md-6">
                         <h4 class="m-0 font-weight-bolder">Pricing</h4>
                         <hr class="m-0 p-0">
+                        <p class="p-0 m-0"><b> Harga Product : </b>
+                            <span>{{number_format($detail->Product->price, 0, ',', '.')}}</span></p>
+                        <p class="p-0 m-0"><b> Diskon : </b> <span>{{$detail->discount}} %</span></p>
+
                         <p class="p-0 m-0"><b> Sub Total : </b>
                             <span>{{number_format($detail->Transaction->sub_total, 0, ',', '.')}}</span></p>
                         <p class="p-0 m-0"><b> Ongkos Kirim : </b>
                             <span>{{number_format($detail->Transaction->shipping_cost, 0, ',', '.')}}</span></p>
+
                         <p class="p-0 m-0"><b> Total : </b> <span>Rp.
                                 {{number_format($detail->Transaction->total, 0, ',', '.')}}</span></p>
                         <p class="p-0 m-0"><b> Status : </b> <span

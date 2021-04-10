@@ -50,7 +50,7 @@ class TransactionDetailsController extends Controller
 
             // dd($cart->qty);
         }
-        $notificationId = request('p');
+        $notificationId = request('p'); //id notif dari form
 
         $userUnreadNotification = auth()->user()
             ->unreadNotifications

@@ -88,14 +88,22 @@
                                                         <form id="link-extra-info">
                                                             <input type="hidden" name="p" value="0">
                                                         </form>
-                                                        @foreach (Auth()->user()->unreadNotifications as $notif)
+                                                        @forelse (Auth()->user()->unreadNotifications as $notif)
                                                         <li class="listnotif" data-submit="{!!$notif->id!!}"
                                                             class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
 
                                                             {!!$notif->data!!}
                                                             <hr>
                                                         </li>
-                                                        @endforeach
+                                                        @empty
+
+                                                        <li class="listnotif text-center"
+                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
+
+                                                            Tidak Ada Notifikasi
+                                                            <hr>
+                                                        </li>
+                                                        @endforelse
 
                                                     </ul>
                                                 </div>
@@ -247,14 +255,22 @@
                             <form id="link-extra-info">
                                 <input type="hidden" name="p" value="0">
                             </form>
-                            @foreach (Auth()->user()->unreadNotifications as $notif)
+                            @forelse (Auth()->user()->unreadNotifications as $notif)
                             <li class="listnotif" data-submit="{!!$notif->id!!}"
                                 class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
 
                                 {!!$notif->data!!}
                                 <hr>
                             </li>
-                            @endforeach
+                            @empty
+
+                            <li class="listnotif text-center"
+                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
+
+                                Tidak Ada Notifikasi
+                                <hr>
+                            </li>
+                            @endforelse
 
                         </ul>
                     </div>

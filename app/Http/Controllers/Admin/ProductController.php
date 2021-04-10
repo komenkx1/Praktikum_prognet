@@ -85,6 +85,16 @@ class ProductController extends Controller
      */
     public function show(Products $product)
     {
+        $notificationId = request('id');
+
+        $adminUnreadNotification = auth()->user()
+            ->unreadNotifications
+            ->where('id', $notificationId)
+            ->first();
+        // dd($notificationId);
+        if ($adminUnreadNotification) {
+            $adminUnreadNotification->update(['read_at' => now()]);
+        }
         $responses = Response::all();
         return view('/admin/product/show', compact('product', 'responses'));
     }
@@ -109,10 +119,10 @@ class ProductController extends Controller
         return redirect()->back()->with('error', 'Data Telah Dihapus');
     }
 
-    public function discounts_update(Discounts $discounts,Request $request)
+    public function discounts_update(Discounts $discounts, Request $request)
     {
 
-         $discount = $request->all();
+        $discount = $request->all();
         $discounts->update($discount);
         return redirect()->back()->with('info', 'Diskon Berhasil Update');
     }

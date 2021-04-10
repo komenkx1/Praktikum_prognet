@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\ReviewProducts;
 use App\Models\TransactionDetails;
 use App\Models\Products;
+use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class ReviewProductController extends Controller
 {
@@ -47,6 +50,18 @@ class ReviewProductController extends Controller
         $review->content = $request->content;
         $review->user_id = Auth::user()->id;
         $review->save();
+        // $admin = Admin::where('role', 'super admin')->get();
+        $admin = Admin::get();
+        // dd($admin);
+        $product = Products::find($review->product_id);
+        $notif = "<a class='dropdown-item submit-form' data-submits='' href='/admin/product/show/" . $request->id . "'>" .
+            "<div class='item-content flex-grow'>" .
+            "<h6 class='ellipsis font-weight-normal'>" . Auth::user()->name . "</h6>" .
+            "<p class='font-weight-light small-text text-muted mb-0'>memberikan review ke" . $product->product_name ."</p>" .
+            "</div>" .
+            "</a>";
+        // $admin->notify(new AdminNotification(['role'=>'super admin'],$notif));
+        Notification::send($admin, new AdminNotification($notif)); // multiple notification
         echo 'Review Terkirim. Terima kasi sudah memberikan review anda';
     }
 

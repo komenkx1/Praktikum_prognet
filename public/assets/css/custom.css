@@ -36,3 +36,4 @@ overflow: hidden!important;
 td.dsc p{
   overflow: hidden;
 }
+li.listnotif p { word-break: break-all!important; overflow:hidden }

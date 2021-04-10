@@ -47,7 +47,7 @@ class ResponseController extends Controller
         $review = ReviewProducts::where('id', $request->review_id)->first();
         $product = Products::find($review->product_id);
         $user = User::find($review->user_id);
-        $user->notify(new UserNotification("<a href ='/detail-product/" . $review->product_id . "'>Reviewmu di produk " . $product->product_name . " telah direspon oleh admin</a>"));
+        $user->notify(new UserNotification("<a class='submit-form' data-submits='' href ='/detail-product/" . $review->product_id . "'>Reviewmu di produk " . $product->product_name . " telah direspon oleh admin</a>"));
         return redirect()->back()->with('success', 'berhasil membalas review pengguna');
     }
 

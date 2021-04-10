@@ -106,7 +106,7 @@ class TransactionController extends Controller
         $admin = Admin::whereIn('role', ['super admin'])->get();
         // dd($admin);
 
-        $notif = "<a class='dropdown-item' href='/admin/transaksi/detail/" . $transactions->id . "'>" .
+        $notif = "<a class='dropdown-item submit-form' data-submits='' href='/admin/transaksi/show/" . $transactions->id . "'>" .
             "<div class='item-content flex-grow'>" .
             "<h6 class='ellipsis font-weight-normal'>" . Auth::user()->name . "</h6>" .
             "<p class='font-weight-light small-text text-muted mb-0'>Bukti Bayar Diupload" .

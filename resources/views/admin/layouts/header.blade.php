@@ -23,44 +23,28 @@
             <li>
                 <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
                     <i class="fas fa-bell"></i>
-                    <span class="badge">3</span>
+                    <span class="badge">{{Auth::guard('admin')->user()->unreadNotifications->count()}}</span>
                 </a>
-
+                <form id="link-extra-info">
+                    <input type="hidden" name="id" value="0">
+                </form>
                 <div class="dropdown-menu notification-menu">
                     <div class="notification-title">
-                        <span class="float-right badge badge-default">3</span>
+                        <span class="float-right badge badge-default">{{Auth::guard('admin')->user()->unreadNotifications->count()}}</span>
                         Alerts
                     </div>
 
                     <div class="content">
                         <ul>
-                            <li>
-                                <a href="#" class="clearfix">
-                                    <div class="image">
-                                        <i class="fas fa-thumbs-down bg-danger text-light"></i>
-                                    </div>
-                                    <span class="title">Server is Down!</span>
-                                    <span class="message">Just now</span>
-                                </a>
+                            @forelse (Auth::guard('admin')->user()->unreadNotifications as $notif)
+                                
+                            <li class="listnotif" data-submit="{{$notif->id }}">
+                              {!!$notif->data!!}
                             </li>
-                            <li>
-                                <a href="#" class="clearfix">
-                                    <div class="image">
-                                        <i class="fas fa-lock bg-warning text-light"></i>
-                                    </div>
-                                    <span class="title">User Locked</span>
-                                    <span class="message">15 minutes ago</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="clearfix">
-                                    <div class="image">
-                                        <i class="fas fa-signal bg-success text-light"></i>
-                                    </div>
-                                    <span class="title">Connection Restaured</span>
-                                    <span class="message">10/10/2017</span>
-                                </a>
-                            </li>
+                            @empty
+                                
+                            @endforelse
+                          
                         </ul>
 
                         <hr />

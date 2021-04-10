@@ -27,4 +27,10 @@ class Admin extends Authenticable
     {
         return $this->morphMany(AdminNotification::class, 'notifiable')->orderBy('created_at', 'desc');
     }
+
+    public function unreadNotifications()
+    {
+        return $this->morphMany(AdminNotification::class, 'notifiable')->where('read_at',null)
+            ->orderBy('created_at', 'desc');
+    }
 }
