@@ -87,6 +87,7 @@ class CartController extends Controller
         $price = 0;
         $total = 0;
         $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
+        
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
@@ -98,8 +99,10 @@ class CartController extends Controller
                 }
 
             }
+            if ($price == 0) {
+                $total += $cart->products->price * $cart->qty;
+            }
                
-            
         }
         $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total, 2, ',', '.') . '</span>';
         echo ($output);

@@ -130,7 +130,7 @@
 
     $(document).ready(function() {
 
-        $.noConflict();
+        // $.noConflict();
         $('#datatableFilter').DataTable({
            "columnDefs": [
                 { responsivePriority: 1, targets: 0 },

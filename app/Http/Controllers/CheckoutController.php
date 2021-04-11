@@ -50,6 +50,9 @@ class CheckoutController extends Controller
                  }
  
              }
+             if ($price == 0) {
+                $total += $cart->products->price * $cart->qty;
+             }
             $berattotal = $berattotal + ($cart->products->weight * $cart->qty);
             $subprice = $subprice + ($cart->products->price * $cart->qty);
 
