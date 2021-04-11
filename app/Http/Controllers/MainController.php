@@ -403,15 +403,14 @@ class MainController extends Controller
     public function show(Products $products,Request $request)
     {
         $notificationId = $request->p;
-
-        $userUnreadNotification = auth()->user()
-            ->unreadNotifications
-            ->where('id', $notificationId)
-            ->first();
+            if (Auth::user()) {
+            $userUnreadNotification = auth()->user()
+                ->unreadNotifications->where('id', $notificationId)->first();
         // dd($notificationId);
         if ($userUnreadNotification) {
             $userUnreadNotification->update(['read_at' => now()]);
         }
+    }
         $categories = Category::all();
         $price = 0;
         $total = 0;
