@@ -44,8 +44,8 @@
 
                         <hr />
 
-                        <div class="text-right">
-                            <a href="#" class="view-more">View All</a>
+                        <div class="text-right readall">
+                            
                         </div>
                     </div>
                 </div>

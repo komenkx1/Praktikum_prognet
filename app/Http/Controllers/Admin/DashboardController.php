@@ -71,6 +71,13 @@ class DashboardController extends Controller
 
         return json_encode($myarray);
     }
+
+    public function MarkAllRead()
+    {
+        $admin = Admin::find(Auth::guard('admin')->user()->id);
+        $admin->unreadNotifications()->update(['read_at' => now()]);
+        return redirect()->back();
+    }
     public function filterBulan(Request $request)
     {
 

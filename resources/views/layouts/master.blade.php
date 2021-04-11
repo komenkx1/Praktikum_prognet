@@ -173,6 +173,8 @@
     <script src="/assets/js/star-rating.js"></script>
     @yield('scripts')
     <script>
+    loadnotif();
+    
         @if ($message = Session::get('error'))
         toastr.error('{{ session('error') }}');
         @elseif ($message = Session::get('warning'))
@@ -185,7 +187,6 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
     });
-    loadnotif();
         function loadcarts(){
         var html_option = '';
         $.ajax({
@@ -237,8 +238,9 @@
                     // console.log(responsedata);
                     
                     jQuery.each(responsedata.list, function(index, value){
-                        console.log(value);
-                        $('ul.sub-menu.notif').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
+                        // console.log(value);
+                        $('ul.sub-menu.notif .notifi').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
+                        $('.markall').html('<a href = "/marksallread">Tandai Semua Pesan Terbaca</a>');
                         $('a.submit-form').eq(index).attr('data-submits',value.id);
         
                     });
@@ -345,7 +347,7 @@
             $input = $this.next('input'),
             $parent = $input.closest('div'),
             newValue = parseInt($input.val())-1;
-        console.log($parent);
+        // console.log($parent);
         $parent.find('.inc').addClass('a'+newValue);
         $input.val(newValue);
         price = $(this).next('input').data('price'); 

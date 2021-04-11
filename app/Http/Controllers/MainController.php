@@ -6,6 +6,7 @@ use App\Models\Products;
 use App\Models\Carts;
 use App\Models\Category;
 use App\Models\ProductImage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -460,6 +461,13 @@ class MainController extends Controller
         $myarray['list'] = Auth()->user()->unreadNotifications;
 
         return json_encode($myarray);
+    }
+
+    public function MarkAllRead()
+    {
+        $user = User::find(Auth::user()->id);
+        $user->unreadNotifications()->update(['read_at' => now()]);
+        return redirect()->back();
     }
     /**
      * Remove the specified resource from storage.

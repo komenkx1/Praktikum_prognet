@@ -87,8 +87,12 @@
                                                         <form id="link-extra-info">
                                                             <input type="hidden" name="p" value="0">
                                                         </form>
+                                                        <div class="notifi">
+                                                            {{-- <span class=" text-center">Tidak ada notifikasi masuk</span> --}}
+                                                        </div>
+                                                        <div class="markall text-center">
 
-
+                                                        </div>                                            
 
                                                     </ul>
                                                 </div>
@@ -244,7 +248,9 @@
                                 <input type="hidden" name="p" value="0">
                             </form>
                            
+                            <div class="markall">
 
+                            </div>
                         </ul>
                     </div>
                     <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">

@@ -56,11 +56,15 @@ Route::post('add-cart', [CartController::class, 'store'])->name('add-cart');
 Route::post('update-cart', [CartController::class, 'update'])->name('update-cart');
 Route::get('count-cart', [CartController::class, 'count'])->name('count-cart');
 Route::get('total-cart', [CartController::class, 'totalprice'])->name('total-cart');
-Route::get('count-notif', [MainController::class, 'counttotal'])->name("count-notif");
-Route::get('count-admin-notif', [DashboardController::class, 'counttotal'])->name("count-notif-admin");
 Route::delete('delete-cart', [CartController::class, 'destroy'])->name('delete-cart');
 Route::delete('delete/{cart:id}', [CartController::class, 'destroy'])->name('delete');
 
+
+//notification
+Route::get('count-notif', [MainController::class, 'counttotal'])->name("count-notif");
+Route::get('marksallread', [MainController::class, 'MarkAllRead'])->name("markread-notif-all");
+Route::get('/admin/marksallreadadmin', [DashboardController::class, 'MarkAllRead'])->name("markreadadmin-notif-all");
+Route::get('count-admin-notif', [DashboardController::class, 'counttotal'])->name("count-notif-admin");
 //product
 
 Route::post('beli', [MainController::class, 'store'])->name('beli-product');

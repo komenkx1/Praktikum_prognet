@@ -167,13 +167,12 @@ function loadnotif(){
                     var responsedata = $.parseJSON(data);
                     $('.badge.count-notif').html(responsedata.count);
                     $('.float-right.badge.badge-default').html(responsedata.count);
-                    // console.log(responsedata);
                     
                     jQuery.each(responsedata.list, function(index, value){
-                        console.log(value);
+                        
                         $('ul.sub-notif').append('<li class="listnotif" >'+value.data+'</li>');
                         $('a.submit-form').eq(index).attr('data-submits',value.id);
-        
+                        $('.readall').html('<a href="/admin/marksallreadadmin" class="view-more">Tandai Semua Notifikasi Terbaca</a>')
                     });
                 }
         });
@@ -184,7 +183,7 @@ function loadnotif(){
         $(document).on('click','a.submit-form',function(){
   //add the value to be sent to the input in the form
   $('#link-extra-info input').val($(this).data('submits'));
-  console.log($(this).data('submits'));
+
   //the href in the link becomes the action of the form
   $('#link-extra-info').attr('action', $(this).attr('href'));
   
