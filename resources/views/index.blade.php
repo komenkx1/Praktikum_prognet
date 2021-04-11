@@ -127,6 +127,13 @@
   }
 });
 
+$(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      $('#btn-search').click();
+    }
+  });
+
 var SITEURL = "{{ url('/') }}";
 var nearToBottom = 100;
    var page = 1; //track user scroll as page number, right now page number is 1
@@ -182,14 +189,13 @@ var nearToBottom = 100;
         .done(function(data)
         {
             if(data.length == 0){
-            console.log(data.length);
-            //notify user if nothing to load
+
             $('.ajax-loading').html("No more records!");
             return;
           }
           $('.ajax-loading').hide(); //hide loading animation once data is received
           $("#results").append(data); //append data into #results element          
-           console.log('data.length');
+         
        })
        .fail(function(jqXHR, ajaxOptions, thrownError)
        {
@@ -206,6 +212,8 @@ var nearToBottom = 100;
 			data: {id: id},
 			success: function(data){
                 $('#results').html(data);
+                $('.vertical-wrapper.block-nav-category.has-vertical-menu.show-button-all' ).removeClass('has-open');
+                $('.block-title' ).removeClass('active');
 			}
 		});
 	});
