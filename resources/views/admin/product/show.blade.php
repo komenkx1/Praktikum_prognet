@@ -40,9 +40,9 @@
                                 @foreach ($product->product_image as $image)
                                 <div class="carousel-item text-center">
                                     <a href="{{$image->image}}" data-fancybox="gallery"
-                                    data-caption='{{ $image->image_name }}'>
-                                    <img class="text-center" style="width:250px;height:250px" src="{{ $image->image }}"
-                                        alt=""></a>
+                                        data-caption='{{ $image->image_name }}'>
+                                        <img class="text-center" style="width:250px;height:250px"
+                                            src="{{ $image->image }}" alt=""></a>
                                     <form method="POST"
                                         action="{{Route('thumbnail-destroy',['productImages'=>$image->id])}}"
                                         class="  m-3">
@@ -249,7 +249,7 @@
 @endsection
 @section('footer')
 <script src="/assets/dropzone/dist/dropzone.js"></script>
-
+<script src="/assets/vendor/readmore-js/readmore.min.js"></script>
 <script>
     $('.carousel-item').first().addClass('active')
     $('td.dsc p').readmore({

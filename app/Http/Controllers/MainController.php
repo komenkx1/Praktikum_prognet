@@ -400,9 +400,9 @@ class MainController extends Controller
      * @param  \App\Models\Products  $products
      * @return \Illuminate\Http\Response
      */
-    public function show(Products $products)
+    public function show(Products $products,Request $request)
     {
-        $notificationId = request('id');
+        $notificationId = $request->p;
 
         $userUnreadNotification = auth()->user()
             ->unreadNotifications

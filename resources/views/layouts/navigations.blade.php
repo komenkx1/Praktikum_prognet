@@ -211,6 +211,9 @@
             <div class="header-logo">
                 <a href="index.html"><img alt="Kobolg" src="/assets/images/logo.png" class="logo"></a></div>
         </div>
+        <form id="form-logout" action="{{Route('logout')}}" method="post">
+            @csrf
+        </form>
         <div class="header-mobile-right">
             <div class="header-control-inner">
                 <div class="meta-dreaming">

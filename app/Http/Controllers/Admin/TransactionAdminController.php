@@ -62,8 +62,7 @@ class TransactionAdminController extends Controller
         if ($adminUnreadNotification) {
             $adminUnreadNotification->update(['read_at' => now()]);
         }
-        $detail = TransactionDetails::where('transaction_id', $transaction->id)->get()->first();
-        return view('admin/transactions/show', compact('transaction', 'detail'));
+        return view('admin/transactions/show', compact('transaction'));
     }
 
     /**

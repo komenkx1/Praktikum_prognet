@@ -172,16 +172,17 @@
                                                             data-harga="{{$cart->products->price - $diskon}}">{{"Rp " . number_format($cart->products->price - $diskon,2,',','.')}}</span>
                                                         <input type="hidden" name="harga_diskon[]" multiple
                                                             value="{{$cart->products->price - $diskon ?? '0'}}">
+                                                        <input type="hidden" name="diskon[]" multiple
+                                                            value="{{$discount->percentage}}">
                                                         <br>
                                                         @endif
                                                         @endif
-                                                        <input type="hidden" name="diskon[]" multiple
-                                                            value="{{$discount->percentage}}">
 
                                                         @endforeach
                                                         @if ($is_discount)
                                                         <small><strike>{{ "Rp " . number_format($cart->products->price, 2, ',', '.')}}</strike></small>
                                                         @else
+                                                        <input type="hidden" name="diskon[]" multiple value="0">
                                                         {{"Rp " . number_format($cart->products->price,2,',','.')}}
                                                         <input type="hidden" name="harga_diskon[]" multiple
                                                             value="{{$cart->products->price}}">
