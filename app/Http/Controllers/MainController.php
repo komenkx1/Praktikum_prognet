@@ -454,7 +454,13 @@ class MainController extends Controller
     {
         //
     }
+    public function counttotal()
+    {
+        $myarray['count'] = Auth()->user()->unreadNotifications->count();
+        $myarray['list'] = Auth()->user()->unreadNotifications;
 
+        return json_encode($myarray);
+    }
     /**
      * Remove the specified resource from storage.
      *

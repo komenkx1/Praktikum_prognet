@@ -64,7 +64,13 @@ class DashboardController extends Controller
     }
 
 
+    public function counttotal()
+    {
+        $myarray['count'] = Auth::guard('admin')->user()->unreadNotifications->count();
+        $myarray['list'] = Auth::guard('admin')->user()->unreadNotifications;
 
+        return json_encode($myarray);
+    }
     public function filterBulan(Request $request)
     {
 

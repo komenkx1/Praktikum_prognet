@@ -174,206 +174,207 @@
     @yield('scripts')
     <script>
         @if ($message = Session::get('error'))
-    toastr.error('{{ session('error') }}');
-    @elseif ($message = Session::get('warning'))
-    toastr.warning('{{ session('warning') }}');
-    @elseif ($message = Session::get('success'))
-    toastr.success('{{ session('success') }}');
-@endif
-        $.ajaxSetup({
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-  }
-});
-    function loadcarts(){
-    var html_option = '';
-	$.ajax({
-			url: '{{Route("cart")}}',
-			type: 'get',
-            success :'success',
-			success: function(data){
-                html_option += data;
-        $('.item-cart').html(html_option);
+        toastr.error('{{ session('error') }}');
+        @elseif ($message = Session::get('warning'))
+        toastr.warning('{{ session('warning') }}');
+        @elseif ($message = Session::get('success'))
+        toastr.success('{{ session('success') }}');
+    @endif
+            $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+    });
+    loadnotif();
+        function loadcarts(){
+        var html_option = '';
+        $.ajax({
+                url: '{{Route("cart")}}',
+                type: 'get',
+                success :'success',
+                success: function(data){
+                    html_option += data;
+            $('.item-cart').html(html_option);
 
-			}
-		});
-}
-
-function loadcount(){
-	$.ajax({
-			url: '{{Route("count-cart")}}',
-			type: 'get',
-			success: function(data){
-                $('.countcarts').html(data);
-                if (data < 1) {
-                    $('a.button.kobolg-forward').addClass('w-100')
-                    $('a.button.checkout.kobolg-forward').addClass('d-none')
-                }else{
-                    $('a.button.kobolg-forward').removeClass('w-100')
-                    $('a.button.checkout.kobolg-forward').removeClass('d-none')
                 }
-			}
-		});
-}
+            });
+    }
 
-function loadtotal(){
-	$.ajax({
-			url: '{{Route("total-cart")}}',
-			type: 'get',
-			success: function(data){
-                $('span .kobolg-Price-currencySymbol-totals').html(data);
-			}
-		});
-}
+    function loadcount(){
+        $.ajax({
+                url: '{{Route("count-cart")}}',
+                type: 'get',
+                success: function(data){
+                    $('.countcarts').html(data);
+                    if (data < 1) {
+                        $('a.button.kobolg-forward').addClass('w-100')
+                        $('a.button.checkout.kobolg-forward').addClass('d-none')
+                    }else{
+                        $('a.button.kobolg-forward').removeClass('w-100')
+                        $('a.button.checkout.kobolg-forward').removeClass('d-none')
+                    }
+                }
+            });
+    }
 
-            $(document).on('click','.btn-add',function(){
-                @guest
-                toastr.warning('Silahkan Login terlebih Dahulu');
-                @endguest
-                @auth
-                @if(!Auth::user()->email_verified_at)
-                toastr.warning('Email Anda Belum Terverifikasi, silahkan verifikasi email terlebih dahulu');
-                 @else
-		var id = $(this).data('id');
-		var stock = $(this).data('stock');
-		$.ajax({
-			url: '{{Route("add-cart")}}',
-			type: 'post',
-			data: {id: id,stock : stock},
-			success: function(data){
-                loadcount();
-                loadcarts();
-                loadtotal();
-                
-                if (data == 'stok habis') {
+    function loadtotal(){
+        $.ajax({
+                url: '{{Route("total-cart")}}',
+                type: 'get',
+                success: function(data){
+                    $('span .kobolg-Price-currencySymbol-totals').html(data);
+                }
+            });
+    }
+
+    function loadnotif(){
+        $.ajax({
+                url: '{{Route("count-notif")}}',
+                type: 'get',
+                success: function(data){
+                    var responsedata = $.parseJSON(data);
+                    $('.count.countnotif').html(responsedata.count);
+                    // console.log(responsedata);
+                    
+                    jQuery.each(responsedata.list, function(index, value){
+                        console.log(value);
+                        $('ul.sub-menu.notif').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
+                        $('a.submit-form').eq(index).attr('data-submits',value.id);
+        
+                    });
+                }
+        });
+    }
+
+                $(document).on('click','.btn-add',function(){
+                    @guest
+                    toastr.warning('Silahkan Login terlebih Dahulu');
+                    @endguest
+                    @auth
+                    @if(!Auth::user()->email_verified_at)
+                    toastr.warning('Email Anda Belum Terverifikasi, silahkan verifikasi email terlebih dahulu');
+                    @else
+            var id = $(this).data('id');
+            var stock = $(this).data('stock');
+            $.ajax({
+                url: '{{Route("add-cart")}}',
+                type: 'post',
+                data: {id: id,stock : stock},
+                success: function(data){
+                    loadcount();
+                    loadcarts();
+                    loadtotal();
+                    
+                    if (data == 'stok habis') {
+                        toastr.error(data);
+                    }else{
+                        toastr.success(data);
+                    } 
+                }
+
+            });
+            @endif
+            @endauth
+        });
+
+        $(document).on('click','.delete',function(){
+            var id = $(this).data('id');
+            $.ajax({
+                url: '{{Route("delete-cart")}}',
+                type: 'delete',
+                data: {id: id},
+                success: function(data){
+                    loadcount();
+                    loadcarts();
+                    loadtotal();
                     toastr.error(data);
-                }else{
-                    toastr.success(data);
-                } 
-			}
-
-		});
-        @endif
-        @endauth
-	});
-
-    $(document).on('click','.delete',function(){
-		var id = $(this).data('id');
-		$.ajax({
-			url: '{{Route("delete-cart")}}',
-			type: 'delete',
-			data: {id: id},
-			success: function(data){
-                loadcount();
-                loadcarts();
-                loadtotal();
-                toastr.error(data);
-			}
-		});
-	});
+                }
+            });
+        });
     </script>
 
     <script>
         var price;
-var qty;
-var total;
+    var qty;
+    var total;
 
-    var format = function(num){
-      var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
-      if(str.indexOf(".") > 0) {
-        parts = str.split(".");
-        str = parts[0];
-      }
-      str = str.split("").reverse();
-      for(var j = 0, len = str.length; j < len; j++) {
-        if(str[j] != ".") {
-          output.push(str[j]);
-          if(i%3 == 0 && j < (len - 1)) {
-            output.push(".");
-          }
-          i++;
+        var format = function(num){
+        var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+        if(str.indexOf(".") > 0) {
+            parts = str.split(".");
+            str = parts[0];
         }
-      }
-      formatted = output.reverse().join("");
-      return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
-    };
+        str = str.split("").reverse();
+        for(var j = 0, len = str.length; j < len; j++) {
+            if(str[j] != ".") {
+            output.push(str[j]);
+            if(i%3 == 0 && j < (len - 1)) {
+                output.push(".");
+            }
+            i++;
+            }
+        }
+        formatted = output.reverse().join("");
+        return("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+        };
 
 
-incrementVar = 0;
-$('.inc.button').click(function(){
-    var max = $(this).data("max");
-    if ($(this).prev('input').val() < $(this).data("max")) {
+    incrementVar = 0;
+    $('.inc.button').click(function(){
+        var max = $(this).data("max");
+        if ($(this).prev('input').val() < $(this).data("max")) {
+            var $this = $(this),
+            $input = $this.prev('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val())+1;
+        $parent.find('.inc').addClass('a'+newValue);
+        $input.val(newValue);
+        price = $(this).prev('input').data('price'); 
+        incrementVar += newValue;
+        total = price * newValue;
+    var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
+        }else{
+            toastr.info('Stock Product Habis');
+        }
+    
+    });
+    $('.dec.button').click(function(){
+        var min = $(this).data("min");
+        if ($(this).next('input').val() > $(this).data("min")) {
         var $this = $(this),
-        $input = $this.prev('input'),
-        $parent = $input.closest('div'),
-        newValue = parseInt($input.val())+1;
-    $parent.find('.inc').addClass('a'+newValue);
-    $input.val(newValue);
-    price = $(this).prev('input').data('price'); 
-    incrementVar += newValue;
-    total = price * newValue;
-   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
-    }else{
-        toastr.info('Stock Product Habis');
-    }
-   
-});
-$('.dec.button').click(function(){
-    var min = $(this).data("min");
-    if ($(this).next('input').val() > $(this).data("min")) {
-    var $this = $(this),
-        $input = $this.next('input'),
-        $parent = $input.closest('div'),
-        newValue = parseInt($input.val())-1;
-    console.log($parent);
-    $parent.find('.inc').addClass('a'+newValue);
-    $input.val(newValue);
-    price = $(this).next('input').data('price'); 
-    incrementVar += newValue;
-    total = price * newValue;
-   var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
+            $input = $this.next('input'),
+            $parent = $input.closest('div'),
+            newValue = parseInt($input.val())-1;
+        console.log($parent);
+        $parent.find('.inc').addClass('a'+newValue);
+        $input.val(newValue);
+        price = $(this).next('input').data('price'); 
+        incrementVar += newValue;
+        total = price * newValue;
+    var spans = $(this).closest("tr").find("span.kobolg-Price-amount.amount.subtotal").html('Rp '+format(total));
 
-}else{
-        toastr.error('Pembelian Minimal 1 Product');
-    }
-});
+    }else{
+            toastr.error('Pembelian Minimal 1 Product');
+        }
+    });
 
     </script>
     <script src="/assets/js/functions.js"></script>
     <script>
-        var array = [];
-        $('.listnotif').each(function(){
-            // var subit = $('.listnotif').attr('data-submit')
-            array.push($(this).attr('data-submit'));
-            // console.log(subit);
+    
 
-        })
-        var allDiv = document.querySelectorAll('a.submit-form');
-allDiv.forEach(function(item, i){
-        console.log(array[i]);
-  item.setAttribute('data-submits', array[i]);
-});
-        // $.each(array,function( index, value ) {
-        //     console.log(array[index]);
-        //     $('.submit-form').attr('data-submits',array[index]);
-
-
-        // })
-            // var datasub = ;
-
-        $('a.submit-form').click(function(){
-  //add the value to be sent to the input in the form
-  $('#link-extra-info input').val($(this).data('submits'));
-  console.log($(this).data('submits'));
-  //the href in the link becomes the action of the form
-  $('#link-extra-info').attr('action', $(this).attr('href'));
-  
-  //submit the form
-  $('#link-extra-info').submit();
-  
-  //return false to cancel the normal action for the click event
-  return false;
-});
+            $(document).on('click','a.submit-form',function(){
+    //add the value to be sent to the input in the form
+    $('#link-extra-info input').val($(this).data('submits'));
+    //the href in the link becomes the action of the form
+    $('#link-extra-info').attr('action', $(this).attr('href'));
+    
+    //submit the form
+    $('#link-extra-info').submit();
+    
+    //return false to cancel the normal action for the click event
+    return false;
+    });
     </script>
 </body>
 

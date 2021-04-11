@@ -81,29 +81,14 @@
                                                 <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                                                     <a class="block-link" href="javascript:void(0)">
                                                         <i class="fas fa-bell"></i>
-                                                        <span
-                                                            class="count countcart">{{Auth()->user()->unreadNotifications->count()}}</span>
+                                                        <span class="count countnotif">0</span>
                                                     </a>
                                                     <ul class="sub-menu notif">
                                                         <form id="link-extra-info">
                                                             <input type="hidden" name="p" value="0">
                                                         </form>
-                                                        @forelse (Auth()->user()->unreadNotifications as $notif)
-                                                        <li class="listnotif" data-submit="{!!$notif->id!!}"
-                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
 
-                                                            {!!$notif->data!!}
-                                                            <hr>
-                                                        </li>
-                                                        @empty
 
-                                                        <li class="listnotif text-center"
-                                                            class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-
-                                                            Tidak Ada Notifikasi
-                                                            <hr>
-                                                        </li>
-                                                        @endforelse
 
                                                     </ul>
                                                 </div>
@@ -252,28 +237,13 @@
                     <div class="menu-item block-user block-dreaming kobolg-dropdown pr-2">
                         <a class="block-link" href="javascript:void(0)">
                             <i class="fas fa-bell"></i>
-                            <span class="count countcart">{{Auth()->user()->unreadNotifications->count()}}</span>
+                            <span class="count countnotif">0</span>
                         </a>
                         <ul class="sub-menu notif">
                             <form id="link-extra-info">
                                 <input type="hidden" name="p" value="0">
                             </form>
-                            @forelse (Auth()->user()->unreadNotifications as $notif)
-                            <li class="listnotif" data-submit="{!!$notif->id!!}"
-                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-
-                                {!!$notif->data!!}
-                                <hr>
-                            </li>
-                            @empty
-
-                            <li class="listnotif text-center"
-                                class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">
-
-                                Tidak Ada Notifikasi
-                                <hr>
-                            </li>
-                            @endforelse
+                           
 
                         </ul>
                     </div>

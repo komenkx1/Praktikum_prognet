@@ -158,29 +158,30 @@ $admin = Auth::guard('admin')->user();
   }
 });
 
+loadnotif()
+function loadnotif(){
+        $.ajax({
+                url: '{{Route("count-notif-admin")}}',
+                type: 'get',
+                success: function(data){
+                    var responsedata = $.parseJSON(data);
+                    $('.badge.count-notif').html(responsedata.count);
+                    $('.float-right.badge.badge-default').html(responsedata.count);
+                    // console.log(responsedata);
+                    
+                    jQuery.each(responsedata.list, function(index, value){
+                        console.log(value);
+                        $('ul.sub-notif').append('<li class="listnotif" >'+value.data+'</li>');
+                        $('a.submit-form').eq(index).attr('data-submits',value.id);
+        
+                    });
+                }
+        });
+    }
 
+  
 
-        var array = [];
-        $('.listnotif').each(function(){
-            // var subit = $('.listnotif').attr('data-submit')
-            array.push($(this).attr('data-submit'));
-            // console.log(subit);
-
-        })
-        var allDiv = document.querySelectorAll('a.submit-form');
-allDiv.forEach(function(item, i){
-        console.log(array[i]);
-  item.setAttribute('data-submits', array[i]);
-});
-        // $.each(array,function( index, value ) {
-        //     console.log(array[index]);
-        //     $('.submit-form').attr('data-submits',array[index]);
-
-
-        // })
-            // var datasub = ;
-
-        $('a.submit-form').click(function(){
+        $(document).on('click','a.submit-form',function(){
   //add the value to be sent to the input in the form
   $('#link-extra-info input').val($(this).data('submits'));
   console.log($(this).data('submits'));

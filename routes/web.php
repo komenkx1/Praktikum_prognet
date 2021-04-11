@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\TransactionAdminController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,8 @@ Route::post('add-cart', [CartController::class, 'store'])->name('add-cart');
 Route::post('update-cart', [CartController::class, 'update'])->name('update-cart');
 Route::get('count-cart', [CartController::class, 'count'])->name('count-cart');
 Route::get('total-cart', [CartController::class, 'totalprice'])->name('total-cart');
+Route::get('count-notif', [MainController::class, 'counttotal'])->name("count-notif");
+Route::get('count-admin-notif', [DashboardController::class, 'counttotal'])->name("count-notif-admin");
 Route::delete('delete-cart', [CartController::class, 'destroy'])->name('delete-cart');
 Route::delete('delete/{cart:id}', [CartController::class, 'destroy'])->name('delete');
 

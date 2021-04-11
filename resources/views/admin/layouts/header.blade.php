@@ -23,27 +23,22 @@
             <li>
                 <a href="#" class="dropdown-toggle notification-icon" data-toggle="dropdown">
                     <i class="fas fa-bell"></i>
-                    <span class="badge">{{Auth::guard('admin')->user()->unreadNotifications->count()}}</span>
+                    <span class="badge count-notif">0</span>
                 </a>
                 <form id="link-extra-info">
                     <input type="hidden" name="id" value="0">
                 </form>
                 <div class="dropdown-menu notification-menu">
                     <div class="notification-title">
-                        <span class="float-right badge badge-default">{{Auth::guard('admin')->user()->unreadNotifications->count()}}</span>
+                        <span class="float-right badge badge-default">0</span>
                         Alerts
                     </div>
 
                     <div class="content">
-                        <ul>
-                            @forelse (Auth::guard('admin')->user()->unreadNotifications as $notif)
-                                
-                            <li class="listnotif" data-submit="{{$notif->id }}">
-                              {!!$notif->data!!}
-                            </li>
-                            @empty
-                                
-                            @endforelse
+                        <ul class="sub-notif">
+                        
+                        
+                         
                           
                         </ul>
 
