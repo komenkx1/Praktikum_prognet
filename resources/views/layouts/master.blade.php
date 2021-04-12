@@ -173,7 +173,7 @@
     <script src="/assets/js/star-rating.js"></script>
     @yield('scripts')
     <script>
-    loadnotif();
+  
     
         @if ($message = Session::get('error'))
         toastr.error('{{ session('error') }}');
@@ -187,6 +187,27 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
     });
+
+    loadnotif();
+function loadnotif(){
+        $.ajax({
+                url: '{{Route("count-notif")}}',
+                type: 'get',
+                success: function(data){
+                    var responsedata = $.parseJSON(data);
+                    $('.count.countnotif').html(responsedata.count);
+
+                    
+                    jQuery.each(responsedata.list, function(index, value){
+                        
+                        $('ul.sub-menu.notif .notifi').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
+                        var tests = $('a.submit-form').eq(index).attr('data-submits',value.id);     
+                        console.log(tests);
+                        $('.markall').html('<a href = "/marksallread">Tandai Semua Pesan Terbaca</a>');
+                    });
+                }
+        });
+    }
         function loadcarts(){
         var html_option = '';
         $.ajax({
@@ -228,25 +249,8 @@
             });
     }
 
-    function loadnotif(){
-        $.ajax({
-                url: '{{Route("count-notif")}}',
-                type: 'get',
-                success: function(data){
-                    var responsedata = $.parseJSON(data);
-                    $('.count.countnotif').html(responsedata.count);
-                    // console.log(responsedata);
-                    
-                    jQuery.each(responsedata.list, function(index, value){
-                        // console.log(value);
-                        $('ul.sub-menu.notif .notifi').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
-                        $('.markall').html('<a href = "/marksallread">Tandai Semua Pesan Terbaca</a>');
-                        $('a.submit-form').eq(index).attr('data-submits',value.id);
-        
-                    });
-                }
-        });
-    }
+
+  
 
                 $(document).on('click','.btn-add',function(){
                     @guest
