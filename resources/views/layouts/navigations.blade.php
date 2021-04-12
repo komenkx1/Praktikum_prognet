@@ -200,10 +200,10 @@
             <div class="header-logo">
                 <a href="index.html"><img alt="Kobolg" src="/assets/images/logo.png" class="logo"></a></div>
         </div>
-        <form id="form-logout" action="{{Route('logout')}}" method="post">
-            @csrf
-        </form>
         <div class="header-mobile-right">
+            <form id="form-logout" action="{{Route('logout')}}" method="post">
+                @csrf
+            </form>
             <div class="header-control-inner">
                 <div class="meta-dreaming">
                     <div class="menu-item block-user block-dreaming kobolg-dropdown">
@@ -247,10 +247,13 @@
                             <form id="link-extra-info">
                                 <input type="hidden" name="p" value="0">
                             </form>
-                           
-                            <div class="markall">
-
+                            <div class="notifi">
+                                {{-- <span class=" text-center">Tidak ada notifikasi masuk</span> --}}
                             </div>
+                            <div class="markall text-center">
+
+                            </div>                                            
+
                         </ul>
                     </div>
                     <div class="block-minicart block-dreaming kobolg-mini-cart kobolg-dropdown">
