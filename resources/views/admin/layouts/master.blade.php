@@ -169,9 +169,15 @@ function loadnotif(){
                     $('.float-right.badge.badge-default').html(responsedata.count);
                     
                     jQuery.each(responsedata.list, function(index, value){
-                        
                         $('ul.sub-notif').append('<li class="listnotif" >'+value.data+'</li>');
+
+                        if(index == 0){
+                            $('a.submit-form').attr('data-submits',value.id);    
+                    }else{
+    
                         $('a.submit-form').eq(index).attr('data-submits',value.id);
+
+                    }
                         $('.readall').html('<a href="/admin/marksallreadadmin" class="view-more">Tandai Semua Notifikasi Terbaca</a>')
                     });
                 }

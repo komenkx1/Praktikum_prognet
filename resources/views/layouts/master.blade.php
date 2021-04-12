@@ -195,14 +195,19 @@ function loadnotif(){
                 type: 'get',
                 success: function(data){
                     var responsedata = $.parseJSON(data);
+                    var count = '0';
                     $('.count.countnotif').html(responsedata.count);
 
                     
                     jQuery.each(responsedata.list, function(index, value){
-                        
+                        count ++;
                         $('ul.sub-menu.notif .notifi').append('<li class="listnotif" class="menu-item kobolg-MyAccount-navigation-link kobolg-MyAccount-navigation-link--dashboard is-active">'+value.data+'<hr> </li>');
-                        var tests = $('a.submit-form').eq(index).attr('data-submits',value.id);     
-                        console.log(tests);
+                        if(index == 0){
+                        $('a.submit-form').attr('data-submits',value.id);     
+                    }else{
+                        $('a.submit-form').eq(index).attr('data-submits',value.id);     
+
+                    }
                         $('.markall').html('<a href = "/marksallread">Tandai Semua Pesan Terbaca</a>');
                     });
                 }
