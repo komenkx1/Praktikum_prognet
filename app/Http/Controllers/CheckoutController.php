@@ -115,7 +115,9 @@ class CheckoutController extends Controller
  
              }
           
-          
+             if ($price == 0) {
+                $total += $cart->products->price * $cart->qty;
+            }
 
             // dd($cart->qty);
         }
