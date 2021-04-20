@@ -37,3 +37,10 @@ td.dsc p{
   overflow: hidden;
 }
 li.listnotif p { word-break: break-all!important; overflow:hidden }
+.sub-notif{
+  overflow-x: hidden;
+    height: 200px;
+}
+li.listnotif a.dropdown-item {
+  white-space: unset!important;
+}

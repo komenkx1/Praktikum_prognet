@@ -3819,7 +3819,10 @@ td {
     transition: right 0.4s ease 0s;
     height: 100vh;
 }
-
+.notifi{
+    overflow-x: hidden;
+    height: 350px;
+  }
 .block-minicart.open .widget_shopping_cart {
     right: 0;
 }
@@ -18498,7 +18501,9 @@ body .kobolg-mapper .text__area {
     border-top: 1px solid #eee;
     display: none;
 }
-
+footer{
+    height: 250px!important;
+}
 .footer-device-mobile-item {
     display: table-cell;
     vertical-align: middle;

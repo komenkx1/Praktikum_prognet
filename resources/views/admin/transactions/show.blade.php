@@ -5,7 +5,7 @@
         <h2>Admin</h2>
 
         <div class="right-wrapper text-right">
-            <ol class="breadcrumbs">
+            <ol class="breadcrumbs pr-3">
                 <li>
                     <a href="/admin">
                         <i class="fas fa-home"></i>

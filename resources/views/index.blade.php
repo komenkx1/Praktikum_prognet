@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="filter pb-4 d-flex justify-content-between">
+            <div class="filter pb-4 d-lg-flex d-block justify-content-between">
                 <div data-items="8" class="vertical-wrapper block-nav-category has-vertical-menu show-button-all">
                     <div class="block-title">
                         <span class="before">
@@ -66,7 +66,7 @@
                             <span></span>
                             <span></span>
                         </span>
-                        <span class="text-title">SHOP BY CATEGORIES</span>
+                        <span class="text-title">CATEGORIES</span>
                     </div>
                     <div class="block-content verticalmenu-content">
                         <ul id="menu-vertical-menu" class="azeroth-nav vertical-menu default">
@@ -87,11 +87,11 @@
                         </div>
                     </div>
                 </div><!-- block category -->
-                <div class="header-search">
+                <div class="header-search p-lg-0 pt-3 ml-lg-4 w-lg-0 w-100">
                     <div class="block-search">
                         <form role="search" method="get"
                             class="form-search d-flex block-search-form kobolg-live-search-form">
-                            <div class="form-content search-box results-search mr-3">
+                            <div class="form-content search-box results-search mr-3 w-lg-0 w-100">
                                 <div class="inner">
                                     <input autocomplete="off" id="form-search" class="searchfield txt-livesearch input"
                                         name="s" value="" placeholder="Search here..." type="text">

@@ -198,7 +198,7 @@
         </div>
         <div class="header-mobile-mid">
             <div class="header-logo">
-                <a href="index.html"><img alt="Kobolg" src="/assets/images/logo.png" class="logo"></a></div>
+                <a href="/"><img alt="Kobolg" src="/assets/images/logo.png" class="logo"></a></div>
         </div>
         <div class="header-mobile-right">
             <form id="form-logout" action="{{Route('logout')}}" method="post">

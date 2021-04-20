@@ -6,7 +6,7 @@
         <h2>Admin</h2>
 
         <div class="right-wrapper text-right">
-            <ol class="breadcrumbs">
+            <ol class="breadcrumbs pr-3">
                 <li>
                     <a href="/admin">
                         <i class="fas fa-home"></i>
@@ -16,7 +16,7 @@
 
             </ol>
 
-            <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+          
         </div>
     </header>
     <!-- start: page -->
