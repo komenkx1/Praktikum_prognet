@@ -93,9 +93,11 @@
                                                         class="input-text " name="telp" id="billing_tepl"
                                                         placeholder="Nomor Telepon" value="" autocomplete="alamat-line1"
                                                         data-placeholder="Nomor Telepon"></span>
-                                                @if ($errors->has('telp'))
-                                                <span class="text-danger">{{ $errors->first('telp') }}</span>
-                                                @endif
+                                                        @if ($message = Session::get('false'))
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @elseif($errors->has('telp'))
+                                                        <span class="text-danger">{{ $errors->first('telp')  }}</span>
+                                                        @endif
                                             </p>
                                             <p class="form-row form-row-wide addresses-field update_totals_on_change validate-required"
                                                 id="billing_courier_field" data-priority="40"><label

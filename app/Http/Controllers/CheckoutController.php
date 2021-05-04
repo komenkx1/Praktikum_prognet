@@ -70,6 +70,7 @@ class CheckoutController extends Controller
             'kota' => $sen
         ], 200);
     }
+    
     public function cekongkir(Request $request)
     {
         $asal = Cities::where('city_id', '128')->get()->first();
@@ -122,17 +123,7 @@ class CheckoutController extends Controller
             // dd($cart->qty);
         }
 
-    //     $request->validate([
-    //         'province'      => 'required',
-    //         'regency'  => 'required',
-    //         'address'  => 'required',
-    //         'courier_id'  => 'required',
-    //         'shipping_cost'  => 'required',
-    //         'telp'  => 'required',
-    //         'total'  => 'numeric|not_in:0',
-    //     ],
-    //     ['total.not_in:0' => 'Minimal 1 Barang di keranjang untuk melakukan checkout']
-    // );
+   
     
         $transaksi = new Transactions;
 
@@ -152,7 +143,7 @@ class CheckoutController extends Controller
         'address'  => 'required',
         'courier_id'  => 'required',
         'shipping_cost'  => 'required',
-        'telp'  => 'required',
+        'telp'  => 'required|numeric',
         'total'  => 'required|numeric|not_in:0',
         'sub_total'  => 'required|numeric|not_in:0',
     ],
@@ -170,9 +161,25 @@ class CheckoutController extends Controller
                     ->withErrors($validator)
                     ->withInput();
     }
-        $idtransaksi = $transaksi->create($transaksaction);
 
-
+       // proses data apabila sudah diinput
+       if ($request->telp) {
+        // mengambil nomor handphone telah diinput
+        $handphone = $request->telp;
+        // validasi inputan nomor handphone
+        if (!preg_match("/^[0-9|(\+|)]*$/", $handphone) OR strlen(strpos($handphone, "+", 1)) > 0) {
+            return redirect()->back()->with('false','Handphone hanya boleh menggunakan angka dan diawali simbol +');
+        }
+        else if (substr($handphone, 0, 3) != "+62" ) {
+             return redirect()->back()->with('false','Handphone harus diawali dengan kode negara +62');
+        }
+        else if (substr($handphone, 3, 1) == "0" ) {
+            return redirect()->back()->with('false','Handphone tidak boleh diikuti dengan angka 0 setelah kode negara');
+        }
+        else {
+            $idtransaksi = $transaksi->create($transaksaction);
+        }                
+    }
         
         foreach ($carts as $key => $value) {
     // echo($request->harga_diskon[$key]);

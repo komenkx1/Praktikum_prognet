@@ -15,7 +15,7 @@
 
             </ol>
 
-            <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fas fa-chevron-left"></i></a>
+           
         </div>
     </header>
     @include('admin/layouts/notif')
