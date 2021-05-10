@@ -83,7 +83,7 @@ $admin = Auth::guard('admin')->user();
             <div class="row">
                 <div class="col-xl-9 p-0">
                     <div class="call-to-action-content ml-4 pt-xl-5 pb-4">
-                        <h2 class=" text-dark">Praktikum Prognet @ 2020</h2>
+                        <h2 class=" text-dark">Praktikum Prognet @ 2021</h2>
                     </div>
                 </div>
 
