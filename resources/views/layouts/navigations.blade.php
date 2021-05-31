@@ -115,15 +115,17 @@
                                                                 <li class="kobolg-mini-cart-item mini_cart_item">
                                                                     <a href="javascript:void(0)" data-id="{{$cart->id}}"
                                                                         class="delete remove_from_cart_button">×</a>
-                                                                   
+                                                                   @php
+                                                                         $count = 0;
+                                                                   @endphp
                                                                 @foreach ($carts as $cart)
-                                                                        @php
-                                                                            $count++;
-                                                                        @endphp
-                                                                @if($count == 1) 
+                                                                       
                                                                 <a href="#">
                                                                         @foreach ($cart->products->product_image as $image )
-
+                                                                        @php
+                                                                        $count++;
+                                                                    @endphp
+                                                            @if($count == 1) 
                                                                         <img src="{{$image->image}}"
                                                                             class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
                                                                             alt="img" width="600"
