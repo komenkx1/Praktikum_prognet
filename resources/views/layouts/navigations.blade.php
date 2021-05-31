@@ -112,20 +112,21 @@
                                                             </h3>
                                                             <ul class="kobolg-mini-cart cart_list product_list_widget item-cart"
                                                                 id="">
-                                                                <li class="kobolg-mini-cart-item mini_cart_item">
-                                                                    <a href="javascript:void(0)" data-id="{{$cart->id}}"
-                                                                        class="delete remove_from_cart_button">×</a>
+                                                               
                                                                    @php
                                                                          $count = 0;
                                                                    @endphp
                                                                 @foreach ($carts as $cart)
-                                                                       
-                                                                <a href="#">
+                                                                <li class="kobolg-mini-cart-item mini_cart_item">
+                                                                    <a href="javascript:void(0)" data-id="{{$cart->id}}"
+                                                                        class="delete remove_from_cart_button">×</a>
+                                                               
                                                                         @foreach ($cart->products->product_image as $image )
                                                                         @php
                                                                         $count++;
                                                                     @endphp
                                                             @if($count == 1) 
+                                                            <a href="#">
                                                                         <img src="{{$image->image}}"
                                                                             class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
                                                                             alt="img" width="600"
