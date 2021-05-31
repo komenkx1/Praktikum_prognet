@@ -48,9 +48,20 @@
                                             </form>
                                         </td>
                                         <td class="product-thumbnail">
-                                            <a href="#"><img src="assets/images/apro134-1-600x778.jpg"
+                                            @php
+                                                $count = 0;
+                                            @endphp
+                                            @foreach ($cart->products->product_image as $image )
+                                            @php
+                                            $count++;
+                                        @endphp
+                                @if($count == 1) 
+                                            <a href="#"><img src="{{$image->image}}"
                                                     class="attachment-kobolg_thumbnail size-kobolg_thumbnail" alt="img"
-                                                    width="600" height="778"></a></td>
+                                                    width="600" height="778"></a>
+                                                @endif
+                                                @endforeach
+                                                </td>
                                         <td class="product-name" data-title="Product">
                                             <a href="#">{{$cart->products->product_name}}</a></td>
                                         <td class="product-price" data-title="Price">
