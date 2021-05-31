@@ -120,7 +120,7 @@
                                                                         @php
                                                                             $count++;
                                                                         @endphp
-                                                                @if ($Count == 1) 
+                                                                @if($count == 1) 
                                                                 <a href="#">
                                                                         @foreach ($cart->products->product_image as $image )
 
