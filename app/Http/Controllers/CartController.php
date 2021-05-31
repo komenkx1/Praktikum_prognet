@@ -40,14 +40,22 @@ class CartController extends Controller
         if ($request->ajax()) {
             foreach ($carts as $cart) {
                 $output = '<li class="kobolg-mini-cart-item mini_cart_item">
-            <a href="javascript:void(0)" data-id="' . $cart->id . '" class="delete remove remove_from_cart_button">×</a>
-            <a href="#">
-                <img src="assets/images/apro134-1-600x778.jpg"
+            <a href="javascript:void(0)" data-id="' . $cart->id . '" class="delete remove remove_from_cart_button">×</a>';
+            @foreach ($cart->products->product_image as $image )
+                $Count++;
+                if ($Count == 1) {
+                    // $data .= '<img class="img-responsive" src="' . $image->image . '"
+                    //         alt="' . $product->product_name . '" width="270" height="350">';
+                    $output .= '<a href="#">
+                <img src="' . $image->image . '"
                      class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
                      alt="img" width="600" height="778">' . $cart->products->product_name . '</a>
             <span class="quantity">' . $cart->qty . ' × <span
                     class="kobolg-Price-amount amount"><span
                     class="kobolg-Price-currencySymbol">';
+                }
+            }
+           
                 $is_discount = false;
                 foreach ($cart->products->discounts as $discount) {
                     if (date('Y-m-d') >= $discount->start  &&  date('Y-m-d') < $discount->end) {

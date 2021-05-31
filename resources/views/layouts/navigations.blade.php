@@ -118,11 +118,15 @@
                                                                     <a href="javascript:void(0)" data-id="{{$cart->id}}"
                                                                         class="delete remove_from_cart_button">×</a>
                                                                     <a href="#">
-                                                                        <img src="/assets/images/apro134-1-600x778.jpg"
+                                                                        @foreach ($cart->products->product_image as $image )
+
+                                                                        <img src="{{$image->image}}"
                                                                             class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
                                                                             alt="img" width="600"
                                                                             height="778">{{$cart->products->product_name}}&nbsp;
                                                                     </a>
+                                                                                                                                                
+                                                                    @endforeach
                                                                     <span class="quantity">{{$cart->qty}} × <span
                                                                             class="kobolg-Price-amount amount"><span
                                                                                 class="kobolg-Price-currencySymbol">
