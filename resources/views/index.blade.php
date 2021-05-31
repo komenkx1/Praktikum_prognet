@@ -13,7 +13,7 @@
                             <h1>SUMMER</h1>
                             <h5>Hot Watches</h5>
                             <h2><span>Smart </span>Cool</h2>
-                            <a href="#">Shop now</a>
+                           
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                             <h1>SPRING </h1>
                             <h5>New Arrivals</h5>
                             <h2><span>Modern</span> collection</h2>
-                            <a href="#">Shop now</a>
+                           
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                             <h1>AUTUMN </h1>
                             <h5>Best Seller</h5>
                             <h2><span>Photo </span> Screen</h2>
-                            <a href="#">Shop now</a>
+                           
                         </div>
                     </div>
                 </div>
