@@ -117,7 +117,10 @@
                                                                         class="delete remove_from_cart_button">×</a>
                                                                    
                                                                 @foreach ($carts as $cart)
-
+                                                                        @php
+                                                                            $count++;
+                                                                        @endphp
+                                                                @if ($Count == 1) 
                                                                 <a href="#">
                                                                         @foreach ($cart->products->product_image as $image )
 
@@ -126,7 +129,7 @@
                                                                             alt="img" width="600"
                                                                             height="778">{{$cart->products->product_name}}&nbsp;
                                                                     </a>
-                                                                                                                                                
+                                                                      @endif                                                                         
                                                                     @endforeach
                                                                     <span class="quantity">{{$cart->qty}} × <span
                                                                             class="kobolg-Price-amount amount"><span

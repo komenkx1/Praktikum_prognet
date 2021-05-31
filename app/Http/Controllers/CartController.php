@@ -50,12 +50,14 @@ class CartController extends Controller
                     $output .= '<a href="#">
                 <img src="' . $image->image . '"
                      class="attachment-kobolg_thumbnail size-kobolg_thumbnail"
-                     alt="img" width="600" height="778">' . $cart->products->product_name . '</a>
-            <span class="quantity">' . $cart->qty . ' × <span
+                     alt="img" width="600" height="778">' . $cart->products->product_name . '</a>';
+                    }
+            }
+
+            $output .= '<span class="quantity">' . $cart->qty . ' × <span
                     class="kobolg-Price-amount amount"><span
                     class="kobolg-Price-currencySymbol">';
-                }
-            }
+           
            
                 $is_discount = false;
                 foreach ($cart->products->discounts as $discount) {
