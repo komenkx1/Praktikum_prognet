@@ -41,6 +41,7 @@ class CartController extends Controller
             foreach ($carts as $cart) {
                 $output = '<li class="kobolg-mini-cart-item mini_cart_item">
             <a href="javascript:void(0)" data-id="' . $cart->id . '" class="delete remove remove_from_cart_button">×</a>';
+            $Count = 0;
             foreach ($cart->products->product_image as $image) {
                 $Count++;
                 if ($Count == 1) {
