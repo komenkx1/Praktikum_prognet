@@ -87,22 +87,20 @@ class CartController extends Controller
         $price = 0;
         $total = 0;
         $carts = Carts::where('user_id', "=", Auth::user()->id)->where('status', '=', 'notyet')->get();
-        
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
                     $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
-                    $total += $price*$cart->qty;
-                }else{
-                    $total += $cart->products->price * $cart->qty;
                 }
-
             }
             if ($price == 0) {
-                $total += $cart->products->price * $cart->qty;
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
             }
-               
+
+            // dd($cart->qty);
         }
         $output = ' <span class=" kobolg-Price-currencySymbol" id="total">Rp ' . number_format($total, 2, ',', '.') . '</span>';
         echo ($output);
