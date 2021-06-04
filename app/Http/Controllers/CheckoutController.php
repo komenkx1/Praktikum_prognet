@@ -42,21 +42,18 @@ class CheckoutController extends Controller
         foreach ($carts as $cart) {
             foreach ($cart->products->discounts as $diskon) {
 
-                if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
-                     $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
-                     $total += $price*$cart->qty;
-                 }else{
-                     $total += $cart->products->price * $cart->qty;
-                 }
- 
-             }
-             if ($price == 0) {
-                $total += $cart->products->price * $cart->qty;
-             }
+               if (date('Y-m-d') >= $diskon->start  &&  date('Y-m-d') < $diskon->end) {
+                    $price = $cart->products->price - ($diskon->percentage / 100 * $cart->products->price);
+                }
+            }
+            if ($price == 0) {
+                $total = $total + ($cart->products->price * $cart->qty);
+            } else {
+                $total = $total + ($price * $cart->qty);
+            }
+
             $berattotal = $berattotal + ($cart->products->weight * $cart->qty);
             $subprice = $subprice + ($cart->products->price * $cart->qty);
-
-            // dd($cart->qty);
         }
         // dd($carts);
         return view('checkout', compact('provinsis', 'kurirs', 'carts', 'total', 'berattotal', 'subprice'));
