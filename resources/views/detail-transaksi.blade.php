@@ -6,8 +6,7 @@
         <div class="bayar">
             <h1 class="text-center text-danger font-weight-bolder">
                 {{"Rp " . number_format($transaksi->total,2,',','.')}}
-                <br>
-                <small>Transfer To : 0988465775</small>
+
                 <hr>
             </h1>
         </div>
@@ -31,12 +30,21 @@
             @else
             @if (!$transaksi->proof_of_payment && $transaksi->status == 'unverified'|| $transaksi->status == 'failed')
             <div id="countdown"> </div>
-            <form action="{{Route('cancel',['transactions' => $transaksi->id])}}" method="POST"
-                enctype="multipart/form-data">
-                @method('put')
-                @csrf
-                <button type="submit">Cancel Transaction</button>
-            </form>
+            <div class="btn-checkout d-flex justify-content-center">
+                  
+                <a href="{{$transaksi->payment_url}}" class="btn btn-success alt mr-3" value="submit"
+                    data-value="Submit">Bayar Sekarang
+                </a> 
+                <form action="{{Route('cancel',['transactions' => $transaksi->id])}}" method="POST"
+                    enctype="multipart/form-data">
+                    @method('put')
+                    @csrf
+                    <button type="submit">Cancel Transaction</button>
+                </form>
+            
+              
+            </div>
+           
             @else
             <h2>Bukti Pembayaran Diterima, silahkan tunggu admin memverifikasi bukti pembayaran</h2>
             @endif
@@ -45,47 +53,8 @@
         </div>
 
         <div class="row pt-5">
-            @if ($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status ==
-            'failed' )
-
-            <div class="main-content col-md-6">
-
-                <div class="col2-set w-100" id="customer_details">
-                    <div class="col-1">
-                        <div class="kobolg-billing-fields">
-                            <h3>Upload Bukti Bayar</h3>
-                            <div class="kobolg-billing-fields__field-wrapper">
-                                <form action="{{Route('upload-bukti',['transactions' => $transaksi->id])}}"
-                                    method="POST" enctype="multipart/form-data">
-                                    @method('put')
-                                    @csrf
-                                    <p class="form-row form-row-wide bukti-field validate-required form-group"
-                                        id="billing_bukti_1_field" data-priority="50"><label for="billing_bukti_1"
-                                            class="">Bukti Pembayaran&nbsp;<abbr class="required"
-                                                title="required">*</abbr></label><span
-                                            class="kobolg-input-wrapper">
-                                            <img id="blah" style="width: 100%; height:300px; border-radius:5px;"
-                                    src="{{$transaksi->id}}" alt="-" class="p-3" />
-                                            <input type="file" id="imgInp"
-                                                class="input-name form-control" name="proof_of_payment"
-                                                id="billing_bukti_1" placeholder="bukti Lengkap" value=""
-                                                autocomplete="bukti-line1" data-placeholder="bukti Lengkap"></span>
-                                    </p>
-                                    <button type="submit" class="button alt" id="submit" value="submit"
-                                        data-value="Submit">Submit
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-            @endif
             <div
-                class="main-content @if($transaksi->status == 'unverified' && $transaksi->proof_of_payment == null || $transaksi->status == 'failed') col-md-6 @else col-md-12 @endif">
+                class="main-content col-md-12 ">
                 <div class="page-main-content">
                     <div class="kobolg">
                         <div class="kobolg-notices-wrapper"></div>

@@ -7,6 +7,7 @@ use App\Models\Couriers;
 use App\Models\Provinces;
 use App\Models\Cities;
 use App\Models\Carts;
+use App\Models\Payment;
 use App\Models\Transactions;
 use App\Models\TransactionDetails;
 use App\Notifications\AdminNotification;
@@ -20,6 +21,7 @@ use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Midtrans\Transaction;
 
 class CheckoutController extends Controller
 {
@@ -130,6 +132,7 @@ class CheckoutController extends Controller
         $transaksaction['timeout'] = $tomorrowDate;
         $transaksaction['total'] =  $request->shipping_cost + $total;
         $transaksaction['sub_total'] = $total;
+        $transaksaction['code'] = Transactions::generateCode();
         $transaksaction['user_id'] = Auth::user()->id;
         $transaksaction['status'] = 'unverified';
         $transaksaction['telp'] = $request->telp;
@@ -175,6 +178,7 @@ class CheckoutController extends Controller
         }
         else {
             $idtransaksi = $transaksi->create($transaksaction);
+            $this->_generatePaymentToken($idtransaksi);
         }                
     }
         
@@ -209,7 +213,37 @@ class CheckoutController extends Controller
         Notification::send($admin, new AdminNotification($notif)); // multiple notification
         return redirect(Route('detail-transaksi', ['transactions' => encrypt($idtransaksi->id)]));
     }
+    
+    private function _generatePaymentToken($idtransaksi){
+        $this->initPaymentGateaway();
 
+        $customerDetails = [
+            "first_name" => $idtransaksi->user->name,
+            "email"=>$idtransaksi->user->email,
+            "phone"=>$idtransaksi->telp 
+        ];
+
+        $params =[
+            "transaction_details"=>[
+                'order_id'=>$idtransaksi->code,
+                'gross_amount'=>$idtransaksi->total
+            ],
+            "customer_details"=>$customerDetails,
+            "expiry" =>[
+                "start_time"=>date("Y-m-d H:i:s T"),
+                "unit" => Payment::EXPIRY_UNIT,
+                "duration"=> Payment::EXPIRY_DURATION,
+            ],
+        ];
+        // dd($params);
+        $paymentUrl = \Midtrans\Snap::createTransaction($params);
+       
+        if ($paymentUrl->token) {
+            $idtransaksi->payment_token = $paymentUrl->token;
+            $idtransaksi->payment_url = $paymentUrl->redirect_url;
+            $idtransaksi->save();
+        }
+    }
     /**
      * Display the specified resource.
      *

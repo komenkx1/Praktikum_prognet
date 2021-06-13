@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\ResponseController;
 use App\Http\Controllers\Admin\ProductImagesController;
 use App\Http\Controllers\Admin\TransactionAdminController;
 use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -33,6 +34,11 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 
 Auth::routes(['verify' => true]);
+
+Route::post('payments/notification', [PaymentController::class, 'notification']);
+Route::get('payments/completed', [PaymentController::class, 'completed']);
+Route::get('payments/failed', [PaymentController::class, 'failed']);
+Route::get('payments/unfinish', [PaymentController::class, 'unfinish']);
 
 Route::middleware('auth')->group(function(){
 Route::get('sendEmaliVerif/{user:id}', [UserController::class, 'sendEmailVerif'])->name('send-email');
